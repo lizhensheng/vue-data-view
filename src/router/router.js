@@ -13,6 +13,7 @@ import Idleland from 'components/statistics/idleland/idleland'
 import Line from 'components/chart/line/line'
 import Bar from 'components/chart/bar/bar'
 import Pie from 'components/chart/pie/pie'
+import Preview from 'components/chart/preview/preview'
 export default new Router({
     routes: [
         {
@@ -53,7 +54,13 @@ export default new Router({
         },
         {
             path:'/chart/bar',
-            component:Bar
+            component:Bar,
+            children:[
+                {
+                    path:'/chart/preview',
+                    component:Preview
+                }
+            ]
         },
         {
             path:'/chart/pie',
