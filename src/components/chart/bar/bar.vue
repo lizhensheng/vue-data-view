@@ -23,9 +23,9 @@
                     </div>
                     <div class="drawer-item">
                         <span>服务地址</span>
-                        <el-select v-model="value" placeholder="请选择">
+                        <el-select v-model="addr" placeholder="请选择" @change="onAddrChange">
                             <el-option-group
-                                    v-for="group in options"
+                                    v-for="group in optionsAddr"
                                     :key="group.label"
                                     :label="group.label">
                                 <el-option
@@ -40,16 +40,42 @@
                         </el-select>
                     </div>
                     <div class="drawer-item">
-                        <span>{{config.title.textStyle.color}}</span>
+                        <span>x轴显示列</span>
+                        <el-select v-model="xData" placeholder="请选择">
+                            <el-option
+                                    v-for="item in tags"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
                     </div>
                     <div class="drawer-item">
-                        <span>{{config.title.text}}</span>
+                        <span>y轴显示列</span>
+                        <el-select multiple  v-model="yData" placeholder="请选择">
+                            <el-option
+                                    v-for="item in tags"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
                     </div>
                     <div class="drawer-item">
-                        <span>{{config.title.textStyle.fontSize}}</span>
+                        <span>y轴名称</span>
+                        <el-input v-model="otherConfig.yTitle" placeholder="请输入内容"></el-input>
                     </div>
                     <div class="drawer-item">
-                        <span>{{cconfig}}</span>
+                        <span>y轴单位</span>
+                        <el-input v-model="otherConfig.yUnit" placeholder="请输入内容"></el-input>
+                    </div>
+                    <div class="drawer-item">
+                        <span>图表宽度</span>
+                        <el-slider v-model="otherConfig.width" :min="300" :max="1000"></el-slider>
+                    </div>
+                    <div class="drawer-item">
+                        <span>图表高度</span>
+                        <el-slider v-model="otherConfig.height" :min="300" :max="1000"></el-slider>
                     </div>
                 </div>
             </div>
@@ -62,6 +88,10 @@
     import {barConfig} from "./config"
     import './bar.styl'
     import {normalize} from 'common/js/observer'
+    import {baseConfigApi} from "common/js/config"
+    import {getChartData} from "api/bar"
+    import {socket} from "common/js/socket-client"
+    import {debounce} from "common/js/util"
 
     export default {
         data() {
@@ -75,21 +105,87 @@
                         }
                     },
                 },
-                dataAddr:'',
-                options:[],
-                value:''
+                optionsAddr:[],
+                addr:'',
+                tags:[],
+                xData:'',
+                yData:[],
+                otherConfig:{
+                    yTitle:'',
+                    yUnit:'',
+                    width:600,
+                    height:600
+                }
             }
         },
         computed:{
-          cconfig(){
-              return Object.assign({},barConfig,this.config)
+            cConfig(){
+                if(!this.xData||this.yData.length<=0){
+                    return ''
+                }
+                let commonConfig = Object.assign({},barConfig,this.config)
+                let y = []
+                this.yData.forEach(item=>{
+                    y.push({
+                        id:item,
+                        name:this.tags[this.tags.findIndex((i)=>{return i.value == item})].label
+                    })
+                })
+                let userConfig = {
+                    x:this.xData,
+                    y:y,
+                    yAxis:[{type: 'value',name: this.otherConfig.yTitle,axisLabel: {formatter: `{value} ${this.otherConfig.yUnit}`}}]
+                }
+                let dataUrl = baseConfigApi+this.addr
+                return {
+                    commonConfig,
+                    userConfig,
+                    dataUrl,
+                    width:this.otherConfig.width,
+                    height:this.otherConfig.height
+                }
             }
         },
+        watch:{
+            cConfig(newVal){
+                if(newVal){
+                    socket.emit('onChartConfig',JSON.stringify(newVal))
+                }
+            },
+            "config.title.text"(){
+                if(this.cConfig){
+                    socket.emit('onChartConfig',JSON.stringify(this.cConfig))
+                }
+            },
+            "config.title.textStyle.color"(){
+                if(this.cConfig){
+                    socket.emit('onChartConfig',JSON.stringify(this.cConfig))
+                }
+            },
+            "config.title.textStyle.fontSize"(){
+                if(this.cConfig){
+                    socket.emit('onChartConfig',JSON.stringify(this.cConfig))
+                }
+            }
+        },
+        created(){
+            this.$router.push({path: '/chart/preview'});
+        },
         mounted(){
-            this.options = normalize()
+            this.optionsAddr = normalize()
         },
         components:{
             PanelRight
+        },
+        methods:{
+            onAddrChange(){
+                if (this.addr){
+                    let fullUrl = baseConfigApi+this.addr
+                    getChartData(fullUrl).then(res=>{
+                        this.tags = res.data.tags
+                    })
+                }
+            }
         }
     }
 </script>

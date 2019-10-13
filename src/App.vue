@@ -6,14 +6,13 @@
 </template>
 
 <script>
-import MHeader from 'components/m-header/m-header'
-
-export default {
-  name: 'app',
-  components: {
-    MHeader
+  import MHeader from 'components/m-header/m-header'
+  export default {
+    name: 'app',
+    components: {
+      MHeader
+    }
   }
-}
 </script>
 
 <style lang="stylus">

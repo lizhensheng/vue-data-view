@@ -3,7 +3,7 @@
             <div class="item">
                 <div class="top">
                     <div class="text">
-                        <div class="title">line</div>
+                        <div class="title">{{title}}</div>
                         <p class="block"></p>
                         <p class="text">在所有软件开发类人才的需求中，对Java工程师的需求达到全部需求量的50%以上！</p>
                     </div>
@@ -20,5 +20,11 @@
 
 <script>
     import './panel-tool.styl'
-    export default {}
+    export default {
+        props:{
+            title:String
+        },
+        methods: {
+        }
+    }
 </script>
