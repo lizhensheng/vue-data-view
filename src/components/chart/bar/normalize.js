@@ -1,4 +1,3 @@
-import {barCommonConfig,lineCommonConfig,pieCommonConfig} from './config'
 /**
  * 获取x轴数据
  */

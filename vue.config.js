@@ -9,8 +9,12 @@ module.exports = {
                 'common':resolve('src/common'),
                 "components":resolve('src/components'),
                 'api':resolve('src/api'),
-                'base':resolve('src/base')
+                'base':resolve('src/base'),
+                'views':resolve('src/views')
             }
         }
+    },
+    devServer: {
+        port: 8888
     }
 }

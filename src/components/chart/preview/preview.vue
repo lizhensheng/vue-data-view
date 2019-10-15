@@ -11,7 +11,7 @@
 
     export default {
         mounted() {
-            let config = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"大吉大利,今晚吃鸡","textStyle":{"color":"#D61F1F","fontSize":19}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"哈喽","axisLabel":{"formatter":"{value} 朋友"}}]},"dataUrl":"http://localhost:8081/api/bar/ydys/v1","width":597,"height":465}
+            let config = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 雕刻技法","textStyle":{"color":"#D6BC28","fontSize":21}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":600,"height":600}
             let commonConfig = config.commonConfig
             let userConfig = config.userConfig
             let dataUrl = config.dataUrl

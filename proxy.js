@@ -3,6 +3,14 @@ const Mock = require('mockjs');
 const fs = require("fs")
 const path = require("path")
 const renderTemplate = require("any-template-compiler")
+/**
+ * 用户配置图表的信息
+ */
+let golbalConfigStore = {
+    bar:{
+
+    }
+}
 module.exports = (api, projectOptions) => {
     api.chainWebpack(webpackConfig => {
         // 通过 webpack-chain 修改 webpack 配置
@@ -58,19 +66,32 @@ module.exports = (api, projectOptions) => {
         app.use('/api', apiRoutes)
         io.on('connection', function(socket){
             console.log('连接上服务器了');
+            //创建一个当前连接用户的设计面板的页面
+            console.log(socket.id);
+            // let prePath= path.join(__dirname,'src','components','chart','preview','preview.vue');
+            // let preCreatePath= path.join(__dirname,'src','components','chart','preview',`preview-${socket.id}.vue`);
+            // fs.access(preCreatePath,(err)=>{
+            //     if(err.code == "ENOENT"){
+            //         fs.copyFile(prePath,preCreatePath,function(err){
+            //             console.log(err);
+            //         })
+            //     }
+            // })
+
             socket.on('disconnect', function(){
                 console.log('断开服务器连接了');
             });
             socket.on('onChartConfig', function(config){
-                let tplPath= path.join(__dirname,'src','components','chart','bar','template.tpl');
-                let prePath= path.join(__dirname,'src','components','chart','preview','preview.vue');
-                let tplFile = fs.readFileSync(tplPath);
-                let outFile = renderTemplate(tplFile.toString(),{ config: config })
-                fs.writeFileSync(prePath,outFile)
+                console.log(socket.id)
+                // let tplPath= path.join(__dirname,'src','components','chart','bar','template.tpl');
+                // let prePath= path.join(__dirname,'src','components','chart','preview','preview.vue');
+                // let tplFile = fs.readFileSync(tplPath);
+                // let outFile = renderTemplate(tplFile.toString(),{ config: config })
+                // fs.writeFileSync(prePath,outFile)
             });
         });
-        http.listen(3000, function(){
-            console.log('listening on *:3000');
+        http.listen(9999, function(){
+            console.log('listening on *:9999');
         });
     })
 };

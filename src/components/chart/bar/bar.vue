@@ -91,7 +91,6 @@
     import {baseConfigApi} from "common/js/config"
     import {getChartData} from "api/bar"
     import {socket} from "common/js/socket-client"
-    import {debounce} from "common/js/util"
 
     export default {
         data() {
@@ -169,7 +168,7 @@
             }
         },
         created(){
-            this.$router.push({path: '/chart/preview'});
+            //this.$router.push({path: '/chart/preview'});
         },
         mounted(){
             this.optionsAddr = normalize()
