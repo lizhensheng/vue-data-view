@@ -7,7 +7,7 @@
 <script>
     let echarts = require('echarts')
     import {getChartData} from "api/bar"
-    import {getCommonConfig} from "../bar/normalize"
+    import {getCommonConfig} from "common/js/normalize"
 
     export default {
         mounted() {

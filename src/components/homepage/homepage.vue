@@ -1,22 +1,17 @@
 <template>
     <div class="homepage">
-        <div class="panel-wrapper">
-            <router-link tag="div" class="tab-item" to="/chart/line"><panel-tool title="line"></panel-tool></router-link>
-            <router-link tag="div" class="tab-item" to="/chart/bar/preview"><panel-tool title="bar"></panel-tool></router-link>
-            <router-link tag="div" class="tab-item" to="/chart/pie"><panel-tool title="pie"></panel-tool></router-link>
-        </div>
-        <div class="panel-wrapper">
-        </div>
+        <m-header></m-header>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-    import PanelTool from 'base/panel-tool/panel-tool'
+    import MHeader from 'components/m-header/m-header'
     import './homepage.styl'
 
     export default {
         components:{
-            PanelTool
+            MHeader
         }
     }
 </script>

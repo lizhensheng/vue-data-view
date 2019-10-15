@@ -8,6 +8,7 @@ export const mutations = {
         //登出的时候要清除token
         state.token = null;
         window.sessionStorage.removeItem('token');
+        window.sessionStorage.removeItem('username');
     },
     USERNAME: (state, data) => {
         //把用户名存起来

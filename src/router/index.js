@@ -4,12 +4,12 @@ import store from '../store'
 Vue.use(Router)
 
 import Homepage from 'components/homepage/homepage'
-import Line from 'components/chart/line/line'
 import Bar from 'components/chart/bar/bar'
-import Pie from 'components/chart/pie/pie'
 import Preview from 'components/chart/preview/preview'
 import Login from 'views/login/login'
 import Register from 'views/register/register'
+import ProjectSetting from 'components/projectsetting/projectsetting'
+import Pindex from 'components/page/pindex'
 
 const router =  new Router({
     routes: [
@@ -25,34 +25,32 @@ const router =  new Router({
             component: Homepage,
             meta:{
                 requiresAuth:true
-            }
-        },
-        {
-            path:'/chart/line',
-            component:Line,
-            meta:{
-                requiresAuth:true
-            }
-        },
-        {
-            path:'/chart/bar',
-            component:Bar,
+            },
             children:[
                 {
-                    path:'/chart/bar/preview',
-                    component:Preview
+                    path:'/chart/bar',
+                    component:Bar,
+                    children:[
+                        {
+                            path:'/chart/bar/preview',
+                            component:Preview
+                        }
+                    ],
+                    meta:{
+                        requiresAuth:true
+                    }
+                },
+                {
+                    path:'/projectsetting',
+                    component: ProjectSetting,
+                    children: [
+                        {
+                            path:'/pindex',
+                            component: Pindex
+                        }
+                    ]
                 }
-            ],
-            meta:{
-                requiresAuth:true
-            }
-        },
-        {
-            path:'/chart/pie',
-            component:Pie,
-            meta:{
-                requiresAuth:true
-            }
+            ]
         },
         {
             path:'/login',

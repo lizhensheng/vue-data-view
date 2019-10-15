@@ -23,9 +23,10 @@
 </template>
 <script>
 import register from 'views/register/register'
+import {userLogin} from 'api/user'
 export default {
   data() {
-    var validatePass = (rule, value, callback) => {
+    let validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'));
       } else {
@@ -66,11 +67,28 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$message({
-            type: 'success',
-            message: '登录成功'
-          });
-          this.$router.push('HelloWorld');
+          userLogin(this.ruleForm).then(({data})=>{
+            //账号不存在
+            if(data.info === false){
+              this.$message({
+                type: 'info',
+                message: '账号不存在'
+              });
+              return;
+            }
+            //账号存在
+            if(data.success){
+              this.$message({
+                type: 'success',
+                message: '登录成功'
+              });
+              let token = data.token
+              let username = data.username
+              this.$store.dispatch('UserLogin', token)
+              this.$store.dispatch('UserName', username)
+              this.$router.push('/projectsetting')
+            }
+          })
         } else {
           //console.log('error submit!!');
           return false;

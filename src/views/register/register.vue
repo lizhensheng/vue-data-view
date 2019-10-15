@@ -16,6 +16,7 @@
   </el-form>
 </template>
 <script>
+import {userRegister} from 'api/user'
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -62,11 +63,19 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$message({
-            type: 'success',
-            message: '注册成功'
-          });
-          // this.activeName: 'first',
+          userRegister(this.ruleForm).then(({data})=>{
+            if(data.success){
+              this.$message({
+                type: 'success',
+                message: '注册成功'
+              })
+            }else{
+              this.$message({
+                type: 'info',
+                message: '用户名已经存在'
+              })
+            }
+          })
         } else {
           //console.log('error submit!!');
           return false;

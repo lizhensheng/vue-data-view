@@ -6,7 +6,10 @@ Vue.use(ElmentUI)
 import 'element-ui/lib/theme-chalk/index.css'
 import 'common/stylus/index.styl'
 import store from './store'
-import router from "./router/router"
+import router from "./router"
+import VueDraggableResizable from 'vue-draggable-resizable'
+import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
+Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.config.productionTip = false
 
 new Vue({

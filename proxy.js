@@ -3,7 +3,9 @@ const Mock = require('mockjs');
 const fs = require("fs")
 const path = require("path")
 const renderTemplate = require("any-template-compiler")
-/**
+const userController = require('./src/server/controller/user')
+const checkToken = require('./src/server/token/check-token')
+    /**
  * 用户配置图表的信息
  */
 let golbalConfigStore = {
@@ -28,6 +30,7 @@ module.exports = (api, projectOptions) => {
     api.configureDevServer(app => {
         let http = require('http').createServer(app)
         let io = require('socket.io')(http)
+        let bodyParser = require('body-parser');
         let apiRoutes = express.Router()
         apiRoutes.get('/bar/ydys/v1', function (req, res) {
             //建设用地审批
@@ -63,6 +66,24 @@ module.exports = (api, projectOptions) => {
             })
             res.json(json)
         });
+        /**
+         * 登录
+         */
+        apiRoutes.post('/login',userController.login);
+        /**
+         * 注册
+         */
+        apiRoutes.post('/register',userController.reg);
+        /**
+         * 获取所有用户
+         */
+        apiRoutes.get('/user', checkToken,userController.getAllUser);
+        /**
+         * 删除某个用户
+         */
+        apiRoutes.post('/delUser', checkToken,userController.delUser);
+        app.use(bodyParser.urlencoded({extended: false}));
+        app.use(bodyParser.json());
         app.use('/api', apiRoutes)
         io.on('connection', function(socket){
             console.log('连接上服务器了');
