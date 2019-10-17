@@ -1,4 +1,4 @@
-const user = require('../db/db')
+const {user} = require('../db/db')
 const moment = require('moment')
 const objectIdToTimestamp = require('objectid-to-timestamp')
 const sha1 = require('sha1')

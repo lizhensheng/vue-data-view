@@ -1,11 +1,62 @@
 .projectsetting
   display flex
+  color black
+  .moveflag
+    position absolute
+    width 20px
+    height 20px
+    z-index 100001
+    border 1px dashed black
   .leftWrapper
     background #F6F9FC
     width 280px
     padding-left 10px
     height 100%
     position fixed
+    .dbtitle
+      line-height 40px
+    .split
+      height 10px
+      line-height 10px
+    .divided
+      border-bottom: 1px solid #edeff1
+      margin-bottom 10px
+    .list-container
+      .tool-list
+        li
+          float left
+          margin 0 5px 4px
+          .tool-item
+            display inline-block
+            width 79px
+            white-space nowrap
+            overflow hidden
+            cursor pointer
+            .tool-item__name
+              line-height 16px
+              font-size 12px
+              margin-bottom 4px
+              color #333
+              text-align center
+            .tool-item__icon
+              background-size 100% 100%
+              background-repeat no-repeat
+              position relative
+              display inline-block
+              height 44px
+              width 44px
+              margin 8px 16px 0
+              border-radius 2px
+              &.chart-line
+                background-image: url('/img/tool-items/line1_a6d1650.png')
+              &.chart-bar
+                background-image: url('/img/tool-items/bar_ad67268.png')
+              &.chart-pie
+                background-image: url('/img/tool-items/pie_5d94603.png')
+              &.chart-ring
+                background-image: url('/img/tool-items/ring_a180e9f.png')
+          :hover
+            background-color #ebebeb
   .rightWrapper
     flex 1
     .css-sqdry3

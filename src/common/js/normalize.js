@@ -20,7 +20,8 @@ export function getSeries(data,config) {
         seriesData.push({
             name:name,
             type:'bar',
-            data:[]
+            data:[],
+            barWidth:20
         })
         data.forEach((item)=>{
             let value = item[id]
@@ -56,11 +57,7 @@ export function getCommonConfig(data,commonConfig,userConfig) {
         xAxis: [
             {
                 type: 'category',
-                data: x,
-                axisPointer: {
-                    type: 'shadow'
-                },
-                boundaryGap: ['20%', '20%']
+                data: x
             }
         ],
         yAxis: yAxis,
