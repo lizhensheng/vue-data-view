@@ -1,4 +1,5 @@
 let {getChartDemoConfig,replaceFileByCompile} = require('./src/common/js/charthelper')
+let {deepCopy} = require('./src/common/js/util')
 /**
  * 保存了所有临时的图表的配置
  */
@@ -31,18 +32,30 @@ let createConnection = function createConnection(app) {
             // let outFile = renderTemplate(tplFile.toString(),{ config: config })
             // fs.writeFileSync(prePath,outFile)
         });
+        //用户拖动控件到面板中时触发
         socket.on('onDragInControl',function (config) {
             let configDiy = JSON.parse(config)
-            let demoConfig = getChartDemoConfig(configDiy.chartType)
-            demoConfig.dx=configDiy.dx
-            demoConfig.dy=configDiy.dy
+            let demoConfig = getChartDemoConfig(parseInt(configDiy.chartType))
+            let copyObj = deepCopy(demoConfig)
+            copyObj.dx=configDiy.dx
+            copyObj.dy=configDiy.dy
             //增加图表id
             let chartId = `chart${Date.parse(new Date())}`
             globalStore.push({
                 chartId:chartId,
-                config:demoConfig
+                config:copyObj
             })
+            console.log(JSON.stringify(globalStore))
             replaceFileByCompile(globalStore)
+        });
+        //用户在面板中拖动控件时触发
+        socket.on('onDragInPanel',function (position) {
+            let configPosition = JSON.parse(position)
+            //根据图表id修改globalStore的配置
+            let selectedChartIndex = globalStore.findIndex((item)=>{return item.chartId == configPosition.chartId })
+            globalStore[selectedChartIndex].config.dx = configPosition.dx
+            globalStore[selectedChartIndex].config.dy = configPosition.dy
+            console.log(globalStore[selectedChartIndex].config.dx)
         });
     })
 
