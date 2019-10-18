@@ -13,6 +13,15 @@
 
   vue + vue-router + socket-io + axios + webpack + express + ES6/7 + styuls + element-ui 
 
+### v0.1.1
+- 功能描述:
+
+  - [x] 实现了数据源的连接配置,支持sqlserver,mysql,pgsql,oracle
+
+- 技术栈
+
+  mssql+mysql+pg+pg-then+oracledb   
+
   
 
   
