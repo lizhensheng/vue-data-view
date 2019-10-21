@@ -43,7 +43,7 @@
                 <el-tab-pane label="数据源" name="third">
                     <div class="dbsource">
                         <el-row>
-                            <el-col :span="8"><div class="grid-content bg-purple"><div class="dbtitle">数据源:</div></div></el-col>
+                            <el-col :span="8"><div class="grid-content bg-purple"><div class="title">数据源:</div></div></el-col>
                             <el-col :span="16"><div class="grid-content bg-purple-light">
                                 <el-select v-model="dbtype" placeholder="请选择" @change="changeDbType">
                                     <el-option
@@ -59,9 +59,9 @@
                     <div class="split"></div>
                     <div class="dbtablename">
                         <el-row>
-                            <el-col :span="8"><div class="grid-content bg-purple"><div class="dbtitle">数据表:</div></div></el-col>
+                            <el-col :span="8"><div class="grid-content bg-purple"><div class="title">数据表:</div></div></el-col>
                             <el-col :span="16"><div class="grid-content bg-purple-light">
-                                <el-select v-model="dbtablename" placeholder="请选择" >
+                                <el-select v-model="dbtablename" placeholder="请选择"  @change="changeTablename">
                                     <el-option
                                             v-for="item in dbtablenameoptions"
                                             :key="item.value"
@@ -70,6 +70,20 @@
                                     </el-option>
                                 </el-select>
                             </div></el-col>
+                        </el-row>
+                    </div>
+                    <div class="split"></div>
+                    <div class="split"></div>
+                    <div class="tablefields" v-if="tablefields.length>0">
+                        <el-row>
+                            <el-col :span="12"><h3>原始列名</h3></el-col>
+                            <el-col :span="12"><h3>显示列名</h3></el-col>
+                        </el-row>
+                        <div class="split"></div>
+                        <div class="divided"></div>
+                        <el-row v-for="(item,index) in tablefields" :key="index">
+                            <el-col :span="12"><div class="title">{{Object.keys(item)[0]}}</div></el-col>
+                            <el-col :span="12"><el-input v-model="tablefields[index][Object.keys(item)[1]]" autocomplete="off" ></el-input></el-col>
                         </el-row>
                     </div>
                     <div class="split"></div>
@@ -131,6 +145,7 @@
     export default {
         data() {
             return {
+                tablefields:[],
                 moveflag:false,
                 form:{
                     sourcename:''
@@ -219,9 +234,47 @@
                     }
                 })
             },
+            changeTablename(){
+                if(this.dbtablename&&this.dbtype){
+                    getDataset('',this.dbtablename,this.dbtype).then((res)=>{
+                        if(res.status == 200){
+                            if(res.data.length>0){
+                                let arrNames = Object.keys(res.data[0])
+                                arrNames.splice(0,1)
+                                let formfields = []
+                                arrNames.forEach(item =>{
+                                    let aform = {}
+                                    aform[item] = item
+                                    aform[`${item}_nickname`] = item
+                                    formfields.push(aform)
+                                })
+                                this.tablefields = formfields
+                            }else{
+                                this.tablefields = []
+                                this.$message({
+                                    type: 'info',
+                                    message: '暂无数据'
+                                });
+                            }
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '获取表结构出现异常'
+                            });
+                        }
+                    })
+                }
+            },
             clickSearch(){
                 if(this.dbtablename&&this.dbtype){
-                    getDataset(this.dbtablename,this.dbtype).then((res)=>{
+                    let searchStr = ''
+                    if(this.tablefields.length>0){
+                        this.tablefields.forEach((item)=>{
+                            searchStr +=`${item[Object.keys(item)[0]]} ${item[Object.keys(item)[1]]},`
+                        })
+                        searchStr = searchStr.substr(0,searchStr.length-1)
+                    }
+                    getDataset(searchStr,this.dbtablename,this.dbtype).then((res)=>{
                         if(res.status == 200){
                             this.dialogTableVisible = true
                             this.gridData = res.data
@@ -235,7 +288,14 @@
                 }
             },
             clickSaveSource(){
-                this.dialogFormVisible = true
+                if(this.dbtablename&&this.dbtype){
+                    this.dialogFormVisible = true
+                }else{
+                    this.$message({
+                        type: 'info',
+                        message: '请选择数据源'
+                    });
+                }
             },
             clickSaveSourceOk(){
                 if(this.dbtablename&&this.dbtype&&this.form.sourcename) {

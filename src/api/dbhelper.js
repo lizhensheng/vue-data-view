@@ -4,8 +4,8 @@ export function getTableNames(dbType){
     return instance.post('/config/getTableNames', {dbtype:dbType});
 }
 //获取数据集
-export function getDataset(tableName,dbType) {
-    return instance.post('/config/getDataset',{tablename:tableName,dbtype:dbType})
+export function getDataset(tablefields,tableName,dbType) {
+    return instance.post('/config/getDataset',{tablefields:tablefields,tablename:tableName,dbtype:dbType})
 }
 //保存数据源配置
 export function setDataSource(tableName,dbType,sourceName) {

@@ -21,7 +21,7 @@
             let userConfig<%- configs[i].chartId%> = config<%- configs[i].chartId%>.userConfig
             let dataUrl<%- configs[i].chartId%> = config<%- configs[i].chartId%>.dataUrl
             getChartData(dataUrl<%- configs[i].chartId%>).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfig<%- configs[i].chartId%>,userConfig<%- configs[i].chartId%>)
+                let tempConfig = getCommonConfig(res.data.array,commonConfig<%- configs[i].chartId%>,userConfig<%- configs[i].chartId%>,<%- configs[i].chartType%>)
                        echarts.init(this.$refs.<%- configs[i].chartId%>, {
                             width: config<%- configs[i].chartId%>.width-80,
                             height: config<%- configs[i].chartId%>.height-80
@@ -39,6 +39,7 @@
                 socket.emit('onDragInPanel',JSON.stringify(position))
             },
             onResize(){
+                // eslint-disable-next-line no-console
                 console.log('')
             }
         }

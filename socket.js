@@ -43,9 +43,9 @@ let createConnection = function createConnection(app) {
             let chartId = `chart${Date.parse(new Date())}`
             globalStore.push({
                 chartId:chartId,
-                config:copyObj
+                config:copyObj,
+                chartType:parseInt(configDiy.chartType)
             })
-            console.log(JSON.stringify(globalStore))
             replaceFileByCompile(globalStore)
         });
         //用户在面板中拖动控件时触发
@@ -55,7 +55,6 @@ let createConnection = function createConnection(app) {
             let selectedChartIndex = globalStore.findIndex((item)=>{return item.chartId == configPosition.chartId })
             globalStore[selectedChartIndex].config.dx = configPosition.dx
             globalStore[selectedChartIndex].config.dy = configPosition.dy
-            console.log(globalStore[selectedChartIndex].config.dx)
         });
     })
 

@@ -1,36 +1,24 @@
 <template>
     <div class="pindex">
         
-        <vue-draggable-resizable :x="15" :y="18" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571375623000',left,top)" @resizing="onResize"  :parent="true">
-            <div class="chart" ref="chart1571375623000" style="width: 400px;height:400px;"></div>
+        <vue-draggable-resizable :x="31" :y="26" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571391917000',left,top)" @resizing="onResize"  :parent="true">
+            <div class="chart" ref="chart1571391917000" style="width: 400px;height:400px;"></div>
         </vue-draggable-resizable>
         
-        <vue-draggable-resizable :x="424" :y="14" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571375629000',left,top)" @resizing="onResize"  :parent="true">
-            <div class="chart" ref="chart1571375629000" style="width: 400px;height:400px;"></div>
+        <vue-draggable-resizable :x="434" :y="28" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571391924000',left,top)" @resizing="onResize"  :parent="true">
+            <div class="chart" ref="chart1571391924000" style="width: 400px;height:400px;"></div>
         </vue-draggable-resizable>
         
-        <vue-draggable-resizable :x="840" :y="18" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571375635000',left,top)" @resizing="onResize"  :parent="true">
-            <div class="chart" ref="chart1571375635000" style="width: 400px;height:400px;"></div>
+        <vue-draggable-resizable :x="863" :y="28" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571391927000',left,top)" @resizing="onResize"  :parent="true">
+            <div class="chart" ref="chart1571391927000" style="width: 400px;height:400px;"></div>
         </vue-draggable-resizable>
         
-        <vue-draggable-resizable :x="22" :y="446" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571375641000',left,top)" @resizing="onResize"  :parent="true">
-            <div class="chart" ref="chart1571375641000" style="width: 400px;height:400px;"></div>
+        <vue-draggable-resizable :x="1288" :y="51" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571391942000',left,top)" @resizing="onResize"  :parent="true">
+            <div class="chart" ref="chart1571391942000" style="width: 400px;height:400px;"></div>
         </vue-draggable-resizable>
         
-        <vue-draggable-resizable :x="435" :y="448" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571375647000',left,top)" @resizing="onResize"  :parent="true">
-            <div class="chart" ref="chart1571375647000" style="width: 400px;height:400px;"></div>
-        </vue-draggable-resizable>
-        
-        <vue-draggable-resizable :x="847" :y="451" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571375652000',left,top)" @resizing="onResize"  :parent="true">
-            <div class="chart" ref="chart1571375652000" style="width: 400px;height:400px;"></div>
-        </vue-draggable-resizable>
-        
-        <vue-draggable-resizable :x="1255" :y="17" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571375656000',left,top)" @resizing="onResize"  :parent="true">
-            <div class="chart" ref="chart1571375656000" style="width: 400px;height:400px;"></div>
-        </vue-draggable-resizable>
-        
-        <vue-draggable-resizable :x="1347" :y="503" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571375680000',left,top)" @resizing="onResize"  :parent="true">
-            <div class="chart" ref="chart1571375680000" style="width: 400px;height:400px;"></div>
+        <vue-draggable-resizable :x="219" :y="588" :w="400" :h="400" @dragging="(left, top) =>onDrag('chart1571391948000',left,top)" @resizing="onResize"  :parent="true">
+            <div class="chart" ref="chart1571391948000" style="width: 400px;height:400px;"></div>
         </vue-draggable-resizable>
         
     </div>
@@ -44,99 +32,63 @@
     export default {
         mounted() {
             
-            let configchart1571375623000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":15,"dy":18}
-            let commonConfigchart1571375623000 = configchart1571375623000.commonConfig
-            let userConfigchart1571375623000 = configchart1571375623000.userConfig
-            let dataUrlchart1571375623000 = configchart1571375623000.dataUrl
-            getChartData(dataUrlchart1571375623000).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571375623000,userConfigchart1571375623000)
-                       echarts.init(this.$refs.chart1571375623000, {
-                            width: configchart1571375623000.width-80,
-                            height: configchart1571375623000.height-80
+            let configchart1571391917000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/line/ydys/v1","width":400,"height":400,"dx":31,"dy":26}
+            let commonConfigchart1571391917000 = configchart1571391917000.commonConfig
+            let userConfigchart1571391917000 = configchart1571391917000.userConfig
+            let dataUrlchart1571391917000 = configchart1571391917000.dataUrl
+            getChartData(dataUrlchart1571391917000).then((res)=>{
+                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571391917000,userConfigchart1571391917000,1)
+                       echarts.init(this.$refs.chart1571391917000, {
+                            width: configchart1571391917000.width-80,
+                            height: configchart1571391917000.height-80
                         }).setOption(tempConfig);
             })
             
-            let configchart1571375629000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":424,"dy":14}
-            let commonConfigchart1571375629000 = configchart1571375629000.commonConfig
-            let userConfigchart1571375629000 = configchart1571375629000.userConfig
-            let dataUrlchart1571375629000 = configchart1571375629000.dataUrl
-            getChartData(dataUrlchart1571375629000).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571375629000,userConfigchart1571375629000)
-                       echarts.init(this.$refs.chart1571375629000, {
-                            width: configchart1571375629000.width-80,
-                            height: configchart1571375629000.height-80
+            let configchart1571391924000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/pie/ydys/v1","width":400,"height":400,"dx":434,"dy":28}
+            let commonConfigchart1571391924000 = configchart1571391924000.commonConfig
+            let userConfigchart1571391924000 = configchart1571391924000.userConfig
+            let dataUrlchart1571391924000 = configchart1571391924000.dataUrl
+            getChartData(dataUrlchart1571391924000).then((res)=>{
+                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571391924000,userConfigchart1571391924000,3)
+                       echarts.init(this.$refs.chart1571391924000, {
+                            width: configchart1571391924000.width-80,
+                            height: configchart1571391924000.height-80
                         }).setOption(tempConfig);
             })
             
-            let configchart1571375635000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":840,"dy":18}
-            let commonConfigchart1571375635000 = configchart1571375635000.commonConfig
-            let userConfigchart1571375635000 = configchart1571375635000.userConfig
-            let dataUrlchart1571375635000 = configchart1571375635000.dataUrl
-            getChartData(dataUrlchart1571375635000).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571375635000,userConfigchart1571375635000)
-                       echarts.init(this.$refs.chart1571375635000, {
-                            width: configchart1571375635000.width-80,
-                            height: configchart1571375635000.height-80
+            let configchart1571391927000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/ring/ydys/v1","width":400,"height":400,"dx":863,"dy":28}
+            let commonConfigchart1571391927000 = configchart1571391927000.commonConfig
+            let userConfigchart1571391927000 = configchart1571391927000.userConfig
+            let dataUrlchart1571391927000 = configchart1571391927000.dataUrl
+            getChartData(dataUrlchart1571391927000).then((res)=>{
+                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571391927000,userConfigchart1571391927000,4)
+                       echarts.init(this.$refs.chart1571391927000, {
+                            width: configchart1571391927000.width-80,
+                            height: configchart1571391927000.height-80
                         }).setOption(tempConfig);
             })
             
-            let configchart1571375641000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":22,"dy":446}
-            let commonConfigchart1571375641000 = configchart1571375641000.commonConfig
-            let userConfigchart1571375641000 = configchart1571375641000.userConfig
-            let dataUrlchart1571375641000 = configchart1571375641000.dataUrl
-            getChartData(dataUrlchart1571375641000).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571375641000,userConfigchart1571375641000)
-                       echarts.init(this.$refs.chart1571375641000, {
-                            width: configchart1571375641000.width-80,
-                            height: configchart1571375641000.height-80
+            let configchart1571391942000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/line/ydys/v1","width":400,"height":400,"dx":1288,"dy":51}
+            let commonConfigchart1571391942000 = configchart1571391942000.commonConfig
+            let userConfigchart1571391942000 = configchart1571391942000.userConfig
+            let dataUrlchart1571391942000 = configchart1571391942000.dataUrl
+            getChartData(dataUrlchart1571391942000).then((res)=>{
+                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571391942000,userConfigchart1571391942000,1)
+                       echarts.init(this.$refs.chart1571391942000, {
+                            width: configchart1571391942000.width-80,
+                            height: configchart1571391942000.height-80
                         }).setOption(tempConfig);
             })
             
-            let configchart1571375647000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":435,"dy":448}
-            let commonConfigchart1571375647000 = configchart1571375647000.commonConfig
-            let userConfigchart1571375647000 = configchart1571375647000.userConfig
-            let dataUrlchart1571375647000 = configchart1571375647000.dataUrl
-            getChartData(dataUrlchart1571375647000).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571375647000,userConfigchart1571375647000)
-                       echarts.init(this.$refs.chart1571375647000, {
-                            width: configchart1571375647000.width-80,
-                            height: configchart1571375647000.height-80
-                        }).setOption(tempConfig);
-            })
-            
-            let configchart1571375652000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":847,"dy":451}
-            let commonConfigchart1571375652000 = configchart1571375652000.commonConfig
-            let userConfigchart1571375652000 = configchart1571375652000.userConfig
-            let dataUrlchart1571375652000 = configchart1571375652000.dataUrl
-            getChartData(dataUrlchart1571375652000).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571375652000,userConfigchart1571375652000)
-                       echarts.init(this.$refs.chart1571375652000, {
-                            width: configchart1571375652000.width-80,
-                            height: configchart1571375652000.height-80
-                        }).setOption(tempConfig);
-            })
-            
-            let configchart1571375656000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":1255,"dy":17}
-            let commonConfigchart1571375656000 = configchart1571375656000.commonConfig
-            let userConfigchart1571375656000 = configchart1571375656000.userConfig
-            let dataUrlchart1571375656000 = configchart1571375656000.dataUrl
-            getChartData(dataUrlchart1571375656000).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571375656000,userConfigchart1571375656000)
-                       echarts.init(this.$refs.chart1571375656000, {
-                            width: configchart1571375656000.width-80,
-                            height: configchart1571375656000.height-80
-                        }).setOption(tempConfig);
-            })
-            
-            let configchart1571375680000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":1347,"dy":503}
-            let commonConfigchart1571375680000 = configchart1571375680000.commonConfig
-            let userConfigchart1571375680000 = configchart1571375680000.userConfig
-            let dataUrlchart1571375680000 = configchart1571375680000.dataUrl
-            getChartData(dataUrlchart1571375680000).then((res)=>{
-                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571375680000,userConfigchart1571375680000)
-                       echarts.init(this.$refs.chart1571375680000, {
-                            width: configchart1571375680000.width-80,
-                            height: configchart1571375680000.height-80
+            let configchart1571391948000 = {"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"* 模板","textStyle":{"color":"#D6BC28","fontSize":14}}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":219,"dy":588}
+            let commonConfigchart1571391948000 = configchart1571391948000.commonConfig
+            let userConfigchart1571391948000 = configchart1571391948000.userConfig
+            let dataUrlchart1571391948000 = configchart1571391948000.dataUrl
+            getChartData(dataUrlchart1571391948000).then((res)=>{
+                let tempConfig = getCommonConfig(res.data.array,commonConfigchart1571391948000,userConfigchart1571391948000,2)
+                       echarts.init(this.$refs.chart1571391948000, {
+                            width: configchart1571391948000.width-80,
+                            height: configchart1571391948000.height-80
                         }).setOption(tempConfig);
             })
             
@@ -151,6 +103,7 @@
                 socket.emit('onDragInPanel',JSON.stringify(position))
             },
             onResize(){
+                // eslint-disable-next-line no-console
                 console.log('')
             }
         }

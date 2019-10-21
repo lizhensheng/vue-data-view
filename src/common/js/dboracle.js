@@ -18,11 +18,17 @@ let dbOracle = function dbOracle() {
         const result = await this.conn.execute(`select table_name from user_tables where TABLESPACE_NAME is not null and  user='${oracleConfig.username}'`)
         callback(result.rows)
     }
-    this.getDataset = async (tablename,callback)=>{
+    this.getDataset = async (tablefields,tablename,callback)=>{
         if(tablename.indexOf(' ')>-1){
             callback('')
         }
-        const result = await this.conn.execute(`select rownum,t.*from ${tablename} t where rownum<6`)
+        let sql = ''
+        if(tablefields){
+            sql = `select ${tablefields} from (select rownum,t.* from ${tablename} t where rownum<6)`
+        }else{
+            sql = `select rownum,t.*from ${tablename} t where rownum<6`
+        }
+        const result = await this.conn.execute(sql)
         callback(result.rows)
     }
     // this.getTableCols = async (tablename)=>{

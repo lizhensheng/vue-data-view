@@ -28,11 +28,12 @@ configRoutes.post('/getTableNames',async (req,res) => {
  */
 configRoutes.post('/getDataset',async (req,res)=>{
     if(req.body.tablename&&req.body.dbtype){
+        let tablefields = req.body.tablefields
         let tablename = req.body.tablename
         let dbtype = req.body.dbtype
         let handle = dbFactory.createOperate(dbtype)
         await handle.createConnection()
-        await handle.getDataset(tablename,(result)=>{
+        await handle.getDataset(tablefields,tablename,(result)=>{
             handle.closeConnection()
             if(result){
                 res.json(result)

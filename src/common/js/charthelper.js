@@ -1,20 +1,21 @@
-let {chartBarDemoConfig} = require('./chartconfig')
+let {chartBarDemoConfig,chartLineDemoConfig,chartPieDemoConfig,chartRingDemoConfig} = require('./chartconfig')
 const fs = require("fs")
 const path = require("path")
 const renderTemplate = require("any-template-compiler")
 let  getChartDemoConfig = function (chartType) {
-    // eslint-disable-next-line no-debugger
-    debugger;
     let config = {}
     switch (chartType) {
         case LINE:
+            config = chartLineDemoConfig
             break
         case BAR:
             config = chartBarDemoConfig
             break
         case PIE:
+            config = chartPieDemoConfig
             break
         case RING:
+            config = chartRingDemoConfig
             break
     }
     return config
@@ -32,12 +33,9 @@ let  replaceFileByCompile = function (configs){
     let prePath = getPrePath()
     let tplFile = fs.readFileSync(tplPath)
     let outFile = renderTemplate(tplFile.toString(),{ configs: configs })
-    // eslint-disable-next-line no-console
-    console.log(outFile)
     fs.writeFileSync(prePath,outFile)
 }
 function getTplPath(){
-    console.log(__dirname)
     return path.resolve('./src/components/chart/template/default.tpl')
 }
 function getPrePath(){

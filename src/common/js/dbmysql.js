@@ -21,8 +21,14 @@ let dbMysql = function dbMysql() {
                 callback(result)
             })
     }
-    this.getDataset = async (tablename,callback)=>{
-        await this.conn.query(this.conn.format('select *from ?? limit 5',tablename),  (error, result, fields) => {
+    this.getDataset = async (tablefields,tablename,callback)=>{
+        let sql = ''
+        if(tablefields){
+            sql = `select ${tablefields} from ?? limit 5`
+        }else{
+            sql = 'select *from ?? limit 5'
+        }
+        await this.conn.query(this.conn.format(sql,tablename),  (error, result, fields) => {
             if (error) {
                 throw new Error(error)
             }

@@ -3,6 +3,9 @@ const Mock = require('mockjs');
 let apiRoutes = express.Router()
 const userController = require('./src/server/controller/user')
 const checkToken = require('./src/server/token/check-token')
+/**
+ * 模板柱状图数据的接口
+ */
 apiRoutes.get('/bar/ydys/v1', function (req, res) {
     //建设用地审批
     let json = Mock.mock({
@@ -25,6 +28,91 @@ apiRoutes.get('/bar/ydys/v1', function (req, res) {
                 "value":"ARECODE",
                 "label":"行政区"
             },
+            {
+                "value":"GWYPZZMJ",
+                "label":"国务院批准总面积"
+            },
+            {
+                "value":"SZFPZZMJ",
+                "label":"省政府批准总面积"
+            }
+        ]
+    })
+    res.json(json)
+});
+/**
+ * 模板折线图数据的接口
+ */
+apiRoutes.get('/line/ydys/v1', function (req, res) {
+    //建设用地审批
+    let json = Mock.mock({
+        "array|4": [
+            {
+                "TJDATE":function(){
+                    return Mock.mock('@date("yyyy/MM")')
+                },
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            }
+        ],
+        "tags":[
+            {
+                "value":"TJDATE",
+                "label":"月份"
+            },
+            {
+                "value":"ARECODE",
+                "label":"行政区"
+            },
+            {
+                "value":"GWYPZZMJ",
+                "label":"国务院批准总面积"
+            },
+            {
+                "value":"SZFPZZMJ",
+                "label":"省政府批准总面积"
+            }
+        ]
+    })
+    res.json(json)
+});
+/**
+ * 模板饼图数据的接口
+ */
+apiRoutes.get('/pie/ydys/v1', function (req, res) {
+    //建设用地审批
+    let json = Mock.mock({
+        "array":{
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+        }
+        ,
+        "tags":[
+            {
+                "value":"GWYPZZMJ",
+                "label":"国务院批准总面积"
+            },
+            {
+                "value":"SZFPZZMJ",
+                "label":"省政府批准总面积"
+            }
+        ]
+    })
+    res.json(json)
+});
+/**
+ * 模板环形饼图数据的接口
+ */
+apiRoutes.get('/ring/ydys/v1', function (req, res) {
+    //建设用地审批
+    let json = Mock.mock({
+        "array":{
+            "GWYPZZMJ|1-100":1,
+            "SZFPZZMJ|1-100":1
+        }
+        ,
+        "tags":[
             {
                 "value":"GWYPZZMJ",
                 "label":"国务院批准总面积"
