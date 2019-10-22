@@ -9,8 +9,7 @@ import Preview from 'components/chart/preview/preview'
 import Login from 'views/login/login'
 import Register from 'views/register/register'
 import ProjectSetting from 'components/projectsetting/projectsetting'
-import Pindex from 'components/page/pindex'
-
+import Echartdemo from 'components/page/echartdemo'
 const router =  new Router({
     routes: [
         {
@@ -19,6 +18,10 @@ const router =  new Router({
             meta:{
                 requiresAuth:true
             }
+        },
+        {
+            path:'/test',
+            component:Echartdemo
         },
         {
             path: '/homepage',
@@ -42,13 +45,7 @@ const router =  new Router({
                 },
                 {
                     path:'/projectsetting',
-                    component: ProjectSetting,
-                    children: [
-                        {
-                            path:'/pindex',
-                            component: Pindex
-                        }
-                    ]
+                    component: ProjectSetting
                 }
             ]
         },

@@ -1,0 +1,61 @@
+<template>
+    <div class="chart">
+        <vue-draggable-resizable :x="802" :y="38" :w="431" :h="261" @dragging="(left, top) =>onDrag('chart1571734697000',left,top)" @resizing="(x, y, width, height) =>onResize('chart1571734697000',x, y, width, height)"  @activated="onActivated('chart1571734697000')">
+            <div @click="deleteChart('chart1571734697000')" class="delete">删除</div>
+            <div class="chart" ref="chart1571734697000" style="width: 431px;height:261px;"></div>
+        </vue-draggable-resizable>
+    </div>
+</template>
+<script>
+    import './chart.styl'
+    let echarts = require('echarts')
+    import {getChartData} from "api/bar"
+    import {getCommonConfig} from "common/js/normalize"
+    import {socket} from "common/js/socket-client"
+    import jsonobj from "common/js/chalk.project.json"
+    export default {
+        mounted() {
+            let mconfig = {"chartId":"chart1571734697000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":431,"height":261,"dx":802,"dy":38},"chartType":2}
+            let commonConfig = mconfig.config.commonConfig
+            let userConfig = mconfig.config.userConfig
+            let dataUrl = mconfig.config.dataUrl
+            getChartData(dataUrl).then((res)=>{
+               let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,2)
+               echarts.registerTheme('chalk',jsonobj)
+                this.$echarts = echarts.init(this.$refs.chart1571734697000, 'chalk', {
+                    width: mconfig.config.width,
+                    height: mconfig.config.height
+                })
+                this.$echarts.setOption(tempConfig)
+            })
+        },
+        methods:{
+            onDrag(id,x,y){
+                let position = {
+                   dx:x,
+                   dy:y,
+                   chartId:id
+                }
+                socket.emit('onDragInPanel',JSON.stringify(position))
+            },
+            onResize(id,x,y,width,height){
+               let position = {
+                   dx:x,
+                   dy:y,
+                   width:width,
+                   height:height,
+                   chartId:id
+               }
+               this.$echarts.resize({width:width,height:height})
+               socket.emit('onDragInPanel',JSON.stringify(position))
+            },
+            deleteChart(id){
+                socket.emit('onDragRemove',id)
+            },
+            onActivated(id){
+                console.log(id)
+                this.$emit('activeChart',id)
+            }
+        }
+    }
+</script>

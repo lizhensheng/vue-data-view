@@ -7,7 +7,7 @@
         </div>
         <div class="leftWrapper">
             <el-tabs v-model="activeName">
-                <el-tab-pane label="项目管理" name="first">
+                <el-tab-pane label="工程管理" name="first">
                     <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
                 </el-tab-pane>
                 <el-tab-pane label="控件" name="second">
@@ -103,14 +103,32 @@
         </div>
         <div class="rightWrapper">
             <div class="css-sqdry3">
-                <div class="css-1qkwt59">
-                    <el-menu :default-active="menuIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                        <el-menu-item index="1" >预览</el-menu-item>
-                        <el-menu-item index="2" >代码</el-menu-item>
-                    </el-menu>
-                    <div class="css-10ro1m">
-                        <router-view></router-view>
+
+                    <div class="css-1qkwt59">
+                        <el-menu :default-active="menuIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                            <el-menu-item index="1" >预览</el-menu-item>
+                            <el-menu-item index="2" >文档</el-menu-item>
+                        </el-menu>
+
+                            <div class="css-10ro1m" v-if="!docdesc">
+                                <div class="dashboard-background-image" @activeChart="onActiveChart">
+                                    <Index></Index>
+                                </div>
+                            </div>
+                            <div v-if="docdesc">
+                                文档
+                            </div>
                     </div>
+            </div>
+            <div class="css-fullconfig">
+                <div class="configheader">
+                    <span>控制面板</span>
+                </div>
+                <div class="content" @activeChart="onActiveChart">
+
+                </div>
+                <div class="nocontent">
+                    点击控件进行配置
                 </div>
             </div>
         </div>
@@ -139,6 +157,7 @@
 <script>
     import {getTableNames,getDataset,setDataSource} from 'api/dbhelper'
     import {socket} from "common/js/socket-client"
+    import Index from 'components/page/index'
     let TOP_HEIGHT = 125
     let LEFT_WIDTH = 300
     import './projectsetting.styl'
@@ -197,7 +216,8 @@
                 defaultProps: {
                     children: 'children',
                     label: 'label'
-                }
+                },
+                docdesc:false
             };
         },
         created(){
@@ -207,13 +227,13 @@
         },
         methods:{
             handleNodeClick(){
-                let his = this.$router.history.current.fullPath
-                if(his !== '/pindex'){
-                    this.$router.replace('/pindex')
-                }
+                // let his = this.$router.history.current.fullPath
+                // if(his !== '/pindex'){
+                //     this.$router.replace('/pindex')
+                // }
             },
-            handleSelect(){
-
+            handleSelect(item){
+                this.docdesc = item == 2
             },
             changeDbType(item){
                 this.dbtablename = ''
@@ -350,7 +370,13 @@
                     socket.emit('onDragInControl',JSON.stringify(obj))
                 }
                 this.chartType = -1
+            },
+            onActiveChart(){
+                console.log('onActiveChart')
             }
+        },
+        components:{
+            Index
         }
     }
 </script>

@@ -11,8 +11,9 @@
     background #F6F9FC
     width 280px
     padding-left 10px
-    height 100%
-    position fixed
+    bottom 0
+    top 70px
+    position absolute
     .title
       line-height 40px
     .split
@@ -63,13 +64,13 @@
   .rightWrapper
     flex 1
     .css-sqdry3
-      position: fixed;
+      position: absolute;
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
-      height: 100%;
-      left: 300px;
-      top: 70px;
-      width: 100%;
+      bottom 0
+      left: 300px
+      top: 70px
+      right 300px
       .css-1qkwt59
         position: absolute;
         top: 0px;
@@ -85,8 +86,33 @@
           z-index 3
           height calc(100% - 40px)
           overflow auto
-          transition all 0.1s linear 0s
-          background transparent
-          background-color  #808080
-          background linear-gradient(-90deg, rgba(0, 0, 0, .1) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, .1) 1px, transparent 1px)
-          background-size  20px 20px, 20px 20px
+          //background transparent
+          //background-color  #808080
+          //background linear-gradient(-90deg, rgba(0, 0, 0, .1) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, .1) 1px, transparent 1px)
+          //background-size  20px 20px, 20px 20px
+          background: rgb(0, 0, 0);
+          .dashboard-background-image
+            width 100%
+            height 100%
+            position absolute
+            z-index -1
+            background url(/img/background/background-4.png) 0% 0% / 100% 100%
+            filter blur(0px)
+            opacity 0.7
+    .css-fullconfig
+      position absolute
+      width 300px
+      top 70px
+      bottom 0
+      right 0
+      .configheader
+        line-height 50px
+        padding-left 10px
+        border-bottom 1px solid #e3e3e3
+      .nocontent
+        position absolute
+        top 50%
+        left 50%
+        transform: translate(-50%, -50%)
+        color orange
+

@@ -32,7 +32,14 @@ let deepCopy = function DeepCopy(object) {
     }
     return resultObject;
 }
+
+let upperFirstLetter = function(str){
+    let first = str.substr(0,1).toUpperCase()
+    let last =  str.substr(1)
+    return first + last
+}
 module.exports ={
     debounce,
-    deepCopy
+    deepCopy,
+    upperFirstLetter
 }

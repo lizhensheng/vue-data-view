@@ -53,9 +53,24 @@ let createConnection = function createConnection(app) {
             let configPosition = JSON.parse(position)
             //根据图表id修改globalStore的配置
             let selectedChartIndex = globalStore.findIndex((item)=>{return item.chartId == configPosition.chartId })
-            globalStore[selectedChartIndex].config.dx = configPosition.dx
-            globalStore[selectedChartIndex].config.dy = configPosition.dy
+            if(selectedChartIndex>-1){
+                globalStore[selectedChartIndex].config.dx = configPosition.dx
+                globalStore[selectedChartIndex].config.dy = configPosition.dy
+                if(configPosition.width || configPosition.height){
+                    globalStore[selectedChartIndex].config.width = configPosition.width
+                    globalStore[selectedChartIndex].config.height = configPosition.height
+                }
+            }
         });
+        //用户在面板中删除控件时触发
+        socket.on('onDragRemove',function (chartId) {
+            console.log(chartId)
+            let selectedChartIndex = globalStore.findIndex((item)=>{return item.chartId == chartId })
+            if(selectedChartIndex>-1){
+                globalStore.splice(selectedChartIndex,1)
+                replaceFileByCompile(globalStore)
+            }
+        })
     })
 
     http.listen(9999, function(){
