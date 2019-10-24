@@ -49,14 +49,15 @@ configRoutes.post('/getDataset',async (req,res)=>{
  * 保存数据源配置
  */
 configRoutes.post('/setDataSource',(req,res)=>{
-    if(!req.body.tablename||!req.body.dbtype||!req.body.sourcename){
+    if(!req.body.tablename||!req.body.dbtype||!req.body.sourcename||!req.body.tablefields){
         res.json({code:800})
         return
     }
     let s = new sourceConfig({
         dbtype:req.body.dbtype,
         tablename:req.body.tablename,
-        sourcename:req.body.sourcename
+        sourcename:req.body.sourcename,
+        tablefields:req.body.tablefields
     })
     s.create_time =  moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
     sourceConfig.findOne({sourcename:s.sourcename},(err,doc)=>{

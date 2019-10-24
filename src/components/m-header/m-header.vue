@@ -2,7 +2,7 @@
     <div class="m-header">
         <div class="icon">
         </div>
-        <div class="title">数据可视化yuview</div>
+        <div class="title">数据可视化</div>
         <div class="right-menu" ref="rightMenu">
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
                 <div class="avatar-wrapper">

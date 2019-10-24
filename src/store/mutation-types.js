@@ -1,0 +1,5 @@
+export const SET_CHART_ID = 'SET_CHART_ID'
+export const SET_CHART_WIDTH = 'SET_CHART_WIDTH'
+export const SET_CHART_HEIGHT = 'SET_CHART_HEIGHT'
+export const SET_CHART_X = 'SET_CHART_X'
+export const SET_CHART_Y = 'SET_CHART_Y'

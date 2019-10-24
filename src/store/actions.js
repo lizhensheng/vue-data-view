@@ -1,4 +1,4 @@
-export  const actions = {
+const actions = {
     UserLogin({ commit }, data){
         commit('LOGIN', data);
     },
@@ -9,3 +9,4 @@ export  const actions = {
         commit('USERNAME', data);
     }
 };
+export default actions

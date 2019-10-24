@@ -8,6 +8,6 @@ export function getDataset(tablefields,tableName,dbType) {
     return instance.post('/config/getDataset',{tablefields:tablefields,tablename:tableName,dbtype:dbType})
 }
 //保存数据源配置
-export function setDataSource(tableName,dbType,sourceName) {
-    return instance.post('/config/setDataSource',{tablename:tableName,dbtype:dbType,sourcename:sourceName})
+export function setDataSource(tableName,dbType,sourceName,tablefields) {
+    return instance.post('/config/setDataSource',{tablename:tableName,dbtype:dbType,sourcename:sourceName,tablefields: tablefields})
 }

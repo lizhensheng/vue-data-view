@@ -1,12 +1,17 @@
 <template>
     <div class="projectsetting" @mousemove="mouseProjectSetting" @mouseup="mouseUpProjectSetting" ref="projectsetting">
+        <!--移动选框start-->
         <div class="moveflag" ref="moveflag" v-show="moveflag">
             <canvas ref="myCanvas" width="20" height="20"
                     style="z-index: 10000">
             </canvas>
         </div>
+        <!--移动选框end-->
+
+        <!--左侧面板start-->
         <div class="leftWrapper">
-            <el-tabs v-model="activeName">
+            <keep-alive>
+                <el-tabs v-model="activeName">
                 <el-tab-pane label="工程管理" name="first">
                     <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
                 </el-tab-pane>
@@ -45,7 +50,7 @@
                         <el-row>
                             <el-col :span="8"><div class="grid-content bg-purple"><div class="title">数据源:</div></div></el-col>
                             <el-col :span="16"><div class="grid-content bg-purple-light">
-                                <el-select v-model="dbtype" placeholder="请选择" @change="changeDbType">
+                                <el-select v-model="dbtype" placeholder="请选择" @change="changeDbType" size="small">
                                     <el-option
                                             v-for="item in dbtypeoptions"
                                             :key="item.value"
@@ -61,7 +66,7 @@
                         <el-row>
                             <el-col :span="8"><div class="grid-content bg-purple"><div class="title">数据表:</div></div></el-col>
                             <el-col :span="16"><div class="grid-content bg-purple-light">
-                                <el-select v-model="dbtablename" placeholder="请选择"  @change="changeTablename">
+                                <el-select v-model="dbtablename" placeholder="请选择"  @change="changeTablename"  size="small">
                                     <el-option
                                             v-for="item in dbtablenameoptions"
                                             :key="item.value"
@@ -74,44 +79,52 @@
                     </div>
                     <div class="split"></div>
                     <div class="split"></div>
-                    <div class="tablefields" v-if="tablefields.length>0">
-                        <el-row>
-                            <el-col :span="12"><h3>原始列名</h3></el-col>
-                            <el-col :span="12"><h3>显示列名</h3></el-col>
-                        </el-row>
-                        <div class="split"></div>
-                        <div class="divided"></div>
-                        <el-row v-for="(item,index) in tablefields" :key="index">
-                            <el-col :span="12"><div class="title">{{Object.keys(item)[0]}}</div></el-col>
-                            <el-col :span="12"><el-input v-model="tablefields[index][Object.keys(item)[1]]" autocomplete="off" ></el-input></el-col>
-                        </el-row>
+                    <div class="tablefields" v-if="tablefields.length>0" ref="tablefields">
+                        <div style="width:500px">
+                            <el-row>
+                                <el-col :span="8" class="fields"><h3>原始列名</h3></el-col>
+                                <el-col :span="8" class="fields"><h3>显示列名</h3></el-col>
+                                <el-col :span="8" class="fields"><h3>数据类型</h3></el-col>
+                            </el-row>
+                            <div class="split"></div>
+                            <div class="divided"></div>
+                            <el-row v-for="(item,index) in tablefields" :key="index" class="rowfields">
+                                <el-col :span="8" class="fields"><div class="title">{{Object.keys(item)[0]}}</div></el-col>
+                                <el-col :span="8" class="fields"><el-input v-model="tablefields[index][Object.keys(item)[1]]" autocomplete="off" size="small"></el-input></el-col>
+                                <el-col :span="8" class="fields"><div class="title">{{tablefields[index][Object.keys(item)[2]]}}</div></el-col>
+                            </el-row>
+                        </div>
                     </div>
                     <div class="split"></div>
                     <div class="divided"></div>
                     <div class="search">
                         <el-row>
                             <el-col :span="8">
-                                <el-button round @click="clickSaveSource">保存数据源</el-button>
+                                <el-button round @click="clickSaveSource" size="small">保存数据源</el-button>
                             </el-col>
-                            <el-col :span="8" :offset="8">
-                                <el-button round @click="clickSearch">查询</el-button>
+                            <el-col :span="6" :offset="10">
+                                <el-button round @click="clickSearch" size="small">查询</el-button>
                             </el-col>
                         </el-row>
                     </div>
                 </el-tab-pane>
             </el-tabs>
+            </keep-alive>
         </div>
+        <!--左侧面板end-->
+
+        <!--中间和右侧面板start-->
         <div class="rightWrapper">
+            <!--中间面板start-->
             <div class="css-sqdry3">
 
                     <div class="css-1qkwt59">
                         <el-menu :default-active="menuIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                             <el-menu-item index="1" >预览</el-menu-item>
-                            <el-menu-item index="2" >文档</el-menu-item>
                         </el-menu>
 
-                            <div class="css-10ro1m" v-if="!docdesc">
-                                <div class="dashboard-background-image" @activeChart="onActiveChart">
+                            <div class="css-10ro1m" v-if="!docdesc" @click="onClick">
+                                <div class="dashboard-background-image">
                                     <Index></Index>
                                 </div>
                             </div>
@@ -120,25 +133,52 @@
                             </div>
                     </div>
             </div>
+            <!--中间面板end-->
+
+            <!--右侧面板start-->
             <div class="css-fullconfig">
                 <div class="configheader">
                     <span>控制面板</span>
                 </div>
-                <div class="content" @activeChart="onActiveChart">
-
+                <div class="content" v-if="chartId">
+                    <el-tabs type="border-card">
+                        <el-tab-pane label="基础">
+                            <div class="simple">
+                                <div class="tag"><el-tag size="small">图表id</el-tag></div>
+                                <div class="setting"><el-tag type="info" size="small">{{chartId}}</el-tag></div>
+                                <div class="tag"><el-tag size="small">宽度</el-tag></div>
+                                <div class="setting"><el-input-number v-model="localChartWidth"  :min="100" :max="1000" label="图表宽度" size="small"></el-input-number></div>
+                                <div class="tag"><el-tag size="small">高度</el-tag></div>
+                                <div class="setting"><el-input-number v-model="localChartHeight"  :min="100" :max="1000" label="图表高度" size="small"></el-input-number></div>
+                                <div class="tag"><el-tag size="small">X坐标</el-tag></div>
+                                <div class="setting"><el-input-number v-model="localChartX"  :min="0" :max="1000" label="X坐标" size="small"></el-input-number></div>
+                                <div class="tag"><el-tag size="small">Y坐标</el-tag></div>
+                                <div class="setting"><el-input-number v-model="localChartY"  :min="0" :max="1000" label="Y坐标" size="small"></el-input-number></div>
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="数据">数据</el-tab-pane>
+                        <el-tab-pane label="高级">高级</el-tab-pane>
+                        <el-tab-pane label="下钻">下钻</el-tab-pane>
+                        <el-tab-pane label="联动">联动</el-tab-pane>
+                    </el-tabs>
                 </div>
-                <div class="nocontent">
+                <div class="nocontent" v-if="!chartId">
                     点击控件进行配置
                 </div>
             </div>
+            <!--右侧面板end-->
         </div>
+        <!--中间和右侧面板end-->
 
+        <!--预览数据对话框start-->
         <el-dialog title="预览数据(展示前5条)" :visible.sync="dialogTableVisible">
             <el-table :data="gridData" v-if="gridData.length>0">
                 <el-table-column v-for="(item,index) in Object.keys(gridData[0])" :key="index" :property="item" :label="item" width="150"></el-table-column>
             </el-table>
         </el-dialog>
+        <!--预览数据对话框end-->
 
+        <!--保存数据源对话框start-->
         <el-dialog title="保存数据源" :visible.sync="dialogFormVisible">
             <el-form :model="form">
                 <el-form-item label="数据源名称" :label-width="formLabelWidth">
@@ -150,20 +190,25 @@
                 <el-button type="primary" @click="clickSaveSourceOk">确 定</el-button>
             </div>
         </el-dialog>
-
-
+        <!--保存数据源对话框end-->
     </div>
 </template>
 <script>
     import {getTableNames,getDataset,setDataSource} from 'api/dbhelper'
     import {socket} from "common/js/socket-client"
     import Index from 'components/page/index'
+    import {mapGetters,mapMutations} from 'vuex'
+    import BScroll from 'better-scroll'
     let TOP_HEIGHT = 125
     let LEFT_WIDTH = 300
     import './projectsetting.styl'
     export default {
         data() {
             return {
+                localChartWidth:0,
+                localChartHeight:0,
+                localChartX:0,
+                localChartY:0,
                 tablefields:[],
                 moveflag:false,
                 form:{
@@ -220,8 +265,82 @@
                 docdesc:false
             };
         },
+        computed:{
+           ...mapGetters(
+               ['chartId','chartWidth','chartHeight','chartX','chartY']
+           )
+        },
         created(){
-
+            this.localChartWidth = this.chartWidth
+            this.localChartHeight = this.chartHeight
+            this.localChartX = this.chartX
+            this.localChartY = this.chartY
+        },
+        watch:{
+            chartWidth(newVal){
+                this.localChartWidth = newVal
+            },
+            chartHeight(newVal){
+                this.localChartHeight = newVal
+            },
+            chartX(newVal){
+                this.localChartX = newVal
+            },
+            chartY(newVal){
+                this.localChartY = newVal
+            },
+            localChartWidth(newVal){
+                if(this.chartWidth == newVal){
+                    return
+                }
+                let position = {
+                    dx:this.chartX,
+                    dy:this.chartY,
+                    width:newVal,
+                    height:this.chartHeight,
+                    chartId:this.chartId
+                }
+                socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+            },
+            localChartHeight(newVal){
+                if(this.chartHeight == newVal){
+                    return
+                }
+                let position = {
+                    dx:this.chartX,
+                    dy:this.chartY,
+                    width:this.chartWidth,
+                    height:newVal,
+                    chartId:this.chartId
+                }
+                socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+            },
+            localChartX(newVal){
+                if(this.chartX == newVal){
+                    return
+                }
+                let position = {
+                    dx:newVal,
+                    dy:this.chartY,
+                    width:this.chartWidth,
+                    height:this.chartHeight,
+                    chartId:this.chartId
+                }
+                socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+            },
+            localChartY(newVal){
+                if(this.chartY == newVal){
+                    return
+                }
+                let position = {
+                    dx:this.chartX,
+                    dy:newVal,
+                    width:this.chartWidth,
+                    height:this.chartHeight,
+                    chartId:this.chartId
+                }
+                socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+            }
         },
         mounted(){
         },
@@ -254,21 +373,41 @@
                     }
                 })
             },
+            _getDataType(data){
+                if(typeof data == 'number'){
+                    return 'number'
+                }else if(/^\d{4}-\d{2}-\d{2}.+/.test(data)){
+                    return  'date'
+                }else{
+                    return 'string'
+                }
+            },
             changeTablename(){
                 if(this.dbtablename&&this.dbtype){
                     getDataset('',this.dbtablename,this.dbtype).then((res)=>{
                         if(res.status == 200){
                             if(res.data.length>0){
                                 let arrNames = Object.keys(res.data[0])
-                                arrNames.splice(0,1)
+                                let arrValues = Object.values(res.data[0])
+                                if(arrNames[0] == 'ROWNUM'){
+                                    arrNames.splice(0,1)
+                                    arrValues.splice(0,1)
+                                }
                                 let formfields = []
-                                arrNames.forEach(item =>{
+                                arrNames.forEach((item,index) =>{
                                     let aform = {}
                                     aform[item] = item
                                     aform[`${item}_nickname`] = item
+                                    aform[`${item}_datetype`] = this._getDataType(arrValues[index])
                                     formfields.push(aform)
                                 })
                                 this.tablefields = formfields
+                                window.setTimeout(()=>{
+                                    this.$scroll = new BScroll(this.$refs.tablefields,{
+                                        scrollX: true,
+                                        click: true
+                                    })
+                                },50)
                             }else{
                                 this.tablefields = []
                                 this.$message({
@@ -319,7 +458,16 @@
             },
             clickSaveSourceOk(){
                 if(this.dbtablename&&this.dbtype&&this.form.sourcename) {
-                    setDataSource(this.dbtablename,this.dbtype,this.form.sourcename).then((res)=>{
+                    let mtags = []
+                    this.tablefields.forEach((item)=>{
+                        let keys = Object.keys(item)
+                        let tag = {}
+                        tag['value'] = item[keys[0]]
+                        tag['label'] = item[keys[1]]
+                        tag['type'] = item[keys[2]]
+                        mtags.push(tag)
+                    })
+                    setDataSource(this.dbtablename,this.dbtype,this.form.sourcename,JSON.stringify(mtags)).then((res)=>{
                         if(res.data.code==0){
                             this.dialogFormVisible = false
                             this.form.sourcename = ''
@@ -371,9 +519,18 @@
                 }
                 this.chartType = -1
             },
-            onActiveChart(){
-                console.log('onActiveChart')
-            }
+            onClick(e){
+                if (e.target.tagName != 'CANVAS'){
+                    this.setChartId('')
+                }
+            },
+            ...mapMutations({
+                setChartId:'SET_CHART_ID',
+                setChartWidth:'SET_CHART_WIDTH',
+                setChartHeight:'SET_CHART_HEIGHT',
+                setChartX:'SET_CHART_X',
+                setChartY:'SET_CHART_Y'
+            })
         },
         components:{
             Index

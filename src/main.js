@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import ElmentUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import 'common/css/index.css'
 Vue.use(ElmentUI)
-import 'element-ui/lib/theme-chalk/index.css'
 import 'common/stylus/index.styl'
 import store from './store'
 import router from "./router"

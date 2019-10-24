@@ -26,6 +26,7 @@ const sourceConfigSchema = mongoose.Schema({
     dbtype:String,
     tablename:String,
     sourcename:String,
+    tablefields:String,
     create_time: Date
 })
 

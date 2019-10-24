@@ -1,5 +1,5 @@
 <template>
-    <div class="pindex">
+    <div class="index">
         <% for(let i =0;i<configs.length;i++){ %>
             <<%- configs[i].chartId%>></<%- configs[i].chartId%>>
         <% } %>
@@ -14,6 +14,9 @@
             <% for(let i =0;i<configs.length;i++){ %>
                 <%- configs[i].chartId.substr(0,1).toUpperCase()+configs[i].chartId.substr(1)%>,
              <% } %>
+        },
+        methods:{
+
         }
     }
 </script>

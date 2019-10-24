@@ -1,18 +1,22 @@
 .projectsetting
   display flex
-  color black
+  color white
+  font-size 14px
+  color #4f5d83
   .moveflag
     position absolute
     width 20px
     height 20px
     z-index 100001
-    border 1px dashed black
+    border 1px dashed fuchsia
   .leftWrapper
-    background #F6F9FC
+    background-image url(/img/background/dragon.jpg)
+    background-size 280px
+    filter opacity(80%)
     width 280px
     padding-left 10px
     bottom 0
-    top 70px
+    top 60px
     position absolute
     .title
       line-height 40px
@@ -20,11 +24,15 @@
       height 10px
       line-height 10px
     .divided
-      border-bottom: 1px solid #edeff1
+      border-bottom 2px solid #5F82C8
       margin-bottom 10px
     .tablefields
       h3
-        font-weight bold;
+        font-weight bold
+      .rowfields
+        margin-bottom 10px
+      .fields
+        text-align center
     .list-container
       .tool-list
         li
@@ -40,7 +48,7 @@
               line-height 16px
               font-size 12px
               margin-bottom 4px
-              color #333
+              color #93A1BA
               text-align center
             .tool-item__icon
               background-size 100% 100%
@@ -68,8 +76,8 @@
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
       bottom 0
-      left: 300px
-      top: 70px
+      left: 290px
+      top: 60px
       right 300px
       .css-1qkwt59
         position: absolute;
@@ -79,8 +87,10 @@
         height: 100%;
         box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 5px 0px;
         background: rgb(255, 255, 255);
-        border-radius: 4px;
         overflow: hidden;
+        .el-menu-demo
+          background-image url(/img/background/dragon.jpg)
+          filter opacity(80%)
         .css-10ro1m
           position relative
           z-index 3
@@ -100,19 +110,26 @@
             filter blur(0px)
             opacity 0.7
     .css-fullconfig
+      background-image url(/img/background/dragon.jpg)
+      filter opacity(80%)
       position absolute
       width 300px
-      top 70px
+      top 60px
       bottom 0
       right 0
       .configheader
-        line-height 50px
+        line-height 60px
         padding-left 10px
-        border-bottom 1px solid #e3e3e3
       .nocontent
         position absolute
         top 50%
         left 50%
         transform: translate(-50%, -50%)
         color orange
+      .content
+        .simple
+          .tag
+            margin-bottom 10px
+          .setting
+            margin-bottom 10px
 
