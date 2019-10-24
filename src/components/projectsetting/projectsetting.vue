@@ -141,7 +141,7 @@
                     <span>控制面板</span>
                 </div>
                 <div class="content" v-if="chartId">
-                    <el-tabs type="border-card">
+                    <el-tabs type="border-card" @tab-click="onConfigPanelClick">
                         <el-tab-pane label="基础">
                             <div class="simple">
                                 <div class="tag"><el-tag size="small">图表id</el-tag></div>
@@ -156,7 +156,20 @@
                                 <div class="setting"><el-input-number v-model="localChartY"  :min="0" :max="1000" label="Y坐标" size="small"></el-input-number></div>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="数据">数据</el-tab-pane>
+                        <el-tab-pane label="数据">
+                            <div class="tag"><span>数据绑定</span></div>
+                            <div class="setting"><el-radio v-model="dataBingType" label="1">SQL建模</el-radio></div>
+                            <div class="setting">
+                                <el-select v-model="configprojects" placeholder="请选择"  @change="changeConfigProjects"  size="small">
+                                    <el-option
+                                            v-for="item in configprojectsoptions"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                        </el-tab-pane>
                         <el-tab-pane label="高级">高级</el-tab-pane>
                         <el-tab-pane label="下钻">下钻</el-tab-pane>
                         <el-tab-pane label="联动">联动</el-tab-pane>
@@ -205,6 +218,9 @@
     export default {
         data() {
             return {
+                configprojects:'',
+                configprojectsoptions:[],
+                dataBingType:'1',
                 localChartWidth:0,
                 localChartHeight:0,
                 localChartX:0,
@@ -523,6 +539,14 @@
                 if (e.target.tagName != 'CANVAS'){
                     this.setChartId('')
                 }
+            },
+            onConfigPanelClick(tab){
+                if(tab.label == '数据'){
+
+                }
+            },
+            changeConfigProjects(){
+
             },
             ...mapMutations({
                 setChartId:'SET_CHART_ID',

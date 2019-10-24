@@ -11,3 +11,7 @@ export function getDataset(tablefields,tableName,dbType) {
 export function setDataSource(tableName,dbType,sourceName,tablefields) {
     return instance.post('/config/setDataSource',{tablename:tableName,dbtype:dbType,sourcename:sourceName,tablefields: tablefields})
 }
+//获取配置的工程
+export function getDataProjects() {
+    return instance.post('/config/getDataProjects',{})
+}

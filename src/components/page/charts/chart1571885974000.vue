@@ -1,16 +1,16 @@
 <template>
     <div class="chart">
-        <vue-draggable-resizable :x="305"
-                                 :y="94"
-                                 :w="400"
-                                 :h="400"
+        <vue-draggable-resizable :x="41"
+                                 :y="16"
+                                 :w="427"
+                                 :h="187"
                                  @dragging="(left, top) =>onDrag('chart1571885974000',left,top)"
                                  @resizing="(x, y, width, height) =>onResize('chart1571885974000',x, y, width, height)"
                                  @activated="onActivated('chart1571885974000')">
             <div @click="deleteChart('chart1571885974000')" class="delete">删除</div>
             <div class="chart" ref="chart1571885974000"
-                               style="width: 400px;height:400px;"
-                               data-width="400" data-height="400" data-x="305" data-y="94"></div>
+                               style="width: 427px;height:187px;"
+                               data-width="427" data-height="187" data-x="41" data-y="16"></div>
         </vue-draggable-resizable>
     </div>
 </template>
@@ -24,7 +24,7 @@
     import {mapMutations} from 'vuex'
     export default {
         mounted() {
-            let mconfig = {"chartId":"chart1571885974000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":305,"dy":94},"chartType":2}
+            let mconfig = {"chartId":"chart1571885974000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":427,"height":"187","dx":41,"dy":16},"chartType":2}
             let commonConfig = mconfig.config.commonConfig
             let userConfig = mconfig.config.userConfig
             let dataUrl = mconfig.config.dataUrl
