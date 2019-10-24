@@ -1,16 +1,16 @@
 <template>
     <div class="chart">
-        <vue-draggable-resizable :x="41"
-                                 :y="16"
-                                 :w="519"
-                                 :h="230"
-                                 @dragging="(left, top) =>onDrag('chart1571885974000',left,top)"
-                                 @resizing="(x, y, width, height) =>onResize('chart1571885974000',x, y, width, height)"
-                                 @activated="onActivated('chart1571885974000')">
-            <div @click="deleteChart('chart1571885974000')" class="delete">删除</div>
-            <div class="chart" ref="chart1571885974000"
-                               style="width: 519px;height:230px;"
-                               data-width="519" data-height="230" data-x="41" data-y="16"></div>
+        <vue-draggable-resizable :x="268"
+                                 :y="163"
+                                 :w="400"
+                                 :h="400"
+                                 @dragging="(left, top) =>onDrag('chart1571907174000',left,top)"
+                                 @resizing="(x, y, width, height) =>onResize('chart1571907174000',x, y, width, height)"
+                                 @activated="onActivated('chart1571907174000')">
+            <div @click="deleteChart('chart1571907174000')" class="delete">删除</div>
+            <div class="chart" ref="chart1571907174000"
+                               style="width: 400px;height:400px;"
+                               data-width="400" data-height="400" data-x="268" data-y="163"></div>
         </vue-draggable-resizable>
     </div>
 </template>
@@ -21,22 +21,28 @@
     import {getCommonConfig} from "common/js/normalize"
     import {socket} from "common/js/socket-client"
     import jsonobj from "common/js/chalk.project.json"
-    import {mapMutations} from 'vuex'
+    import {mapGetters,mapMutations} from 'vuex'
     export default {
         mounted() {
-            let mconfig = {"chartId":"chart1571885974000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":519,"height":230,"dx":41,"dy":16},"chartType":2}
+            let mconfig = {"chartId":"chart1571907174000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":400,"height":400,"dx":268,"dy":163},"chartType":2}
             let commonConfig = mconfig.config.commonConfig
             let userConfig = mconfig.config.userConfig
             let dataUrl = mconfig.config.dataUrl
             getChartData(dataUrl).then((res)=>{
                let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,2)
                echarts.registerTheme('chalk',jsonobj)
-                this.$echarts = echarts.init(this.$refs.chart1571885974000, 'chalk', {
+                this.$echarts = echarts.init(this.$refs.chart1571907174000, 'chalk', {
                     width: mconfig.config.width,
                     height: mconfig.config.height
                 })
                 this.$echarts.setOption(tempConfig)
+                this.setPosition({id:'chart1571907174000',x:mconfig.config.dx,y:mconfig.config.y,width:mconfig.config.width,height:mconfig.config.height})
             })
+        },
+        computed:{
+             ...mapGetters(
+                ['storePosition']
+             )
         },
         methods:{
             onDrag(id,x,y){
@@ -55,25 +61,29 @@
                    height:height,
                    chartId:id
                }
+               this.$echarts.resize({width:width,height:height})
                socket.emit('onDragInPanel',JSON.stringify(position))
             },
             deleteChart(id){
                 socket.emit('onDragRemove',id)
             },
             onActivated(id){
+                console.log(this.storePosition(id))
                 let _set = this.$refs[id].dataset
                 this.setChartId(id)
                 this.setChartWidth(_set.width)
                 this.setChartHeight(_set.height)
                 this.setChartX(_set.x)
                 this.setChartY(_set.y)
+                this.setPosition({id:id,x:_set.x,y:_set.y,width:_set.width,height:_set.height})
             },
             ...mapMutations({
                 setChartId:'SET_CHART_ID',
                 setChartWidth:'SET_CHART_WIDTH',
                 setChartHeight:'SET_CHART_HEIGHT',
                 setChartX:'SET_CHART_X',
-                setChartY:'SET_CHART_Y'
+                setChartY:'SET_CHART_Y',
+                setPosition:'SET_POSITION'
             })
         }
     }

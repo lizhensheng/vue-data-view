@@ -1,16 +1,16 @@
 <template>
     <div class="chart">
-        <vue-draggable-resizable :x="41"
-                                 :y="16"
-                                 :w="519"
-                                 :h="230"
-                                 @dragging="(left, top) =>onDrag('chart1571885974000',left,top)"
-                                 @resizing="(x, y, width, height) =>onResize('chart1571885974000',x, y, width, height)"
-                                 @activated="onActivated('chart1571885974000')">
-            <div @click="deleteChart('chart1571885974000')" class="delete">删除</div>
-            <div class="chart" ref="chart1571885974000"
-                               style="width: 519px;height:230px;"
-                               data-width="519" data-height="230" data-x="41" data-y="16"></div>
+        <vue-draggable-resizable :x="59"
+                                 :y="39"
+                                 :w="421"
+                                 :h="223"
+                                 @dragging="(left, top) =>onDrag('chart1571904222000',left,top)"
+                                 @resizing="(x, y, width, height) =>onResize('chart1571904222000',x, y, width, height)"
+                                 @activated="onActivated('chart1571904222000')">
+            <div @click="deleteChart('chart1571904222000')" class="delete">删除</div>
+            <div class="chart" ref="chart1571904222000"
+                               style="width: 421px;height:223px;"
+                               data-width="421" data-height="223" data-x="59" data-y="39"></div>
         </vue-draggable-resizable>
     </div>
 </template>
@@ -24,14 +24,14 @@
     import {mapMutations} from 'vuex'
     export default {
         mounted() {
-            let mconfig = {"chartId":"chart1571885974000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":519,"height":230,"dx":41,"dy":16},"chartType":2}
+            let mconfig = {"chartId":"chart1571904222000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/line/ydys/v1","width":421,"height":223,"dx":59,"dy":39},"chartType":1}
             let commonConfig = mconfig.config.commonConfig
             let userConfig = mconfig.config.userConfig
             let dataUrl = mconfig.config.dataUrl
             getChartData(dataUrl).then((res)=>{
-               let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,2)
+               let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,1)
                echarts.registerTheme('chalk',jsonobj)
-                this.$echarts = echarts.init(this.$refs.chart1571885974000, 'chalk', {
+                this.$echarts = echarts.init(this.$refs.chart1571904222000, 'chalk', {
                     width: mconfig.config.width,
                     height: mconfig.config.height
                 })
@@ -55,6 +55,7 @@
                    height:height,
                    chartId:id
                }
+               this.$echarts.resize({width:width,height:height})
                socket.emit('onDragInPanel',JSON.stringify(position))
             },
             deleteChart(id){

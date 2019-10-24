@@ -64,7 +64,7 @@ let createConnection = function createConnection(app) {
                     globalStore[selectedChartIndex].config.width = configPosition.width
                     globalStore[selectedChartIndex].config.height = configPosition.height
                 }
-                replaceFileByCompile(globalStore)
+                //replaceFileByCompile(globalStore)
             }
         });
         //用户在面板中删除控件时触发
@@ -72,17 +72,15 @@ let createConnection = function createConnection(app) {
             let selectedChartIndex = findStoreIndexById(chartId)
             if(selectedChartIndex>-1){
                 globalStore.splice(selectedChartIndex,1)
-                replaceFileByCompile(globalStore)
+                //replaceFileByCompile(globalStore)
             }
         })
         //用户定义图表的基础信息
         socket.on('onSingleChartSimpleConfig',function (position) {
             let configPosition = JSON.parse(position)
             let selectedChartIndex = findStoreIndexById(configPosition.chartId)
-            console.log(refreshSimpleChart)
             refreshSimpleChart(selectedChartIndex,configPosition).then((_config)=>{
-                console.log(_config)
-                replaceChartByCompile(_config)
+                //replaceChartByCompile(_config)
             }).catch(()=>{
 
             })

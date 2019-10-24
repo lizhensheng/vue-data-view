@@ -30,6 +30,12 @@ const mutations = {
     },
     [types.SET_CHART_Y](state,chartY){
         state.chartY = chartY
+    },
+    [types.SET_POSITION](state,position){
+        state.storePosition[position.id] = position
+    },
+    [types.SET_INCREASE_ID](state,increaseId){
+        state.increaseId = increaseId
     }
 };
 export default mutations

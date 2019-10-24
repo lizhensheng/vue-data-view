@@ -6,6 +6,8 @@ const state = {
     chartWidth:0,
     chartHeight:0,
     chartX:0,
-    chartY:0
+    chartY:0,
+    storePosition: {},
+    increaseId:0
 };
 export default state

@@ -78,4 +78,13 @@ configRoutes.post('/setDataSource',(req,res)=>{
         })
     })
 })
+configRoutes.post('/getDataProjects',(req,res)=>{
+    sourceConfig.find({},(err,doc)=>{
+        if(err){
+            res.json({code:500})
+            return
+        }
+        res.json({code:0,data:doc})
+    })
+})
 module.exports =  configRoutes

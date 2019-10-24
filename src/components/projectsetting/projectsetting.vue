@@ -80,18 +80,18 @@
                     <div class="split"></div>
                     <div class="split"></div>
                     <div class="tablefields" v-if="tablefields.length>0" ref="tablefields">
-                        <div style="width:500px">
+                        <div style="width:300px">
                             <el-row>
-                                <el-col :span="8" class="fields"><h3>原始列名</h3></el-col>
-                                <el-col :span="8" class="fields"><h3>显示列名</h3></el-col>
-                                <el-col :span="8" class="fields"><h3>数据类型</h3></el-col>
+                                <el-col :span="7" class="fields"><h3>原始列名</h3></el-col>
+                                <el-col :span="10" class="fields"><h3>显示列名</h3></el-col>
+                                <el-col :span="7" class="fields"><h3>数据类型</h3></el-col>
                             </el-row>
                             <div class="split"></div>
                             <div class="divided"></div>
                             <el-row v-for="(item,index) in tablefields" :key="index" class="rowfields">
-                                <el-col :span="8" class="fields"><div class="title">{{Object.keys(item)[0]}}</div></el-col>
-                                <el-col :span="8" class="fields"><el-input v-model="tablefields[index][Object.keys(item)[1]]" autocomplete="off" size="small"></el-input></el-col>
-                                <el-col :span="8" class="fields"><div class="title">{{tablefields[index][Object.keys(item)[2]]}}</div></el-col>
+                                <el-col :span="7" class="fields"><div class="title">{{Object.keys(item)[0]}}</div></el-col>
+                                <el-col :span="10" class="fields"><el-input v-model="tablefields[index][Object.keys(item)[1]]" autocomplete="off" size="small"></el-input></el-col>
+                                <el-col :span="7" class="fields"><div class="title">{{tablefields[index][Object.keys(item)[2]]}}</div></el-col>
                             </el-row>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                             <div class="tag"><span>数据绑定</span></div>
                             <div class="setting"><el-radio v-model="dataBingType" label="1">SQL建模</el-radio></div>
                             <div class="setting">
-                                <el-select v-model="configprojects" placeholder="请选择"  @change="changeConfigProjects"  size="small">
+                                <el-select v-model="configproject" placeholder="请选择"  @change="changeConfigProjects"  size="small">
                                     <el-option
                                             v-for="item in configprojectsoptions"
                                             :key="item.value"
@@ -168,6 +168,32 @@
                                             :value="item.value">
                                     </el-option>
                                 </el-select>
+                                &nbsp;<i class="el-icon-edit"></i>&nbsp;<i class="el-icon-plus"></i>
+                            </div>
+                            <div class="tag"><span>维度</span></div>
+                            <div class="setting">
+                                <el-select v-model="xData" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in dimensionality"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div class="tag"><span>度量</span></div>
+                            <div class="setting">
+                                <el-select multiple  v-model="yData" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in measurement"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div class="setting">
+                                <el-button round @click="clickRefreshChart" size="small">刷新图表</el-button>
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="高级">高级</el-tab-pane>
@@ -207,7 +233,7 @@
     </div>
 </template>
 <script>
-    import {getTableNames,getDataset,setDataSource} from 'api/dbhelper'
+    import {getTableNames,getDataset,setDataSource,getDataProjects} from 'api/dbhelper'
     import {socket} from "common/js/socket-client"
     import Index from 'components/page/index'
     import {mapGetters,mapMutations} from 'vuex'
@@ -218,7 +244,11 @@
     export default {
         data() {
             return {
-                configprojects:'',
+                dimensionality:[],
+                measurement:[],
+                xData:'',
+                yData:[],
+                configproject:'',
                 configprojectsoptions:[],
                 dataBingType:'1',
                 localChartWidth:0,
@@ -283,79 +313,100 @@
         },
         computed:{
            ...mapGetters(
-               ['chartId','chartWidth','chartHeight','chartX','chartY']
+               ['chartId','chartWidth','chartHeight','chartX','chartY','storePosition','increaseId']
            )
         },
         created(){
-            this.localChartWidth = this.chartWidth
-            this.localChartHeight = this.chartHeight
-            this.localChartX = this.chartX
-            this.localChartY = this.chartY
+            // this.localChartWidth = this.chartWidth
+            // this.localChartHeight = this.chartHeight
+            // this.localChartX = this.chartX
+            // this.localChartY = this.chartY
         },
         watch:{
-            chartWidth(newVal){
-                this.localChartWidth = newVal
-            },
-            chartHeight(newVal){
-                this.localChartHeight = newVal
-            },
-            chartX(newVal){
-                this.localChartX = newVal
-            },
-            chartY(newVal){
-                this.localChartY = newVal
+            // chartWidth(newVal){
+            //     this.localChartWidth = this.storePosition(this.chartId).width
+            // },
+            // chartHeight(newVal){
+            //     this.localChartHeight = newVal
+            // },
+            // chartX(newVal){
+            //     this.localChartX = newVal
+            // },
+            // chartY(newVal){
+            //     this.localChartY = newVal
+            // },
+            increaseId(newVal){
+                console.log(newVal)
+                let pos = this.storePosition(this.chartId)
+                console.log(pos)
+                this.localChartWidth = pos.width
+                this.localChartHeight = pos.height
+                this.localChartX = pos.x
+                this.localChartY = pos.y
             },
             localChartWidth(newVal){
                 if(this.chartWidth == newVal){
                     return
                 }
+                let pos = this.storePosition(this.chartId)
+                this.setPosition({id:this.chartId,x:pos.x,y:pos.y,width:newVal,height:pos.height})
                 let position = {
-                    dx:this.chartX,
-                    dy:this.chartY,
+                    dx:pos.x,
+                    dy:pos.y,
                     width:newVal,
-                    height:this.chartHeight,
+                    height:pos.height,
                     chartId:this.chartId
                 }
                 socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+                this.setIncreaseId(this.increaseId+1)
             },
             localChartHeight(newVal){
                 if(this.chartHeight == newVal){
                     return
                 }
+                let pos = this.storePosition(this.chartId)
+                this.setPosition({id:this.chartId,x:pos.x,y:pos.y,width:pos.width,height:newVal})
                 let position = {
-                    dx:this.chartX,
-                    dy:this.chartY,
-                    width:this.chartWidth,
+                    dx:pos.x,
+                    dy:pos.y,
+                    width:pos.width,
                     height:newVal,
                     chartId:this.chartId
                 }
                 socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+                this.setIncreaseId(this.increaseId+1)
             },
             localChartX(newVal){
                 if(this.chartX == newVal){
                     return
                 }
+                let pos = this.storePosition(this.chartId)
+                this.setPosition({id:this.chartId,x:newVal,y:pos.y,width:pos.width,height:pos.height})
                 let position = {
                     dx:newVal,
-                    dy:this.chartY,
-                    width:this.chartWidth,
-                    height:this.chartHeight,
+                    dy:pos.y,
+                    width:pos.width,
+                    height:pos.height,
                     chartId:this.chartId
                 }
                 socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+                this.setIncreaseId(this.increaseId+1)
             },
             localChartY(newVal){
                 if(this.chartY == newVal){
                     return
                 }
+                let pos = this.storePosition(this.chartId)
+                this.setPosition({id:this.chartId,x:pos.x,y:newVal,width:pos.width,height:pos.height})
                 let position = {
-                    dx:this.chartX,
+                    dx:pos.x,
                     dy:newVal,
-                    width:this.chartWidth,
-                    height:this.chartHeight,
+                    width:pos.width,
+                    height:pos.height,
                     chartId:this.chartId
                 }
                 socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+                this.setIncreaseId(this.increaseId+1)
             }
         },
         mounted(){
@@ -542,10 +593,34 @@
             },
             onConfigPanelClick(tab){
                 if(tab.label == '数据'){
-
+                    getDataProjects().then((res)=>{
+                        if(res.data.code == 0){
+                            let data = res.data.data
+                            this.ConfigProjects = data
+                            let mdata = []
+                            data.forEach((item)=>{
+                                mdata.push({
+                                    value:item._id,
+                                    label:item.sourcename
+                                })
+                            })
+                            this.configprojectsoptions = mdata
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '网络断线了'
+                            });
+                        }
+                    })
                 }
             },
             changeConfigProjects(){
+                let index = this.ConfigProjects.findIndex((item)=>item._id == this.configproject)
+                let tt = JSON.parse(this.ConfigProjects[index].tablefields)
+                this.dimensionality = tt.filter(t=>t.type !== 'number')
+                this.measurement= tt.filter(t=>t.type === 'number')
+            },
+            clickRefreshChart(){
 
             },
             ...mapMutations({
@@ -553,7 +628,9 @@
                 setChartWidth:'SET_CHART_WIDTH',
                 setChartHeight:'SET_CHART_HEIGHT',
                 setChartX:'SET_CHART_X',
-                setChartY:'SET_CHART_Y'
+                setChartY:'SET_CHART_Y',
+                setPosition:'SET_POSITION',
+                setIncreaseId:'SET_INCREASE_ID'
             })
         },
         components:{

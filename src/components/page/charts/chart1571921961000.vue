@@ -4,13 +4,13 @@
                                  :y="y"
                                  :w="width"
                                  :h="height"
-                                 @dragging="(left, top) =>onDrag('<%- config.chartId%>',left,top)"
-                                 @resizing="(x, y, width, height) =>onResize('<%- config.chartId%>',x, y, width, height)"
-                                 @activated="onActivated('<%- config.chartId%>')">
-            <div @click="deleteChart('<%- config.chartId%>')" class="delete">删除</div>
-            <div class="chart" ref="<%- config.chartId%>"
-                               style="width: <%- config.config.width%>px;height:<%- config.config.height%>px;"
-                               data-width="<%- config.config.width%>" data-height="<%- config.config.height%>" data-x="<%- config.config.dx%>" data-y="<%- config.config.dy%>"></div>
+                                 @dragging="(left, top) =>onDrag('chart1571921961000',left,top)"
+                                 @resizing="(x, y, width, height) =>onResize('chart1571921961000',x, y, width, height)"
+                                 @activated="onActivated('chart1571921961000')">
+            <div @click="deleteChart('chart1571921961000')" class="delete">删除</div>
+            <div class="chart" ref="chart1571921961000"
+                               style="width: 200px;height:272px;"
+                               data-width="200" data-height="272" data-x="53" data-y="317"></div>
         </vue-draggable-resizable>
     </div>
 </template>
@@ -29,29 +29,27 @@
                 y:0,
                 width:10,
                 height:10,
-                chartId:'<%- config.chartId%>'
+                chartId:'chart1571921961000'
             }
         },
         mounted() {
-            let mconfig = <%- JSON.stringify(config)%>
+            let mconfig = {"chartId":"chart1571921961000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/ring/ydys/v1","width":200,"height":272,"dx":53,"dy":317},"chartType":4}
             let commonConfig = mconfig.config.commonConfig
             let userConfig = mconfig.config.userConfig
             let dataUrl = mconfig.config.dataUrl
-            echarts.registerTheme('chalk',jsonobj)
-            this.$echarts = echarts.init(this.$refs.<%- config.chartId%>, 'chalk', {
-                width: mconfig.config.width,
-                height: mconfig.config.height
-            })
-            this.$echarts.showLoading('default')
             getChartData(dataUrl).then((res)=>{
-                this.$echarts.hideLoading()
-                let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,<%- config.chartType%>)
+               let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,4)
+               echarts.registerTheme('chalk',jsonobj)
+                this.$echarts = echarts.init(this.$refs.chart1571921961000, 'chalk', {
+                    width: mconfig.config.width,
+                    height: mconfig.config.height
+                })
                 this.$echarts.setOption(tempConfig)
                 this.x = mconfig.config.dx
                 this.y = mconfig.config.dy
                 this.width = mconfig.config.width
                 this.height = mconfig.config.height
-                this.setPosition({id:'<%- config.chartId%>',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height})
+                this.setPosition({id:'chart1571921961000',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height})
             })
         },
         computed:{

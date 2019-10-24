@@ -1,16 +1,16 @@
 <template>
     <div class="chart">
-        <vue-draggable-resizable :x="41"
-                                 :y="16"
-                                 :w="519"
-                                 :h="230"
-                                 @dragging="(left, top) =>onDrag('chart1571885974000',left,top)"
-                                 @resizing="(x, y, width, height) =>onResize('chart1571885974000',x, y, width, height)"
-                                 @activated="onActivated('chart1571885974000')">
-            <div @click="deleteChart('chart1571885974000')" class="delete">删除</div>
-            <div class="chart" ref="chart1571885974000"
-                               style="width: 519px;height:230px;"
-                               data-width="519" data-height="230" data-x="41" data-y="16"></div>
+        <vue-draggable-resizable :x="21"
+                                 :y="9"
+                                 :w="578"
+                                 :h="398"
+                                 @dragging="(left, top) =>onDrag('chart1571903017000',left,top)"
+                                 @resizing="(x, y, width, height) =>onResize('chart1571903017000',x, y, width, height)"
+                                 @activated="onActivated('chart1571903017000')">
+            <div @click="deleteChart('chart1571903017000')" class="delete">删除</div>
+            <div class="chart" ref="chart1571903017000"
+                               style="width: 578px;height:398px;"
+                               data-width="578" data-height="398" data-x="21" data-y="9"></div>
         </vue-draggable-resizable>
     </div>
 </template>
@@ -24,14 +24,14 @@
     import {mapMutations} from 'vuex'
     export default {
         mounted() {
-            let mconfig = {"chartId":"chart1571885974000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":519,"height":230,"dx":41,"dy":16},"chartType":2}
+            let mconfig = {"chartId":"chart1571903017000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":578,"height":398,"dx":21,"dy":9},"chartType":2}
             let commonConfig = mconfig.config.commonConfig
             let userConfig = mconfig.config.userConfig
             let dataUrl = mconfig.config.dataUrl
             getChartData(dataUrl).then((res)=>{
                let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,2)
                echarts.registerTheme('chalk',jsonobj)
-                this.$echarts = echarts.init(this.$refs.chart1571885974000, 'chalk', {
+                this.$echarts = echarts.init(this.$refs.chart1571903017000, 'chalk', {
                     width: mconfig.config.width,
                     height: mconfig.config.height
                 })

@@ -1,0 +1,105 @@
+<template>
+    <div class="chart">
+        <vue-draggable-resizable :x="252"
+                                 :y="122"
+                                 :w="100"
+                                 :h="100"
+                                 @dragging="(left, top) =>onDrag('chart1571917340000',left,top)"
+                                 @resizing="(x, y, width, height) =>onResize('chart1571917340000',x, y, width, height)"
+                                 @activated="onActivated('chart1571917340000')">
+            <div @click="deleteChart('chart1571917340000')" class="delete">删除</div>
+            <div class="chart" ref="chart1571917340000"
+                               style="width: 100px;height:100px;"
+                               data-width="100" data-height="100" data-x="252" data-y="122"></div>
+        </vue-draggable-resizable>
+    </div>
+</template>
+<script>
+    import './chart.styl'
+    let echarts = require('echarts')
+    import {getChartData} from "api/bar"
+    import {getCommonConfig} from "common/js/normalize"
+    import {socket} from "common/js/socket-client"
+    import jsonobj from "common/js/chalk.project.json"
+    import {mapGetters,mapMutations} from 'vuex'
+    export default {
+        data(){
+            return {
+                x:0,
+                y:0,
+                width:0,
+                height:0
+            }
+        },
+        mounted() {
+            let mconfig = {"chartId":"chart1571917340000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":100,"height":100,"dx":"252","dy":"122"},"chartType":2}
+            let commonConfig = mconfig.config.commonConfig
+            let userConfig = mconfig.config.userConfig
+            let dataUrl = mconfig.config.dataUrl
+            getChartData(dataUrl).then((res)=>{
+               let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,2)
+               echarts.registerTheme('chalk',jsonobj)
+                this.$echarts = echarts.init(this.$refs.chart1571917340000, 'chalk', {
+                    width: mconfig.config.width,
+                    height: mconfig.config.height
+                })
+                this.$echarts.setOption(tempConfig)
+                this.setPosition({id:'chart1571917340000',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height})
+            })
+        },
+        computed:{
+             ...mapGetters(
+                ['storePosition','increaseId']
+             )
+        },
+        watch:{
+            storePosition(){
+                console.log('调用了')
+            }
+        },
+        methods:{
+            onDrag(id,x,y){
+                let position = {
+                   dx:x,
+                   dy:y,
+                   chartId:id
+                }
+                socket.emit('onDragInPanel',JSON.stringify(position))
+            },
+            onResize(id,x,y,width,height){
+               let position = {
+                   dx:x,
+                   dy:y,
+                   width:width,
+                   height:height,
+                   chartId:id
+               }
+               this.$echarts.resize({width:width,height:height})
+               socket.emit('onDragInPanel',JSON.stringify(position))
+            },
+            deleteChart(id){
+                socket.emit('onDragRemove',id)
+            },
+            onActivated(id){
+                console.log(this.storePosition(id))
+                let _set = this.$refs[id].dataset
+                this.setChartId(id)
+                this.setChartWidth(_set.width)
+                this.setChartHeight(_set.height)
+                this.setChartX(_set.x)
+                this.setChartY(_set.y)
+                this.setIncreaseId(this.increaseId+1)
+                this.setPosition({id:id,x:_set.x,y:_set.y,width:_set.width,height:_set.height})
+            },
+            ...mapMutations({
+                setChartId:'SET_CHART_ID',
+                setChartWidth:'SET_CHART_WIDTH',
+                setChartHeight:'SET_CHART_HEIGHT',
+                setChartX:'SET_CHART_X',
+                setChartY:'SET_CHART_Y',
+                setPosition:'SET_POSITION',
+                setIncreaseId:'SET_INCREASE_ID'
+            })
+        }
+    }
+</script>
