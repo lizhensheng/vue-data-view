@@ -22,6 +22,7 @@
     import {socket} from "common/js/socket-client"
     import jsonobj from "common/js/chalk.project.json"
     import {mapGetters,mapMutations} from 'vuex'
+    import {baseConfigApi} from 'common/js/config'
     export default {
         data(){
             return {
@@ -34,29 +35,30 @@
         },
         mounted() {
             let mconfig = <%- JSON.stringify(config)%>
-            let commonConfig = mconfig.config.commonConfig
-            let userConfig = mconfig.config.userConfig
-            let dataUrl = mconfig.config.dataUrl
+            this.commonConfig = mconfig.config.commonConfig
+            this.userConfig = mconfig.config.userConfig
+            this.dataUrl = mconfig.config.dataUrl
+            this.chartType = <%- config.chartType%>
             echarts.registerTheme('chalk',jsonobj)
             this.$echarts = echarts.init(this.$refs.<%- config.chartId%>, 'chalk', {
                 width: mconfig.config.width,
                 height: mconfig.config.height
             })
-            this.$echarts.showLoading('default')
-            getChartData(dataUrl).then((res)=>{
-                this.$echarts.hideLoading()
-                let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,<%- config.chartType%>)
+            //this.$echarts.showLoading('default')
+            getChartData(this.dataUrl).then((res)=>{
+                //this.$echarts.hideLoading()
+                let tempConfig = getCommonConfig(res.data,this.commonConfig,this.userConfig,this.chartType)
                 this.$echarts.setOption(tempConfig)
                 this.x = mconfig.config.dx
                 this.y = mconfig.config.dy
                 this.width = mconfig.config.width
                 this.height = mconfig.config.height
-                this.setPosition({id:'<%- config.chartId%>',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height})
+                this.setPosition({id:'<%- config.chartId%>',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height,xData:'',yData:[],yFields:[],dataId:''})
             })
         },
         computed:{
              ...mapGetters(
-                ['storePosition','increaseId']
+                ['storePosition','increaseId','increaseIdForData']
              )
         },
         watch:{
@@ -75,9 +77,27 @@
                 if(this.height != pos.height){
                     this.height = pos.height
                 }
+            },
+            increaseIdForData(){
+                this._refreshData()
             }
         },
         methods:{
+            _refreshData(){
+                let pos = this.storePosition(this.chartId)
+                if(!pos.xData || pos.yData.length === 0 || pos.yFields.length === 0 || !pos.dataId){
+                    return
+                }
+                let dataUrl = `${baseConfigApi}/api/getChartDataDynamic?id=${pos.dataId}`
+                getChartData(dataUrl).then((res)=>{
+                    this.userConfig.x = pos.xData
+                    this.userConfig.y = pos.yFields
+                    let tempConfig = getCommonConfig(res.data,this.commonConfig,this.userConfig,this.chartType)
+                    this.$echarts.clear()
+                    console.log(tempConfig)
+                    this.$echarts.setOption(tempConfig)
+                })
+            },
             onDrag(id,x,y){
                 let position = {
                    dx:x,
@@ -103,24 +123,14 @@
                 socket.emit('onDragRemove',id)
             },
             onActivated(id){
-                //console.log(this.storePosition(id))
-                //let _set = this.$refs[id].dataset
                 this.setChartId(id)
-                //this.setChartWidth(_set.width)
-                //this.setChartHeight(_set.height)
-                //this.setChartX(_set.x)
-                //this.setChartY(_set.y)
                 this.setIncreaseId(this.increaseId+1)
-                //this.setPosition({id:id,x:_set.x,y:_set.y,width:_set.width,height:_set.height})
             },
             ...mapMutations({
                 setChartId:'SET_CHART_ID',
-                setChartWidth:'SET_CHART_WIDTH',
-                setChartHeight:'SET_CHART_HEIGHT',
-                setChartX:'SET_CHART_X',
-                setChartY:'SET_CHART_Y',
                 setPosition:'SET_POSITION',
-                setIncreaseId:'SET_INCREASE_ID'
+                setIncreaseId:'SET_INCREASE_ID',
+                setIncreaseUpdateData:'SET_INCREASE_UPDATE_DATA'
             })
         }
     }

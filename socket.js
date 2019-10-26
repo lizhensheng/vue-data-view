@@ -72,7 +72,7 @@ let createConnection = function createConnection(app) {
             let selectedChartIndex = findStoreIndexById(chartId)
             if(selectedChartIndex>-1){
                 globalStore.splice(selectedChartIndex,1)
-                //replaceFileByCompile(globalStore)
+                replaceFileByCompile(globalStore)
             }
         })
         //用户定义图表的基础信息

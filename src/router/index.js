@@ -5,6 +5,7 @@ Vue.use(Router)
 
 import Homepage from 'components/homepage/homepage'
 import Bar from 'components/chart/bar/bar'
+import Line from 'components/chart/line/line'
 import Preview from 'components/chart/preview/preview'
 import Login from 'views/login/login'
 import Register from 'views/register/register'
@@ -46,6 +47,10 @@ const router =  new Router({
                 {
                     path:'/projectsetting',
                     component: ProjectSetting
+                },
+                {
+                    path:'/chart/line',
+                    component:Line
                 }
             ]
         },

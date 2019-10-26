@@ -80,18 +80,26 @@
                     <div class="split"></div>
                     <div class="split"></div>
                     <div class="tablefields" v-if="tablefields.length>0" ref="tablefields">
-                        <div style="width:300px">
-                            <el-row>
-                                <el-col :span="7" class="fields"><h3>原始列名</h3></el-col>
-                                <el-col :span="10" class="fields"><h3>显示列名</h3></el-col>
+                        <div style="width:500px;height: 500px;overflow-x:hidden">
+                            <el-row :gutter="20">
+                                <el-col :span="6" class="fields"><h3>原始列名</h3></el-col>
+                                <el-col :span="7" class="fields"><h3>显示列名</h3></el-col>
                                 <el-col :span="7" class="fields"><h3>数据类型</h3></el-col>
+                                <el-col :span="4" class="fields"><h3>操作</h3></el-col>
                             </el-row>
                             <div class="split"></div>
                             <div class="divided"></div>
-                            <el-row v-for="(item,index) in tablefields" :key="index" class="rowfields">
-                                <el-col :span="7" class="fields"><div class="title">{{Object.keys(item)[0]}}</div></el-col>
-                                <el-col :span="10" class="fields"><el-input v-model="tablefields[index][Object.keys(item)[1]]" autocomplete="off" size="small"></el-input></el-col>
-                                <el-col :span="7" class="fields"><div class="title">{{tablefields[index][Object.keys(item)[2]]}}</div></el-col>
+                            <el-row v-for="(item,index) in tablefields" :key="index" class="rowfields" :gutter="20">
+                                <el-col :span="6" class="fields"><div class="title">{{tablefields[index][Object.keys(item)[0]]}}</div></el-col>
+                                <el-col :span="7" class="fields"><div class="title">{{tablefields[index][Object.keys(item)[1]]}}</div></el-col>
+                                <el-col :span="7" class="fields">
+                                    <div class="title">
+                                        <div class="title">{{tablefields[index][Object.keys(item)[2]]}}</div>
+                                    </div>
+                                </el-col>
+                                <el-col :span="4" class="fields">
+                                    <div class="title"><i class="el-icon-delete" @click="onTableFieldsDelete(index)"></i></div>
+                                </el-col>
                             </el-row>
                         </div>
                     </div>
@@ -145,7 +153,7 @@
                         <el-tab-pane label="基础">
                             <div class="simple">
                                 <div class="tag"><el-tag size="small">图表id</el-tag></div>
-                                <div class="setting"><el-tag type="info" size="small">{{chartId}}</el-tag></div>
+                                <div class="setting"><el-tag type="success" size="small">{{chartId}}</el-tag></div>
                                 <div class="tag"><el-tag size="small">宽度</el-tag></div>
                                 <div class="setting"><el-input-number v-model="localChartWidth"  :min="100" :max="1000" label="图表宽度" size="small"></el-input-number></div>
                                 <div class="tag"><el-tag size="small">高度</el-tag></div>
@@ -157,20 +165,26 @@
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="数据">
-                            <div class="tag"><span>数据绑定</span></div>
-                            <div class="setting"><el-radio v-model="dataBingType" label="1">SQL建模</el-radio></div>
+                            <div class="tag"><el-tag size="small">数据绑定</el-tag></div>
+                            <div class="setting"><el-radio v-model="dataBingType" label="1"><el-tag size="small">SQL建模</el-tag></el-radio></div>
                             <div class="setting">
-                                <el-select v-model="configproject" placeholder="请选择"  @change="changeConfigProjects"  size="small">
-                                    <el-option
-                                            v-for="item in configprojectsoptions"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                    </el-option>
-                                </el-select>
-                                &nbsp;<i class="el-icon-edit"></i>&nbsp;<i class="el-icon-plus"></i>
-                            </div>
-                            <div class="tag"><span>维度</span></div>
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-select v-model="configproject" placeholder="请选择"  @change="changeConfigProjects"  size="small">
+                                            <el-option
+                                                    v-for="item in configprojectsoptions"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-col>
+                                    <el-col :span="9" :offset="1"> <el-button @click="onProjectEdit" size="small"><i class="el-icon-edit"></i></el-button><el-button @click="onProjectPlus" size="small"><i class="el-icon-plus"></i></el-button>
+                                    </el-col>
+                                </el-row>
+
+                              </div>
+                            <div class="tag"><el-tag size="small">维度</el-tag></div>
                             <div class="setting">
                                 <el-select v-model="xData" placeholder="请选择">
                                     <el-option
@@ -181,7 +195,7 @@
                                     </el-option>
                                 </el-select>
                             </div>
-                            <div class="tag"><span>度量</span></div>
+                            <div class="tag"><el-tag size="small">度量</el-tag></div>
                             <div class="setting">
                                 <el-select multiple  v-model="yData" placeholder="请选择">
                                     <el-option
@@ -193,12 +207,11 @@
                                 </el-select>
                             </div>
                             <div class="setting">
+                                <el-button round @click="clickDebugChart" size="small">调试</el-button>
                                 <el-button round @click="clickRefreshChart" size="small">刷新图表</el-button>
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="高级">高级</el-tab-pane>
-                        <el-tab-pane label="下钻">下钻</el-tab-pane>
-                        <el-tab-pane label="联动">联动</el-tab-pane>
                     </el-tabs>
                 </div>
                 <div class="nocontent" v-if="!chartId">
@@ -218,7 +231,7 @@
         <!--预览数据对话框end-->
 
         <!--保存数据源对话框start-->
-        <el-dialog title="保存数据源" :visible.sync="dialogFormVisible">
+        <el-dialog title="保存数据源" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
             <el-form :model="form">
                 <el-form-item label="数据源名称" :label-width="formLabelWidth">
                     <el-input v-model="form.sourcename" autocomplete="off"></el-input>
@@ -230,20 +243,111 @@
             </div>
         </el-dialog>
         <!--保存数据源对话框end-->
+
+        <el-dialog :title="sqleditstate?'修改SQL模型':'新增SQL模型'" :visible.sync="dialogProjectVisible" :close-on-click-modal="false">
+            <el-form>
+                <el-form-item label="SQL模型名称" :label-width="formLabelWidth">
+                    <el-input v-model="sqlModelShowName" autocomplete="off" :disabled="sqleditstate"></el-input>
+                </el-form-item>
+                <el-form-item label="数据源" :label-width="formLabelWidth">
+                    <el-select v-model="sqldbtype" placeholder="请选择" @change="changeDbType" size="small">
+                        <el-option
+                                v-for="item in dbtypeoptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="SQL语句(*SQL语句对应列和字段的名称要对应)" :label-width="formLabelWidth">
+                    <div  ref="monaco" style="height: 120px">
+                    </div>
+                </el-form-item>
+                <el-form-item label="字段" :label-width="formLabelWidth">
+                    <div style="">
+                        <el-row :gutter="20">
+                            <el-col :span="6" class="fields"><el-tag>原始列名</el-tag></el-col>
+                            <el-col :span="6" class="fields"><el-tag>显示列名</el-tag></el-col>
+                            <el-col :span="6" class="fields"><el-tag>数据类型</el-tag></el-col>
+                            <el-col :span="3" class="fields"><el-tag>操作</el-tag></el-col>
+                        </el-row>
+                        <div class="split"></div>
+                        <div class="divided"></div>
+                        <el-row v-for="(item,index) in sqltablefields" :key="index" class="rowfields" :gutter="10">
+                            <el-col :span="6" class="fields"><el-input v-model="sqltablefields[index][Object.keys(item)[0]]" autocomplete="off" size="small"></el-input></el-col>
+                            <el-col :span="6" class="fields"><el-input v-model="sqltablefields[index][Object.keys(item)[1]]" autocomplete="off" size="small"></el-input></el-col>
+                            <el-col :span="6" class="fields">
+                                <div class="title">
+                                    <el-select v-model="sqltablefields[index][Object.keys(item)[2]]" placeholder="请选择"  @change="changeTablename"  size="small">
+                                        <el-option
+                                                v-for="item in tablefieldsoptions"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                            </el-col>
+                            <el-col :span="3" class="fields">
+                                <div class="title" style="text-align: center"><i class="el-icon-delete" @click="onSqlTableFieldsDelete(index)"></i></div>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-form-item>
+                <div class="sqltablefieldsdelete"><el-tag @click="onSqlTableFieldsAdd"><i class="el-icon-plus"></i></el-tag></div>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="clickDebugChart">调 试</el-button>
+                <el-button @click="_saveProject">保 存</el-button>
+                <el-button @click="dialogProjectVisible = false">取 消</el-button>
+                <el-button type="primary" @click="clickSaveProjectOk">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog title="调试" :visible.sync="dialogDebugVisible" :close-on-click-modal="false">
+            <div class="title">原始伪SQL：</div>
+            <br/>
+            <div  ref="debugSql" style="height: 120px">
+            </div>
+            <br/>
+            <div class="title">格式化后结果：</div>
+            <br/>
+            <div  ref="debugResult" style="height: 260px">
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogDebugVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
-    import {getTableNames,getDataset,setDataSource,getDataProjects} from 'api/dbhelper'
+    import {getTableNames,getDataset,setDataSource,getDataProjects,updateSqlDataSource} from 'api/dbhelper'
     import {socket} from "common/js/socket-client"
     import Index from 'components/page/index'
     import {mapGetters,mapMutations} from 'vuex'
     import BScroll from 'better-scroll'
+    import * as monaco from 'monaco-editor'
     let TOP_HEIGHT = 125
     let LEFT_WIDTH = 300
     import './projectsetting.styl'
+    import {baseConfigApi} from 'common/js/config'
+    import {getChartData} from "api/bar"
     export default {
         data() {
             return {
+                dialogDebugVisible:false,
+                sqlstatement:'',
+                sqldbtype:'',
+                sqlModelShowName:'',
+                sqleditstate:true,
+                sqltablefields:[],
+                tablefieldsoptions:[
+                    {label: '字符串', value: 'string'},
+                    {label: '数字', value: 'number'},
+                    {label: '日期', value: 'date'}
+                ],
+                dialogProjectVisible:false,
                 dimensionality:[],
                 measurement:[],
                 xData:'',
@@ -313,32 +417,14 @@
         },
         computed:{
            ...mapGetters(
-               ['chartId','chartWidth','chartHeight','chartX','chartY','storePosition','increaseId']
+               ['chartId','storePosition','increaseId','increaseIdForData']
            )
         },
         created(){
-            // this.localChartWidth = this.chartWidth
-            // this.localChartHeight = this.chartHeight
-            // this.localChartX = this.chartX
-            // this.localChartY = this.chartY
         },
         watch:{
-            // chartWidth(newVal){
-            //     this.localChartWidth = this.storePosition(this.chartId).width
-            // },
-            // chartHeight(newVal){
-            //     this.localChartHeight = newVal
-            // },
-            // chartX(newVal){
-            //     this.localChartX = newVal
-            // },
-            // chartY(newVal){
-            //     this.localChartY = newVal
-            // },
-            increaseId(newVal){
-                console.log(newVal)
+            increaseId(){
                 let pos = this.storePosition(this.chartId)
-                console.log(pos)
                 this.localChartWidth = pos.width
                 this.localChartHeight = pos.height
                 this.localChartX = pos.x
@@ -407,9 +493,61 @@
                 }
                 socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
                 this.setIncreaseId(this.increaseId+1)
+            },
+            dialogProjectVisible(newVal){
+                //sql编辑器初始化
+                if(newVal){
+                    if(!this.$monacoInstance) {
+                        setTimeout(() => {
+                            this.$monacoInstance = monaco.editor.create(this.$refs.monaco, {
+                                value: '',
+                                language: 'sql',
+                                theme: 'vs-dark',
+                                automaticLayout: true
+                            })
+                        }, 20)
+                    }
+
+                }
+            },
+            dialogDebugVisible(newVal){
+                if(newVal){
+                    if(!this.$debugSql) {
+                        setTimeout(() => {
+                            this.$debugSql = monaco.editor.create(this.$refs.debugSql, {
+                                value: '',
+                                language: 'sql',
+                                theme: 'vs-dark',
+                                automaticLayout: true
+                            })
+                        }, 20)
+                    }
+                    if(!this.$debugResult) {
+                        setTimeout(() => {
+                            this.$debugResult = monaco.editor.create(this.$refs.debugResult, {
+                                value: '',
+                                language: 'json',
+                                theme: 'vs-dark',
+                                automaticLayout: true
+                            })
+                        }, 20)
+                    }
+                }
             }
         },
         mounted(){
+
+        },
+        beforeDestroy(){
+            if(this.$monacoInstance){
+                this.$monacoInstance.dispose()
+            }
+            if(this.$debugSql){
+                this.$debugSql.dispose()
+            }
+            if(this.$debugResult){
+                this.$debugResult.dispose()
+            }
         },
         methods:{
             handleNodeClick(){
@@ -591,46 +729,193 @@
                     this.setChartId('')
                 }
             },
+            _getDataProjects(){
+                getDataProjects().then((res)=>{
+                    if(res.data.code == 0){
+                        let data = res.data.data
+                        this.ConfigProjects = data
+                        let mdata = []
+                        data.forEach((item)=>{
+                            mdata.push({
+                                value:item._id,
+                                label:item.sourcename
+                            })
+                        })
+                        this.configprojectsoptions = mdata
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '网络断线了'
+                        });
+                    }
+                })
+            },
             onConfigPanelClick(tab){
                 if(tab.label == '数据'){
-                    getDataProjects().then((res)=>{
-                        if(res.data.code == 0){
-                            let data = res.data.data
-                            this.ConfigProjects = data
-                            let mdata = []
-                            data.forEach((item)=>{
-                                mdata.push({
-                                    value:item._id,
-                                    label:item.sourcename
-                                })
-                            })
-                            this.configprojectsoptions = mdata
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: '网络断线了'
-                            });
-                        }
-                    })
+                    this._getDataProjects()
+                }
+            },
+            _changeBingFields(){
+                let index = this.ConfigProjects.findIndex((item)=>item._id == this.configproject)
+                if(index>-1){
+                    this.xData = ''
+                    this.yData = []
+                    let tt = JSON.parse(this.ConfigProjects[index].tablefields)
+                    this.sqldbtype = this.ConfigProjects[index].dbtype
+                    this.sqltablefields = tt
+                    this.sqlstatement = this.ConfigProjects[index].tablename
+                    this.dimensionality = tt.filter(t=>t.type !== 'number')
+                    this.measurement= tt.filter(t=>t.type === 'number')
                 }
             },
             changeConfigProjects(){
-                let index = this.ConfigProjects.findIndex((item)=>item._id == this.configproject)
-                let tt = JSON.parse(this.ConfigProjects[index].tablefields)
-                this.dimensionality = tt.filter(t=>t.type !== 'number')
-                this.measurement= tt.filter(t=>t.type === 'number')
+                this._changeBingFields()
             },
             clickRefreshChart(){
+                if(!this.xData || this.yData.length === 0)
+                {
+                    return
+                }
+                let y = []
+                this.yData.forEach(item=>{
+                    y.push({
+                        id:item,
+                        name:this.measurement[this.measurement.findIndex((i)=>{return i.value == item})].label
+                    })
+                })
+                let x = this.xData
 
+                //let dataUrl = `${baseConfigApi}/getChartDataDynamic?id=${this.configproject}`
+                this.setPosition({id:this.chartId,xData:x,yData:this.yData,yFields:y,dataId:this.configproject})
+                this.setIncreaseIdForData(this.increaseIdForData+1)
+            },
+            onProjectEdit(){
+                let index = this.configprojectsoptions.findIndex(item=>item.value == this.configproject)
+                if(index>-1){
+                    this.sqlModelShowName = this.configprojectsoptions[index].label
+                    this.sqlstatement = this.ConfigProjects[index].tablename
+                    this.sqldbtype =  this.ConfigProjects[index].dbtype
+                    this.sqltablefields = JSON.parse(this.ConfigProjects[index].tablefields)
+                }else{
+                    return
+                }
+                this.sqleditstate = true
+                this.dialogProjectVisible = true
+                //SQL语句的处理
+                if(!this.sqlstatement.toUpperCase().includes('FROM')){
+                    //处理只含有表名的情况
+                    if(this.sqltablefields.length>0){
+                         let ff = ''
+                         this.sqltablefields.map(function(item){
+                             ff += `${item.value},\r\n`
+                        })
+                        ff = ff.substring(0,ff.length-3)
+                        this.sqlstatement = `select ${ff} from ${this.sqlstatement}`
+                    }
+                }
+                setTimeout(()=>{
+                    this.$monacoInstance.setValue(this.sqlstatement)
+                },200)
+            },
+            onProjectPlus(){
+                this.sqldbtype = ''
+                this.sqltablefields = []
+                this.sqlModelShowName = ""
+                this.sqleditstate = false
+                this.sqlstatement =''
+                setTimeout(()=>{
+                    this.$monacoInstance.setValue(this.sqlstatement)
+                },200)
+                this.dialogProjectVisible = true
+            },
+            onTableFieldsDelete(index){
+                this.tablefields.splice(index,1)
+            },
+            onSqlTableFieldsDelete(index){
+                this.sqltablefields.splice(index,1)
+            },
+            onSqlTableFieldsAdd(){
+                this.sqltablefields.push({
+                    value:'',
+                    label:'',
+                    type:'number'
+                })
+            },
+            _saveProject(){
+                //保存项目的SQL模型配置
+                if(this.sqleditstate){
+                    updateSqlDataSource(this.sqlModelShowName,this.$monacoInstance.getValue().replace(/\r\n/g,''),this.sqldbtype,JSON.stringify(this.sqltablefields))
+                        .then((res)=>{
+                            if(res.data.code == 0){
+                                this.$message({
+                                    type: 'success',
+                                    message: '更新完成'
+                                });
+                                this._getDataProjects()
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '网络断线了'
+                                });
+                            }
+                        })
+                }else{
+                    setDataSource(this.$monacoInstance.getValue().replace(/\r\n/g,''),this.sqldbtype,this.sqlModelShowName,JSON.stringify(this.sqltablefields))
+                        .then((res)=>{
+                            if(res.data.code==0){
+                                this._getDataProjects()
+
+                                this.$message({
+                                    type: 'success',
+                                    message: '保存成功'
+                                });
+                            }else if(res.data.code==1){
+                                this.$message({
+                                    type: 'error',
+                                    message: '数据源名称重复'
+                                });
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '保存异常'
+                                });
+                            }
+                        })
+                }
+            },
+            async clickSaveProjectOk(){
+                this.dialogProjectVisible = false
+                await this._getDataProjects()
+                this._changeBingFields()
+            },
+            clickDebugChart(){
+                if(!this.configproject){
+                    this.$message({
+                        type: 'error',
+                        message: '请选择数据源'
+                    });
+                    return
+                }
+                this.dialogDebugVisible = true
+                let dataUrl = `${baseConfigApi}/api/getChartDataDynamic?id=${this.configproject}`
+                getChartData(dataUrl).then((res)=> {
+                    let originSql = this.sqlstatement
+                    let resJson = res.data
+                    setTimeout(()=>{
+                        this.$debugSql.setValue(originSql)
+                    },100)
+                    setTimeout(()=>{
+                        this.$debugResult.setValue(JSON.stringify(resJson))
+                    },100)
+
+
+                })
             },
             ...mapMutations({
                 setChartId:'SET_CHART_ID',
-                setChartWidth:'SET_CHART_WIDTH',
-                setChartHeight:'SET_CHART_HEIGHT',
-                setChartX:'SET_CHART_X',
-                setChartY:'SET_CHART_Y',
                 setPosition:'SET_POSITION',
-                setIncreaseId:'SET_INCREASE_ID'
+                setIncreaseId:'SET_INCREASE_ID',
+                setIncreaseIdForData:'SET_INCREASE_UPDATE_DATA'
             })
         },
         components:{

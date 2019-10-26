@@ -4,13 +4,13 @@
                                  :y="y"
                                  :w="width"
                                  :h="height"
-                                 @dragging="(left, top) =>onDrag('chart1571922670000',left,top)"
-                                 @resizing="(x, y, width, height) =>onResize('chart1571922670000',x, y, width, height)"
-                                 @activated="onActivated('chart1571922670000')">
-            <div @click="deleteChart('chart1571922670000')" class="delete">删除</div>
-            <div class="chart" ref="chart1571922670000"
-                               style="width: 100px;height:300px;"
-                               data-width="100" data-height="300" data-x="671" data-y="16"></div>
+                                 @dragging="(left, top) =>onDrag('chart1572068635000',left,top)"
+                                 @resizing="(x, y, width, height) =>onResize('chart1572068635000',x, y, width, height)"
+                                 @activated="onActivated('chart1572068635000')">
+            <div @click="deleteChart('chart1572068635000')" class="delete">删除</div>
+            <div class="chart" ref="chart1572068635000"
+                               style="width: 300px;height:300px;"
+                               data-width="300" data-height="300" data-x="222" data-y="85"></div>
         </vue-draggable-resizable>
     </div>
 </template>
@@ -22,6 +22,7 @@
     import {socket} from "common/js/socket-client"
     import jsonobj from "common/js/chalk.project.json"
     import {mapGetters,mapMutations} from 'vuex'
+    import {baseConfigApi} from 'common/js/config'
     export default {
         data(){
             return {
@@ -29,34 +30,35 @@
                 y:0,
                 width:10,
                 height:10,
-                chartId:'chart1571922670000'
+                chartId:'chart1572068635000'
             }
         },
         mounted() {
-            let mconfig = {"chartId":"chart1571922670000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/pie/ydys/v1","width":100,"height":300,"dx":671,"dy":16},"chartType":3}
-            let commonConfig = mconfig.config.commonConfig
-            let userConfig = mconfig.config.userConfig
-            let dataUrl = mconfig.config.dataUrl
+            let mconfig = {"chartId":"chart1572068635000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"test1"},{"id":"SZFPZZMJ","name":"test2"}]},"dataUrl":"http://localhost:8888/api/line/ydys/v1","width":300,"height":300,"dx":222,"dy":85},"chartType":1}
+            this.commonConfig = mconfig.config.commonConfig
+            this.userConfig = mconfig.config.userConfig
+            this.dataUrl = mconfig.config.dataUrl
+            this.chartType = 1
             echarts.registerTheme('chalk',jsonobj)
-            this.$echarts = echarts.init(this.$refs.chart1571922670000, 'chalk', {
+            this.$echarts = echarts.init(this.$refs.chart1572068635000, 'chalk', {
                 width: mconfig.config.width,
                 height: mconfig.config.height
             })
-            this.$echarts.showLoading('default')
-            getChartData(dataUrl).then((res)=>{
-                this.$echarts.hideLoading()
-                let tempConfig = getCommonConfig(res.data.array,commonConfig,userConfig,3)
+            //this.$echarts.showLoading('default')
+            getChartData(this.dataUrl).then((res)=>{
+                //this.$echarts.hideLoading()
+                let tempConfig = getCommonConfig(res.data,this.commonConfig,this.userConfig,this.chartType)
                 this.$echarts.setOption(tempConfig)
                 this.x = mconfig.config.dx
                 this.y = mconfig.config.dy
                 this.width = mconfig.config.width
                 this.height = mconfig.config.height
-                this.setPosition({id:'chart1571922670000',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height})
+                this.setPosition({id:'chart1572068635000',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height,xData:'',yData:[],yFields:[],dataId:''})
             })
         },
         computed:{
              ...mapGetters(
-                ['storePosition','increaseId']
+                ['storePosition','increaseId','increaseIdForData']
              )
         },
         watch:{
@@ -75,9 +77,27 @@
                 if(this.height != pos.height){
                     this.height = pos.height
                 }
+            },
+            increaseIdForData(){
+                this._refreshData()
             }
         },
         methods:{
+            _refreshData(){
+                let pos = this.storePosition(this.chartId)
+                if(!pos.xData || pos.yData.length === 0 || pos.yFields.length === 0 || !pos.dataId){
+                    return
+                }
+                let dataUrl = `${baseConfigApi}/api/getChartDataDynamic?id=${pos.dataId}`
+                getChartData(dataUrl).then((res)=>{
+                    this.userConfig.x = pos.xData
+                    this.userConfig.y = pos.yFields
+                    let tempConfig = getCommonConfig(res.data,this.commonConfig,this.userConfig,this.chartType)
+                    this.$echarts.clear()
+                    console.log(tempConfig)
+                    this.$echarts.setOption(tempConfig)
+                })
+            },
             onDrag(id,x,y){
                 let position = {
                    dx:x,
@@ -103,24 +123,14 @@
                 socket.emit('onDragRemove',id)
             },
             onActivated(id){
-                //console.log(this.storePosition(id))
-                //let _set = this.$refs[id].dataset
                 this.setChartId(id)
-                //this.setChartWidth(_set.width)
-                //this.setChartHeight(_set.height)
-                //this.setChartX(_set.x)
-                //this.setChartY(_set.y)
                 this.setIncreaseId(this.increaseId+1)
-                //this.setPosition({id:id,x:_set.x,y:_set.y,width:_set.width,height:_set.height})
             },
             ...mapMutations({
                 setChartId:'SET_CHART_ID',
-                setChartWidth:'SET_CHART_WIDTH',
-                setChartHeight:'SET_CHART_HEIGHT',
-                setChartX:'SET_CHART_X',
-                setChartY:'SET_CHART_Y',
                 setPosition:'SET_POSITION',
-                setIncreaseId:'SET_INCREASE_ID'
+                setIncreaseId:'SET_INCREASE_ID',
+                setIncreaseUpdateData:'SET_INCREASE_UPDATE_DATA'
             })
         }
     }

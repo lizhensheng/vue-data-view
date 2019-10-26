@@ -3,41 +3,45 @@ const Mock = require('mockjs');
 let apiRoutes = express.Router()
 const userController = require('./src/server/controller/user')
 const checkToken = require('./src/server/token/check-token')
+let {sourceConfig} = require('./src/server/db/db')
+const dbFactory = require('./src/common/js/dbfactory')
 /**
  * 模板柱状图数据的接口
  */
 apiRoutes.get('/bar/ydys/v1', function (req, res) {
     //建设用地审批
-    let json = Mock.mock({
-        "array|4": [
+    let json = Mock.mock( [
             {
-                "TJDATE":function(){
-                    return Mock.mock('@date("yyyy/MM")')
-                },
+                "TJDATE":'2008',
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            },
+            {
+                "TJDATE":'2009',
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            },
+            {
+                "TJDATE":'2010',
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            },
+            {
+                "TJDATE":'2011',
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            },
+            {
+                "TJDATE":'2013',
                 "ARECODE":150000,
                 "GWYPZZMJ|1-100":1,
                 "SZFPZZMJ|1-100":1
             }
-        ],
-        "tags":[
-            {
-                "value":"TJDATE",
-                "label":"月份"
-            },
-            {
-                "value":"ARECODE",
-                "label":"行政区"
-            },
-            {
-                "value":"GWYPZZMJ",
-                "label":"国务院批准总面积"
-            },
-            {
-                "value":"SZFPZZMJ",
-                "label":"省政府批准总面积"
-            }
-        ]
-    })
+        ])
     res.json(json)
 });
 /**
@@ -45,36 +49,38 @@ apiRoutes.get('/bar/ydys/v1', function (req, res) {
  */
 apiRoutes.get('/line/ydys/v1', function (req, res) {
     //建设用地审批
-    let json = Mock.mock({
-        "array|4": [
+    let json = Mock.mock([
             {
-                "TJDATE":function(){
-                    return Mock.mock('@date("yyyy/MM")')
-                },
+                "TJDATE":'2008',
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            },
+            {
+                "TJDATE":'2009',
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            },
+            {
+                "TJDATE":'2010',
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            },
+            {
+                "TJDATE":'2011',
+                "ARECODE":150000,
+                "GWYPZZMJ|1-100":1,
+                "SZFPZZMJ|1-100":1
+            },
+            {
+                "TJDATE":'2013',
                 "ARECODE":150000,
                 "GWYPZZMJ|1-100":1,
                 "SZFPZZMJ|1-100":1
             }
-        ],
-        "tags":[
-            {
-                "value":"TJDATE",
-                "label":"月份"
-            },
-            {
-                "value":"ARECODE",
-                "label":"行政区"
-            },
-            {
-                "value":"GWYPZZMJ",
-                "label":"国务院批准总面积"
-            },
-            {
-                "value":"SZFPZZMJ",
-                "label":"省政府批准总面积"
-            }
-        ]
-    })
+        ])
     res.json(json)
 });
 /**
@@ -82,23 +88,11 @@ apiRoutes.get('/line/ydys/v1', function (req, res) {
  */
 apiRoutes.get('/pie/ydys/v1', function (req, res) {
     //建设用地审批
-    let json = Mock.mock({
-        "array":{
+    let json = Mock.mock([{
                 "GWYPZZMJ|1-100":1,
                 "SZFPZZMJ|1-100":1
-        }
-        ,
-        "tags":[
-            {
-                "value":"GWYPZZMJ",
-                "label":"国务院批准总面积"
-            },
-            {
-                "value":"SZFPZZMJ",
-                "label":"省政府批准总面积"
-            }
-        ]
-    })
+        }]
+    )
     res.json(json)
 });
 /**
@@ -106,25 +100,43 @@ apiRoutes.get('/pie/ydys/v1', function (req, res) {
  */
 apiRoutes.get('/ring/ydys/v1', function (req, res) {
     //建设用地审批
-    let json = Mock.mock({
-        "array":{
+    let json = Mock.mock(
+        [{
             "GWYPZZMJ|1-100":1,
             "SZFPZZMJ|1-100":1
-        }
-        ,
-        "tags":[
-            {
-                "value":"GWYPZZMJ",
-                "label":"国务院批准总面积"
-            },
-            {
-                "value":"SZFPZZMJ",
-                "label":"省政府批准总面积"
-            }
-        ]
-    })
+        }]
+    )
     res.json(json)
 });
+apiRoutes.get('/getChartDataDynamic',async (req,res) => {
+    let id = req.query.id
+    if(id){
+        await sourceConfig.findOne({_id:id}, async (err,doc)=>{
+            if(err){
+                res.json([])
+            }else{
+                let dbtype = doc.dbtype
+                let tablename = doc.tablename
+                let tablefields = JSON.parse(doc.tablefields)
+                let fields = []
+                tablefields.forEach((item)=>{
+                    fields.push(item.value)
+                })
+                let ff = fields.join(',')
+                let handle = dbFactory.createOperate(dbtype)
+                await handle.createConnection()
+                await handle.getDataset(ff,tablename,(result)=>{
+                    handle.closeConnection()
+                    if(result){
+                        res.json(result)
+                    }else{
+                        res.json([])
+                    }
+                })
+            }
+        })
+    }
+})
 /**
  * 登录
  */

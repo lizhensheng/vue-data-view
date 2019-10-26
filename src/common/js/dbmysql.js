@@ -8,7 +8,7 @@ let dbMysql = function dbMysql() {
     this.excuteSql = async (sql,callback)=>{
         await this.conn.query(sql, (error, result, fields) => {
             if (error) {
-                throw new Error(error)
+                console.log(error)
             }
             callback(result)
         })
@@ -16,7 +16,7 @@ let dbMysql = function dbMysql() {
     this.getTableNames = async (callback)=> {
             await this.conn.query(`select table_name from information_schema.tables where table_schema='${mysqlConfig.database}'`,  (error, result, fields) => {
                 if (error) {
-                    throw new Error(error)
+                    console.log(error)
                 }
                 callback(result)
             })
@@ -24,13 +24,18 @@ let dbMysql = function dbMysql() {
     this.getDataset = async (tablefields,tablename,callback)=>{
         let sql = ''
         if(tablefields){
-            sql = `select ${tablefields} from ?? limit 5`
+            if(tablename.toUpperCase().includes('SELECT')){
+                sql = `select ${tablefields} from (${tablename}) t limit 20`
+            }
+            else{
+                sql = `select ${tablefields} from ${tablename} t limit 20`
+            }
         }else{
-            sql = 'select *from ?? limit 5'
+            sql = `select *from ${tablename} limit 20`
         }
-        await this.conn.query(this.conn.format(sql,tablename),  (error, result, fields) => {
+        await this.conn.query(sql,  (error, result, fields) => {
             if (error) {
-                throw new Error(error)
+                console.log(error)
             }
             callback(result)
         })

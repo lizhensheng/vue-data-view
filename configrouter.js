@@ -87,4 +87,19 @@ configRoutes.post('/getDataProjects',(req,res)=>{
         res.json({code:0,data:doc})
     })
 })
+configRoutes.post('/updateSqlDataSource',(req,res)=>{
+    if(!req.body.tablename||!req.body.dbtype||!req.body.sourcename||!req.body.tablefields){
+        res.json({code:800})
+        return
+    }
+    console.log(req.body.tablename,req.body.dbtype,req.body.sourcename,req.body.tablefields)
+    let query = { sourcename: req.body.sourcename };
+    sourceConfig.findOneAndUpdate(query,{'tablename':req.body.tablename,dbtype:req.body.dbtype,tablefields:req.body.tablefields},function(err, doc) {
+        if(err){
+            res.json({code:500})
+        }else{
+            res.json({code:0})
+        }
+    })
+})
 module.exports =  configRoutes

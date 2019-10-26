@@ -56,7 +56,7 @@ export function getSeries(data,config,chartType) {
                 })
             }
 
-            let value = data[id]
+            let value = data[0][id]
             seriesData[0].data.push({value:value,name:name})
         }else if(chartType == 4){
             if(seriesData.length == 0) {
@@ -87,7 +87,7 @@ export function getSeries(data,config,chartType) {
                 })
             }
 
-            let value = data[id]
+            let value = data[0][id]
             seriesData[0].data.push({value:value,name:name})
         }
     })
@@ -133,7 +133,9 @@ export function getCommonConfig(data,commonConfig,userConfig,chartType) {
                 data: x
             }
         ],
-        yAxis: yAxis,
+        yAxis: {
+            type: 'value'
+        },
         series: series
     })
     return ret

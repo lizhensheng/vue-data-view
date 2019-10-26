@@ -10,7 +10,7 @@
             <div @click="deleteChart('chart1571922770000')" class="delete">删除</div>
             <div class="chart" ref="chart1571922770000"
                                style="width: 300px;height:300px;"
-                               data-width="300" data-height="300" data-x="357" data-y="351"></div>
+                               data-width="300" data-height="300" data-x="356" data-y="351"></div>
         </vue-draggable-resizable>
     </div>
 </template>
@@ -33,7 +33,7 @@
             }
         },
         mounted() {
-            let mconfig = {"chartId":"chart1571922770000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/line/ydys/v1","width":300,"height":300,"dx":357,"dy":351},"chartType":1}
+            let mconfig = {"chartId":"chart1571922770000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"国务院批准总面积"},{"id":"SZFPZZMJ","name":"省政府批准总面积"}],"yAxis":[{"type":"value","name":"面积","axisLabel":{"formatter":"{value} "}}]},"dataUrl":"http://localhost:8888/api/line/ydys/v1","width":300,"height":300,"dx":356,"dy":351},"chartType":1}
             let commonConfig = mconfig.config.commonConfig
             let userConfig = mconfig.config.userConfig
             let dataUrl = mconfig.config.dataUrl

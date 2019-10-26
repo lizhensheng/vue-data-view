@@ -24,9 +24,9 @@ let dbOracle = function dbOracle() {
         }
         let sql = ''
         if(tablefields){
-            sql = `select ${tablefields} from (select rownum,t.* from ${tablename} t where rownum<6)`
+            sql = `select ${tablefields} from (select rownum,t.* from (${tablename}) t where rownum<21)`
         }else{
-            sql = `select rownum,t.*from ${tablename} t where rownum<6`
+            sql = `select rownum,t.*from ${tablename} t where rownum<21`
         }
         const result = await this.conn.execute(sql)
         callback(result.rows)

@@ -32,10 +32,17 @@ const mutations = {
         state.chartY = chartY
     },
     [types.SET_POSITION](state,position){
-        state.storePosition[position.id] = position
+        if(state.storePosition[position.id]){
+            state.storePosition[position.id] = Object.assign({},state.storePosition[position.id],position)
+        }else{
+            state.storePosition[position.id] = position
+        }
     },
     [types.SET_INCREASE_ID](state,increaseId){
         state.increaseId = increaseId
+    },
+    [types.SET_INCREASE_UPDATE_DATA](state,increaseIdForData){
+        state.increaseIdForData = increaseIdForData
     }
 };
 export default mutations
