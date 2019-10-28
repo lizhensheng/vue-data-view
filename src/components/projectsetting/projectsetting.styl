@@ -33,6 +33,11 @@
         margin-bottom 10px
       .fields
         text-align center
+      .fieldsWrapper
+        width 500px
+        height 500px
+        overflow-x hidden
+
     .list-container
       .tool-list
         li
@@ -71,7 +76,7 @@
             background-color #ebebeb
   .rightWrapper
     flex 1
-    .css-sqdry3
+    .editor
       position: absolute;
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
@@ -79,7 +84,7 @@
       left: 290px
       top: 60px
       right 300px
-      .css-1qkwt59
+      .editor-panel
         position: absolute;
         top: 0px;
         left: 0px;
@@ -88,27 +93,55 @@
         box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 5px 0px;
         background: rgb(255, 255, 255);
         overflow: hidden;
+        font-size 0
         .el-menu-demo
           background-image url(/img/background/dragon.jpg)
           filter opacity(80%)
-        .css-10ro1m
-          position relative
+        .editor-body
+          position absolute
+          left 0
+          top 60px
+          right 0px
           z-index 3
-          height calc(100% - 40px)
+          bottom 0
+          padding-bottom 150px
+          background-color #f0f3f4
           overflow auto
-          //background transparent
-          //background-color  #808080
-          //background linear-gradient(-90deg, rgba(0, 0, 0, .1) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, .1) 1px, transparent 1px)
-          //background-size  20px 20px, 20px 20px
-          background: rgb(0, 0, 0);
-          .dashboard-background-image
-            width 100%
-            height 100%
-            position absolute
-            z-index -1
-            background url(/img/background/background-4.png) 0% 0% / 100% 100%
-            filter blur(0px)
-            opacity 0.7
+          .containerWrapper
+            position relative
+            //background transparent
+            //background-color  #808080
+            //background linear-gradient(-90deg, rgba(0, 0, 0, .1) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, .1) 1px, transparent 1px)
+            //background-size  20px 20px, 20px 20px
+            .dashboard-background-image
+              position: relative;
+              width: 1920px;
+              height: 1080px;
+              background: rgb(0, 0, 0);
+              transform: scale(0.558333, 0.558333);
+              transform-origin: 0 0;
+              user-select: none;
+              box-shadow: 0 0 10px 0 rgba(0,0,0,.5);
+              transition: all .3s linear;
+              //background url(/img/background/background-4.png) 0% 0% / 100% 100%
+              //filter blur(0px)
+              //opacity 0.7
+         .bottom-panel
+           position absolute
+           bottom 0
+           right 0
+           z-index 3
+           height 2em
+           line-height 2em
+           font-size 18px
+           .range
+             width 200px
+           .number
+             width 3em
+             line-height: 1.15
+             margin-left: .5em
+           .el-icon-full-screen
+             margin-left: .5em
     .css-fullconfig
       background-image url(/img/background/dragon.jpg)
       filter opacity(80%)
@@ -133,4 +166,11 @@
             margin-bottom 10px
   .sqltablefieldsdelete
     text-align center
+  .fieldsWrapper::-webkit-scrollbar,.editor-body::-webkit-scrollbar
+    width 5px
+    height 5px
+  .fieldsWrapper::-webkit-scrollbar-thumb,.editor-body::-webkit-scrollbar-thumb
+    background-color rgba(150,150,150,0.8)
+  .fieldsWrapper::-webkit-scrollbar-track,.editor-body::-webkit-scrollbar-track
+    background-color rgba(255,255,255,0.3)
 

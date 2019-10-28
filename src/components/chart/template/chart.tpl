@@ -1,5 +1,5 @@
 <template>
-    <div class="chart">
+    <div class="chart" ref="chart">
         <vue-draggable-resizable :x="x"
                                  :y="y"
                                  :w="width"
@@ -53,7 +53,7 @@
                 this.y = mconfig.config.dy
                 this.width = mconfig.config.width
                 this.height = mconfig.config.height
-                this.setPosition({id:'<%- config.chartId%>',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height,xData:'',yData:[],yFields:[],dataId:''})
+                this.setPosition({id:this.chartId,chartType:this.chartType,x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height,xData:this.userConfig.x,yData:[],yFields:this.userConfig.y,dataId:'',dataUrl:this.dataUrl})
             })
         },
         computed:{
@@ -89,12 +89,12 @@
                     return
                 }
                 let dataUrl = `${baseConfigApi}/api/getChartDataDynamic?id=${pos.dataId}`
+                this.setPosition({id:this.chartId,dataUrl: dataUrl})
                 getChartData(dataUrl).then((res)=>{
                     this.userConfig.x = pos.xData
                     this.userConfig.y = pos.yFields
                     let tempConfig = getCommonConfig(res.data,this.commonConfig,this.userConfig,this.chartType)
                     this.$echarts.clear()
-                    console.log(tempConfig)
                     this.$echarts.setOption(tempConfig)
                 })
             },
@@ -120,7 +120,12 @@
                socket.emit('onDragInPanel',JSON.stringify(position))
             },
             deleteChart(id){
-                socket.emit('onDragRemove',id)
+                  if(!this.$echarts.isDisposed()){
+                       this.$echarts.clear()
+                       this.$echarts.dispose()
+                   }
+                   this.$refs.chart.innerHTML=''
+                   this.setDeletePosition({id:id})
             },
             onActivated(id){
                 this.setChartId(id)
@@ -130,7 +135,8 @@
                 setChartId:'SET_CHART_ID',
                 setPosition:'SET_POSITION',
                 setIncreaseId:'SET_INCREASE_ID',
-                setIncreaseUpdateData:'SET_INCREASE_UPDATE_DATA'
+                setIncreaseUpdateData:'SET_INCREASE_UPDATE_DATA',
+                setDeletePosition:'SET_DELETE_POSITION'
             })
         }
     }

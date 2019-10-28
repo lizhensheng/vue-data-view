@@ -38,6 +38,11 @@ const mutations = {
             state.storePosition[position.id] = position
         }
     },
+    [types.SET_DELETE_POSITION](state,position){
+        if(state.storePosition[position.id]){
+            delete state.storePosition[position.id]
+        }
+    },
     [types.SET_INCREASE_ID](state,increaseId){
         state.increaseId = increaseId
     },

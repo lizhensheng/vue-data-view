@@ -1,4 +1,4 @@
-let {chartBarDemoConfig,chartLineDemoConfig,chartPieDemoConfig,chartRingDemoConfig} = require('./chartconfig')
+let {chartBarDemoConfig,chartLineDemoConfig,chartPieDemoConfig,chartRingDemoConfig,chartCommonConfig} = require('./chartconfig')
 const fs = require("fs")
 const path = require("path")
 const renderTemplate = require("any-template-compiler")
@@ -102,5 +102,6 @@ function getPreChartContainerPath(pageid){
 module.exports = {
     getChartDemoConfig,
     replaceFileByCompile,
-    replaceChartByCompile
+    replaceChartByCompile,
+    chartCommonConfig
 }

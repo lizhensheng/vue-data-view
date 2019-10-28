@@ -80,7 +80,7 @@
                     <div class="split"></div>
                     <div class="split"></div>
                     <div class="tablefields" v-if="tablefields.length>0" ref="tablefields">
-                        <div style="width:500px;height: 500px;overflow-x:hidden">
+                        <div class="fieldsWrapper">
                             <el-row :gutter="20">
                                 <el-col :span="6" class="fields"><h3>原始列名</h3></el-col>
                                 <el-col :span="7" class="fields"><h3>显示列名</h3></el-col>
@@ -124,21 +124,27 @@
         <!--中间和右侧面板start-->
         <div class="rightWrapper">
             <!--中间面板start-->
-            <div class="css-sqdry3">
-
-                    <div class="css-1qkwt59">
+            <div class="editor">
+                    <div class="editor-panel">
                         <el-menu :default-active="menuIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                             <el-menu-item index="1" >预览</el-menu-item>
                         </el-menu>
-
-                            <div class="css-10ro1m" v-if="!docdesc" @click="onClick">
-                                <div class="dashboard-background-image">
+                        <div class="editor-body" v-if="!docdesc" @click="onClick">
+                            <div class="containerWrapper">
+                                <div class="dashboard-background-image" ref="dashboard">
                                     <Index></Index>
                                 </div>
                             </div>
-                            <div v-if="docdesc">
-                                文档
-                            </div>
+                        </div>
+                        <div class="bottom-panel">
+                            <span>面板缩放百分比</span>
+                            <input class="range" type="range" min="10" max="200" step="1"  v-model="scaleValue" >
+                            <input class="number" type="number" min="10" max="200" step="1"  v-model="scaleValue">
+                            <i class="el-icon-full-screen" @click="onFullScreen"></i>
+                        </div>
+                        <div v-if="docdesc">
+                            文档
+                        </div>
                     </div>
             </div>
             <!--中间面板end-->
@@ -155,13 +161,13 @@
                                 <div class="tag"><el-tag size="small">图表id</el-tag></div>
                                 <div class="setting"><el-tag type="success" size="small">{{chartId}}</el-tag></div>
                                 <div class="tag"><el-tag size="small">宽度</el-tag></div>
-                                <div class="setting"><el-input-number v-model="localChartWidth"  :min="100" :max="1000" label="图表宽度" size="small"></el-input-number></div>
+                                <div class="setting"><el-input-number v-model="localChartWidth"  :min="100" :max="2000" label="图表宽度" size="small"></el-input-number></div>
                                 <div class="tag"><el-tag size="small">高度</el-tag></div>
-                                <div class="setting"><el-input-number v-model="localChartHeight"  :min="100" :max="1000" label="图表高度" size="small"></el-input-number></div>
+                                <div class="setting"><el-input-number v-model="localChartHeight"  :min="100" :max="2000" label="图表高度" size="small"></el-input-number></div>
                                 <div class="tag"><el-tag size="small">X坐标</el-tag></div>
-                                <div class="setting"><el-input-number v-model="localChartX"  :min="0" :max="1000" label="X坐标" size="small"></el-input-number></div>
+                                <div class="setting"><el-input-number v-model="localChartX"  :min="0" :max="2000" label="X坐标" size="small"></el-input-number></div>
                                 <div class="tag"><el-tag size="small">Y坐标</el-tag></div>
-                                <div class="setting"><el-input-number v-model="localChartY"  :min="0" :max="1000" label="Y坐标" size="small"></el-input-number></div>
+                                <div class="setting"><el-input-number v-model="localChartY"  :min="0" :max="2000" label="Y坐标" size="small"></el-input-number></div>
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="数据">
@@ -264,7 +270,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="字段" :label-width="formLabelWidth">
-                    <div style="">
+                    <div>
                         <el-row :gutter="20">
                             <el-col :span="6" class="fields"><el-tag>原始列名</el-tag></el-col>
                             <el-col :span="6" class="fields"><el-tag>显示列名</el-tag></el-col>
@@ -333,9 +339,11 @@
     import './projectsetting.styl'
     import {baseConfigApi} from 'common/js/config'
     import {getChartData} from "api/bar"
+    import {prefixStyle} from 'common/js/dom'
     export default {
         data() {
             return {
+                scaleValue:55,
                 dialogDebugVisible:false,
                 sqlstatement:'',
                 sqldbtype:'',
@@ -417,7 +425,7 @@
         },
         computed:{
            ...mapGetters(
-               ['chartId','storePosition','increaseId','increaseIdForData']
+               ['chartId','storePosition','chartConfigs','increaseId','increaseIdForData']
            )
         },
         created(){
@@ -533,6 +541,10 @@
                         }, 20)
                     }
                 }
+            },
+            scaleValue(newVal){
+                let percent = newVal*1.0/100
+                this.$refs.dashboard.style[prefixStyle('transform')] = `scale(${percent}, ${percent})`
             }
         },
         mounted(){
@@ -550,6 +562,9 @@
             }
         },
         methods:{
+            onFullScreen(){
+                this.$refs.dashboard.style[prefixStyle('transform')] = `scale(0.558333, 0.558333)`
+            },
             handleNodeClick(){
                 // let his = this.$router.history.current.fullPath
                 // if(his !== '/pindex'){
@@ -715,12 +730,18 @@
                 let dy = e.y-TOP_HEIGHT
                 if(dx>0&&dy>0&&this.chartType>0){
                     //在坐标(dx,dy)处增加一个默认图表,图表类型是this.chartType
-                    let obj = {
+                    let lastConfig = {
                         dx:dx,
                         dy:dy,
                         chartType:this.chartType
                     }
-                    socket.emit('onDragInControl',JSON.stringify(obj))
+                    //读取vuex中存储的图表配置
+                    let oldConfigs = Object.values(this.chartConfigs)
+                    let json = JSON.stringify({
+                        oldConfigs:oldConfigs,
+                        lastConfig:lastConfig
+                    })
+                    socket.emit('onDragInControl',json)
                 }
                 this.chartType = -1
             },

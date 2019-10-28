@@ -4,13 +4,13 @@
                                  :y="y"
                                  :w="width"
                                  :h="height"
-                                 @dragging="(left, top) =>onDrag('chart1572068662000',left,top)"
-                                 @resizing="(x, y, width, height) =>onResize('chart1572068662000',x, y, width, height)"
-                                 @activated="onActivated('chart1572068662000')">
-            <div @click="deleteChart('chart1572068662000')" class="delete">删除</div>
-            <div class="chart" ref="chart1572068662000"
-                               style="width: 444px;height:300px;"
-                               data-width="444" data-height="300" data-x="360" data-y="17"></div>
+                                 @dragging="(left, top) =>onDrag('chart1572235167000',left,top)"
+                                 @resizing="(x, y, width, height) =>onResize('chart1572235167000',x, y, width, height)"
+                                 @activated="onActivated('chart1572235167000')">
+            <div @click="deleteChart('chart1572235167000')" class="delete">删除</div>
+            <div class="chart" ref="chart1572235167000"
+                               style="width: 300px;height:300px;"
+                               data-width="300" data-height="300" data-x="1271" data-y="11"></div>
         </vue-draggable-resizable>
     </div>
 </template>
@@ -30,17 +30,17 @@
                 y:0,
                 width:10,
                 height:10,
-                chartId:'chart1572068662000'
+                chartId:'chart1572235167000'
             }
         },
         mounted() {
-            let mconfig = {"chartId":"chart1572068662000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"test1"},{"id":"SZFPZZMJ","name":"test2"}]},"dataUrl":"http://localhost:8888/api/bar/ydys/v1","width":444,"height":300,"dx":360,"dy":17},"chartType":2}
+            let mconfig = {"chartId":"chart1572235167000","config":{"commonConfig":{"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow","label":{"show":true}}},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"test1"},{"id":"SZFPZZMJ","name":"test2"}]},"dataUrl":"http://localhost:8888/api/line/ydys/v1","width":300,"height":300,"dx":1271,"dy":11},"chartType":1}
             this.commonConfig = mconfig.config.commonConfig
             this.userConfig = mconfig.config.userConfig
             this.dataUrl = mconfig.config.dataUrl
-            this.chartType = 2
+            this.chartType = 1
             echarts.registerTheme('chalk',jsonobj)
-            this.$echarts = echarts.init(this.$refs.chart1572068662000, 'chalk', {
+            this.$echarts = echarts.init(this.$refs.chart1572235167000, 'chalk', {
                 width: mconfig.config.width,
                 height: mconfig.config.height
             })
@@ -53,7 +53,7 @@
                 this.y = mconfig.config.dy
                 this.width = mconfig.config.width
                 this.height = mconfig.config.height
-                this.setPosition({id:'chart1572068662000',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height,xData:'',yData:[],yFields:[],dataId:''})
+                this.setPosition({id:'chart1572235167000',x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height,xData:'',yData:[],yFields:[],dataId:''})
             })
         },
         computed:{
@@ -94,7 +94,6 @@
                     this.userConfig.y = pos.yFields
                     let tempConfig = getCommonConfig(res.data,this.commonConfig,this.userConfig,this.chartType)
                     this.$echarts.clear()
-                    console.log(tempConfig)
                     this.$echarts.setOption(tempConfig)
                 })
             },
