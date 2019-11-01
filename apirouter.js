@@ -108,6 +108,33 @@ apiRoutes.get('/ring/ydys/v1', function (req, res) {
     )
     res.json(json)
 });
+/**
+ * 模板散点图数据的接口
+ */
+apiRoutes.get('/scatter/ydys/v1', function (req,res) {
+    let json = Mock.mock([{
+        "year":2006,
+        "region":"武汉",
+        "POPULATION":68,
+        "ECONOMICS":5888
+    },{
+        "year":2007,
+        "region":"武汉",
+        "POPULATION":89,
+        "ECONOMICS":15896
+    },{
+        "year":2006,
+        "region":"襄阳",
+        "POPULATION":45,
+        "ECONOMICS":3896
+    },{
+        "year":2007,
+        "region":"襄阳",
+        "POPULATION":65,
+        "ECONOMICS":7896
+    }])
+    res.json(json)
+})
 apiRoutes.get('/getChartDataDynamic',async (req,res) => {
     let id = req.query.id
     if(id){

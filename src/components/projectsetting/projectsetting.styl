@@ -18,6 +18,7 @@
     bottom 0
     top 60px
     position absolute
+    overflow auto
     .title
       line-height 40px
     .split
@@ -42,10 +43,9 @@
       .tool-list
         li
           float left
-          margin 0 5px 4px
+          width 33%
           .tool-item
             display inline-block
-            width 79px
             white-space nowrap
             overflow hidden
             cursor pointer
@@ -64,14 +64,48 @@
               width 44px
               margin 8px 16px 0
               border-radius 2px
-              &.chart-line
+              &.chart-1
                 background-image: url('/img/tool-items/line1_a6d1650.png')
-              &.chart-bar
+              &.chart-2
                 background-image: url('/img/tool-items/bar_ad67268.png')
-              &.chart-pie
+              &.chart-3
                 background-image: url('/img/tool-items/pie_5d94603.png')
-              &.chart-ring
+              &.chart-4
                 background-image: url('/img/tool-items/ring_a180e9f.png')
+              &.chart-5
+                background-image: url('/img/tool-items/scatter_d6f85f3.png')
+              &.chart-6
+                background-image: url('/img/tool-items/chart-k_836e235.png')
+              &.chart-7
+                background-image: url('/img/tool-items/radar_1481bc4.png')
+              &.chart-8
+                background-image: url('/img/tool-items/treemap_07eb65e.png')
+              &.chart-9
+                background-image: url('/img/tool-items/map-province-area_10e3262.png')
+              &.chart-10
+                background-image: url('/img/tool-items/map-province-line_2ab72d4.png')
+              &.chart-11
+                background-image: url('/img/tool-items/topology_0d77080.png')
+              &.chart-12
+                background-image: url('/img/tool-items/dashboard_c542010.png')
+              &.table-1
+                background-image: url('/img/tool-items/table_7c990ed.png')
+              &.table-2
+                background-image: url('/img/tool-items/table-play_90b76df.png')
+              &.text-1
+                background-image: url('/img/tool-items/simple-text_77655e6.png')
+              &.text-2
+                background-image: url('/img/tool-items/chart-link_92f0cd2.png')
+              &.text-3
+                background-image: url('/img/tool-items/chart-marquee_4702170.png')
+              &.media-1
+                background-image: url('/img/tool-items/chart-image_6e1723e.png')
+              &.media-2
+                background-image: url('/img/tool-items/slider_7665c04.png')
+              &.media-3
+                background-image: url('/img/tool-items/video_28cd4c6.png')
+              &.media-4
+                background-image: url('/img/tool-items/weather_05de0cb.png')
           :hover
             background-color #ebebeb
   .rightWrapper
@@ -118,7 +152,7 @@
               width: 1920px;
               height: 1080px;
               background: rgb(0, 0, 0);
-              transform: scale(0.558333, 0.558333);
+              transform: scale(1.0, 1.0);
               transform-origin: 0 0;
               user-select: none;
               box-shadow: 0 0 10px 0 rgba(0,0,0,.5);
@@ -160,17 +194,23 @@
         transform: translate(-50%, -50%)
         color orange
       .content
-          .tag
-            margin-bottom 10px
-          .setting
-            margin-bottom 10px
+        position absolute
+        top 50px
+        bottom 0
+        right 0
+        left 0
+        overflow auto
+        .tag
+          margin-bottom 10px
+        .setting
+          margin-bottom 10px
   .sqltablefieldsdelete
     text-align center
-  .fieldsWrapper::-webkit-scrollbar,.editor-body::-webkit-scrollbar
+  .fieldsWrapper::-webkit-scrollbar,.editor-body::-webkit-scrollbar,.css-fullconfig .content::-webkit-scrollbar,.leftWrapper::-webkit-scrollbar
     width 5px
     height 5px
-  .fieldsWrapper::-webkit-scrollbar-thumb,.editor-body::-webkit-scrollbar-thumb
+  .fieldsWrapper::-webkit-scrollbar-thumb,.editor-body::-webkit-scrollbar-thumb,.css-fullconfig .content::-webkit-scrollbar-thumb,.leftWrapper::-webkit-scrollbar-thumb
     background-color rgba(150,150,150,0.8)
-  .fieldsWrapper::-webkit-scrollbar-track,.editor-body::-webkit-scrollbar-track
+  .fieldsWrapper::-webkit-scrollbar-track,.editor-body::-webkit-scrollbar-track,.css-fullconfig .content::-webkit-scrollbar-track,.leftWrapper::-webkit-scrollbar-track
     background-color rgba(255,255,255,0.3)
 

@@ -1,5 +1,5 @@
-let {getChartDemoConfig,replaceFileByCompile,replaceChartByCompile,chartCommonConfig} = require('./src/common/js/charthelper')
-let {deepCopy} = require('./src/common/js/util')
+// let {getChartDemoConfig,replaceFileByCompile,replaceChartByCompile,chartCommonConfig} = require('./src/common/js/charthelper')
+// let {deepCopy} = require('./src/common/js/util')
 /**
  * 保存了所有临时的图表的配置
  */
@@ -10,50 +10,55 @@ let createConnection = function createConnection(app) {
     let http = require('http').createServer(app)
     let io = require('socket.io')(http)
     io.on('connection', function(socket){
-        replaceFileByCompile([])
+        //replaceFileByCompile([])
         console.log('connected to server');
         socket.on('disconnect', function(){
             console.log('unconnected');
         });
         //用户拖动控件到面板中时触发
         socket.on('onDragInControl',function (config) {
-            let configs = JSON.parse(config)
-            let oldConfigs = configs.oldConfigs
-            let lastConfig = configs.lastConfig
-            let comConfig = []
-            oldConfigs.forEach(item=>{
-                let config = {
-                    commonConfig:chartCommonConfig,
-                    userConfig:{
-                        x:item.xData,
-                        y:item.yFields
-                    },
-                    dataUrl:item.dataUrl,
-                    width:item.width,
-                    height:item.height,
-                    dx:item.x,
-                    dy:item.y
-                }
-                //let copyObj = deepCopy(config)
-                comConfig.push({
-                    chartId:item.id,
-                    config:config,
-                    chartType:parseInt(item.chartType)
-                })
-            })
-            let lastChartType = parseInt(lastConfig.chartType)
-            let demoConfig = getChartDemoConfig(lastChartType)
-            let copyObj = deepCopy(demoConfig)
-            copyObj.dx=lastConfig.dx
-            copyObj.dy=lastConfig.dy
-            //增加图表id
-            let chartId = `chart${Date.parse(new Date())}`
-            comConfig.push({
-                chartId:chartId,
-                config:copyObj,
-                chartType:lastChartType
-            })
-            replaceFileByCompile(comConfig)
+            // let configs = JSON.parse(config)
+            // let oldConfigs = configs.oldConfigs
+            // let lastConfig = configs.lastConfig
+            // let comConfig = []
+            // oldConfigs.forEach(item=>{
+            //     let config = {
+            //         commonConfig:chartCommonConfig,
+            //         userConfig:{
+            //             x:item.xData,
+            //             y:item.yFields
+            //         },
+            //         dataUrl:item.dataUrl,
+            //         width:item.width,
+            //         height:item.height,
+            //         dx:item.x,
+            //         dy:item.y,
+            //         backgroundColor:item.backgroundColor,
+            //         borderRadius:item.borderRadius,
+            //         borderWidth:item.borderWidth,
+            //         borderStyle:item.borderStyle,
+            //         borderColor:item.borderColor
+            //     }
+            //     //let copyObj = deepCopy(config)
+            //     comConfig.push({
+            //         chartId:item.id,
+            //         config:config,
+            //         chartType:parseInt(item.chartType)
+            //     })
+            // })
+            // let lastChartType = parseInt(lastConfig.chartType)
+            // let demoConfig = getChartDemoConfig(lastChartType)
+            // let copyObj = deepCopy(demoConfig)
+            // copyObj.dx=lastConfig.dx
+            // copyObj.dy=lastConfig.dy
+            // //增加图表id
+            // let chartId = `chart${Date.parse(new Date())}`
+            // comConfig.push({
+            //     chartId:chartId,
+            //     config:copyObj,
+            //     chartType:lastChartType
+            // })
+            // replaceFileByCompile(comConfig)
         });
         //用户在面板中拖动控件时触发
         socket.on('onDragInPanel',function (position) {

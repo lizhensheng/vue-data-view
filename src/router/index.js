@@ -2,67 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store'
 Vue.use(Router)
-
-import Homepage from 'components/homepage/homepage'
-import Bar from 'components/chart/bar/bar'
-import Line from 'components/chart/line/line'
-import Preview from 'components/chart/preview/preview'
-import Login from 'views/login/login'
-import Register from 'views/register/register'
-import ProjectSetting from 'components/projectsetting/projectsetting'
-import Echartdemo from 'components/page/echartdemo'
+import {routers} from './config'
 const router =  new Router({
-    routes: [
-        {
-            path: '/',
-            redirect: '/homepage',
-            meta:{
-                requiresAuth:true
-            }
-        },
-        {
-            path:'/test',
-            component:Echartdemo
-        },
-        {
-            path: '/homepage',
-            component: Homepage,
-            meta:{
-                requiresAuth:true
-            },
-            children:[
-                {
-                    path:'/chart/bar',
-                    component:Bar,
-                    children:[
-                        {
-                            path:'/chart/bar/preview',
-                            component:Preview
-                        }
-                    ],
-                    meta:{
-                        requiresAuth:true
-                    }
-                },
-                {
-                    path:'/projectsetting',
-                    component: ProjectSetting
-                },
-                {
-                    path:'/chart/line',
-                    component:Line
-                }
-            ]
-        },
-        {
-            path:'/login',
-            component:Login
-        },
-        {
-            path:'/register',
-            component:Register
-        }
-    ]
+    routes: routers
 })
 
 //注册全局钩子用来拦截导航

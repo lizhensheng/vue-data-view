@@ -47,7 +47,8 @@
     "oracledb": "^4.0.1",
     "socket.io": "^2.3.0",
     "stylus": "^0.54.7",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^3.0.2",
+    "vue-server-renderer": "^2.6.10"
   },
   "eslintConfig": {
     "root": true,

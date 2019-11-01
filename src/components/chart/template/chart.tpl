@@ -6,9 +6,9 @@
                                  :h="height"
                                  @dragging="(left, top) =>onDrag('<%- config.chartId%>',left,top)"
                                  @resizing="(x, y, width, height) =>onResize('<%- config.chartId%>',x, y, width, height)"
-                                 @activated="onActivated('<%- config.chartId%>')">
+                                 @activated="onActivated('<%- config.chartId%>')"  ref="draggable">
             <div @click="deleteChart('<%- config.chartId%>')" class="delete">删除</div>
-            <div class="chart" ref="<%- config.chartId%>"
+            <div ref="<%- config.chartId%>"
                                style="width: <%- config.config.width%>px;height:<%- config.config.height%>px;"
                                data-width="<%- config.config.width%>" data-height="<%- config.config.height%>" data-x="<%- config.config.dx%>" data-y="<%- config.config.dy%>"></div>
         </vue-draggable-resizable>
@@ -23,6 +23,8 @@
     import jsonobj from "common/js/chalk.project.json"
     import {mapGetters,mapMutations} from 'vuex'
     import {baseConfigApi} from 'common/js/config'
+    import {chartConfigClass} from 'common/js/chartConfigClass'
+    import {deepCopy} from 'common/js/imputil'
     export default {
         data(){
             return {
@@ -53,7 +55,39 @@
                 this.y = mconfig.config.dy
                 this.width = mconfig.config.width
                 this.height = mconfig.config.height
-                this.setPosition({id:this.chartId,chartType:this.chartType,x:mconfig.config.dx,y:mconfig.config.dy,width:mconfig.config.width,height:mconfig.config.height,xData:this.userConfig.x,yData:[],yFields:this.userConfig.y,dataId:'',dataUrl:this.dataUrl})
+                let conf = deepCopy(chartConfigClass)
+                conf.id = this.chartId
+                conf.chartType = this.chartType
+                conf.x = mconfig.config.dx
+                conf.y = mconfig.config.dy
+                conf.width = mconfig.config.width
+                conf.height = mconfig.config.height
+                conf.xData = this.userConfig.x
+                conf.yData = []
+                conf.yFields = this.userConfig.y
+                conf.dataId = ''
+                conf.dataUrl = this.dataUrl
+                conf.backgroundColor=mconfig.config.backgroundColor,
+                conf.borderRadius=mconfig.config.borderRadius,
+                conf.borderWidth=mconfig.config.borderWidth,
+                conf.borderStyle=mconfig.config.borderStyle,
+                conf.borderColor=mconfig.config.borderColor
+                this.setPosition(conf)
+                if(conf.backgroundColor){
+                    this.$refs.draggable.$el.style.backgroundColor = conf.backgroundColor
+                }
+                if(conf.borderRadius){
+                    this.$refs.draggable.$el.style.borderRadius = conf.borderRadius+'px'
+                }
+                if(conf.borderRadius){
+                    this.$refs.draggable.$el.style.borderWidth = conf.borderWidth+'px'
+                }
+                if(conf.borderStyle){
+                    this.$refs.draggable.$el.style.borderStyle = conf.borderStyle
+                }
+                if(conf.borderColor){
+                    this.$refs.draggable.$el.style.borderColor = conf.borderColor
+                }
             })
         },
         computed:{
@@ -76,6 +110,17 @@
                 }
                 if(this.height != pos.height){
                     this.height = pos.height
+                }
+                if(pos.backgroundColor){
+                    this.$refs.draggable.$el.style.backgroundColor = pos.backgroundColor
+                }
+                this.$refs.draggable.$el.style.borderRadius = pos.borderRadius+'px'
+                this.$refs.draggable.$el.style.borderWidth = pos.borderWidth+'px'
+                if(pos.borderStyle){
+                    this.$refs.draggable.$el.style.borderStyle = pos.borderStyle
+                }
+                if(pos.borderColor){
+                    this.$refs.draggable.$el.style.borderColor = pos.borderColor
                 }
             },
             increaseIdForData(){

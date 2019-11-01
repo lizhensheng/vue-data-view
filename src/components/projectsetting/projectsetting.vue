@@ -16,34 +16,69 @@
                     <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
                 </el-tab-pane>
                 <el-tab-pane label="控件" name="second">
-                    <div class="list-container">
-                        <ul class="tool-list">
-                            <li @mousedown.prevent.stop="mouseClickControl"  data-chart="1" >
-                                <span class="tool-item">
-                                    <div class="tool-item__icon chart-line"  data-chart="1" ></div>
-                                    <div class="tool-item__name"  data-chart="1" >折线图</div>
-                                </span>
-                            </li>
-                            <li @mousedown="mouseClickControl"  data-chart="2" >
-                                <span class="tool-item">
-                                    <div class="tool-item__icon chart-bar"  data-chart="2"></div>
-                                    <div class="tool-item__name"  data-chart="2">柱状图</div>
-                                </span>
-                            </li>
-                            <li @mousedown="mouseClickControl"  data-chart="3" >
-                                <span class="tool-item">
-                                    <div class="tool-item__icon chart-pie" data-chart="3" ></div>
-                                    <div class="tool-item__name" data-chart="3" >饼图</div>
-                                </span>
-                            </li>
-                            <li @mousedown="mouseClickControl"  data-chart="4" >
-                                <span class="tool-item">
-                                    <div class="tool-item__icon chart-ring" data-chart="4" ></div>
-                                    <div class="tool-item__name" data-chart="4" >环形饼图</div>
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
+                    <el-collapse v-model="activeControls">
+                        <el-collapse-item title="图表" name="1">
+                            <template slot="title">
+                                &nbsp;&nbsp;图表<i class="header-icon el-icon-info"></i>
+                            </template>
+                            <div class="list-container">
+                                <ul class="tool-list">
+                                    <li @mousedown.prevent.stop="mouseClickControl" v-for="(item,index) in chartModules" :key="index"  :data-chart="item.value">
+                                        <span class="tool-item">
+                                            <div class="tool-item__icon" :class="`chart-${item.value}`"  :data-chart="item.value" ></div>
+                                            <div class="tool-item__name"  :data-chart="item.value" >{{item.name}}</div>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </el-collapse-item>
+                        <el-collapse-item name="2">
+                            <template slot="title">
+                                &nbsp;&nbsp;表格<i class="header-icon el-icon-info"></i>
+                            </template>
+                            <div class="list-container">
+                                <ul class="tool-list">
+                                    <li @mousedown.prevent.stop="mouseClickControl" v-for="(item,index) in tableModules" :key="index"  :data-chart="item.value">
+                                        <span class="tool-item">
+                                            <div class="tool-item__icon" :class="`table-${item.value}`"  :data-chart="item.value" ></div>
+                                            <div class="tool-item__name"  :data-chart="item.value" >{{item.name}}</div>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </el-collapse-item>
+                        <el-collapse-item name="3">
+                            <template slot="title">
+                                &nbsp;&nbsp;文字<i class="header-icon el-icon-info"></i>
+                            </template>
+                            <div class="list-container">
+                                <ul class="tool-list">
+                                    <li @mousedown.prevent.stop="mouseClickControl" v-for="(item,index) in textModules" :key="index"  :data-chart="item.value">
+                                        <span class="tool-item">
+                                            <div class="tool-item__icon" :class="`text-${item.value}`"  :data-chart="item.value" ></div>
+                                            <div class="tool-item__name"  :data-chart="item.value" >{{item.name}}</div>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </el-collapse-item>
+                        <el-collapse-item name="4">
+                            <template slot="title">
+                                &nbsp;&nbsp;媒体<i class="header-icon el-icon-info"></i>
+                            </template>
+                            <div class="list-container">
+                                <ul class="tool-list">
+                                    <li @mousedown.prevent.stop="mouseClickControl" v-for="(item,index) in mediaModules" :key="index"  :data-chart="item.value">
+                                        <span class="tool-item">
+                                            <div class="tool-item__icon" :class="`media-${item.value}`"  :data-chart="item.value" ></div>
+                                            <div class="tool-item__name"  :data-chart="item.value" >{{item.name}}</div>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </el-collapse-item>
+                    </el-collapse>
+
                 </el-tab-pane>
                 <el-tab-pane label="数据源" name="third">
                     <div class="dbsource">
@@ -132,7 +167,7 @@
                         <div class="editor-body" v-if="!docdesc" @click="onClick">
                             <div class="containerWrapper">
                                 <div class="dashboard-background-image" ref="dashboard">
-                                    <Index></Index>
+
                                 </div>
                             </div>
                         </div>
@@ -159,15 +194,48 @@
                         <el-tab-pane label="基础">
                             <div class="simple">
                                 <div class="tag"><el-tag size="small">图表id</el-tag></div>
-                                <div class="setting"><el-tag type="success" size="small">{{chartId}}</el-tag></div>
+                                <div class="setting"><el-tag size="small">{{chartId}}</el-tag></div>
                                 <div class="tag"><el-tag size="small">宽度</el-tag></div>
-                                <div class="setting"><el-input-number v-model="localChartWidth"  :min="100" :max="2000" label="图表宽度" size="small"></el-input-number></div>
+                                <div class="setting"><el-input-number controls-position="right" v-model="localChartWidth"  :min="100" :max="2000" label="图表宽度" size="small" style="width: 205px"></el-input-number></div>
                                 <div class="tag"><el-tag size="small">高度</el-tag></div>
-                                <div class="setting"><el-input-number v-model="localChartHeight"  :min="100" :max="2000" label="图表高度" size="small"></el-input-number></div>
+                                <div class="setting"><el-input-number controls-position="right" v-model="localChartHeight"  :min="100" :max="2000" label="图表高度" size="small" style="width: 205px"></el-input-number></div>
                                 <div class="tag"><el-tag size="small">X坐标</el-tag></div>
-                                <div class="setting"><el-input-number v-model="localChartX"  :min="0" :max="2000" label="X坐标" size="small"></el-input-number></div>
+                                <div class="setting"><el-input-number controls-position="right" v-model="localChartX"  :min="0" :max="2000" label="X坐标" size="small" style="width: 205px"></el-input-number></div>
                                 <div class="tag"><el-tag size="small">Y坐标</el-tag></div>
-                                <div class="setting"><el-input-number v-model="localChartY"  :min="0" :max="2000" label="Y坐标" size="small"></el-input-number></div>
+                                <div class="setting"><el-input-number controls-position="right" v-model="localChartY"  :min="0" :max="2000" label="Y坐标" size="small" style="width: 205px"></el-input-number></div>
+                                <div class="tag"><el-tag size="small">图表背景颜色</el-tag></div>
+                                <div class="setting">
+                                    <el-row>
+                                        <el-col :span="16"> <el-input v-model="comBackgroundColor" size="small"/></el-col>
+                                        <el-col :span="8"> <el-color-picker v-model="comBackgroundColor" size="small" show-alpha></el-color-picker></el-col>
+                                    </el-row>
+                                </div>
+                                <div class="tag"><el-tag size="small">图表圆角</el-tag></div>
+                                <div class="setting">
+                                    <el-input-number controls-position="right" v-model="comBorderRadius"  :min="0" :max="100" label="图表圆角" size="small" style="width: 205px"></el-input-number>
+                                </div>
+                                <div class="tag"><el-tag size="small">图表边框宽度</el-tag></div>
+                                <div class="setting">
+                                    <el-input-number controls-position="right" v-model="comBorderWidth"  :min="0" :max="100" label="图表圆角" size="small" style="width: 205px"></el-input-number>
+                                </div>
+                                <div class="tag"><el-tag size="small">图表边框样式</el-tag></div>
+                                <div class="setting">
+                                    <el-select v-model="comBorderStyle" placeholder="请选择" size="small">
+                                        <el-option
+                                                v-for="item in comBorderStyleArray"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div class="tag"><el-tag size="small">图表边框颜色</el-tag></div>
+                                <div class="setting">
+                                    <el-row>
+                                        <el-col :span="16"> <el-input v-model="comBorderColor" size="small"/></el-col>
+                                        <el-col :span="8"> <el-color-picker v-model="comBorderColor" size="small" show-alpha></el-color-picker></el-col>
+                                    </el-row>
+                                </div>
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="数据">
@@ -328,6 +396,7 @@
     </div>
 </template>
 <script>
+    import Vue from 'vue'
     import {getTableNames,getDataset,setDataSource,getDataProjects,updateSqlDataSource} from 'api/dbhelper'
     import {socket} from "common/js/socket-client"
     import Index from 'components/page/index'
@@ -343,7 +412,86 @@
     export default {
         data() {
             return {
-                scaleValue:55,
+                mediaModules:[{
+                    name:'图片',
+                    value:1
+                },{
+                    name:'图片轮播',
+                    value:2
+                },{
+                    name:'视频',
+                    value:3
+                },{
+                    name:'天气预报',
+                    value:4
+                }],
+                textModules:[{
+                    name:'文本',
+                    value:1
+                },{
+                    name:'超链接',
+                    value:2
+                },{
+                    name:'跑马灯',
+                    value:3
+                }],
+                tableModules:[{
+                    name:'表格',
+                    value:1
+                },{
+                    name:'轮播表格',
+                    value:1
+                }],
+                chartModules:[{
+                    name:'折线图',
+                    value:1
+                },{
+                    name:'柱状图',
+                    value:2
+                },{
+                    name:'饼图',
+                    value:3
+                },{
+                    name:'圆环图',
+                    value:4
+                },{
+                    name:'散点图',
+                    value:5
+                },{
+                    name:'K线图',
+                    value:6
+                },{
+                    name:'雷达图',
+                    value:7
+                },{
+                    name:'树图',
+                    value:8
+                },{
+                    name:'地图',
+                    value:9
+                },{
+                    name:'飞线图',
+                    value:10
+                },{
+                    name:'关系图',
+                    value:11
+                },{
+                    name:'仪表盘',
+                    value:12
+                }],
+                activeControls:['1','2','3','4'],
+                comBorderColor:'rgba(255, 255, 255, 0)',
+                comBorderStyle:'',
+                comBorderStyleArray:[
+                    {label:'实线',value:'solid'},
+                    {label:'点状',value:'dotted'},
+                    {label:'双线',value:'double'},
+                    {label:'虚线',value:'dashed'}
+                ],
+                comBorderWidth:0,
+                comBorderRadius:0,
+                comBackgroundColor:'rgba(255, 255, 255, 0)',
+                scaleValue:100,
                 dialogDebugVisible:false,
                 sqlstatement:'',
                 sqldbtype:'',
@@ -429,6 +577,20 @@
            )
         },
         created(){
+
+        },
+        mounted(){
+          socket.on('reply',data => {
+              console.log(data)
+              const d = JSON.parse(data)
+              const dv = document.createElement('div')
+              dv.id = `echart${d.el}`
+              this.$refs.dashboard.appendChild(dv)
+              const node = eval(d.code)
+              const instance = new Vue({
+                  render: h => h(node.default)
+              }).$mount(`#echart${d.el}`)
+          })
         },
         watch:{
             increaseId(){
@@ -437,6 +599,11 @@
                 this.localChartHeight = pos.height
                 this.localChartX = pos.x
                 this.localChartY = pos.y
+                this.comBackgroundColor = pos.backgroundColor
+                this.comBorderColor = pos.borderColor
+                this.comBorderRadius = pos.borderRadius
+                this.comBorderStyle = pos.borderStyle
+                this.comBorderWidth = pos.borderWidth
             },
             localChartWidth(newVal){
                 if(this.chartWidth == newVal){
@@ -451,8 +618,6 @@
                     height:pos.height,
                     chartId:this.chartId
                 }
-                socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
-                this.setIncreaseId(this.increaseId+1)
             },
             localChartHeight(newVal){
                 if(this.chartHeight == newVal){
@@ -467,8 +632,6 @@
                     height:newVal,
                     chartId:this.chartId
                 }
-                socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
-                this.setIncreaseId(this.increaseId+1)
             },
             localChartX(newVal){
                 if(this.chartX == newVal){
@@ -483,8 +646,6 @@
                     height:pos.height,
                     chartId:this.chartId
                 }
-                socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
-                this.setIncreaseId(this.increaseId+1)
             },
             localChartY(newVal){
                 if(this.chartY == newVal){
@@ -499,7 +660,25 @@
                     height:pos.height,
                     chartId:this.chartId
                 }
-                socket.emit('onSingleChartSimpleConfig',JSON.stringify(position))
+            },
+            comBackgroundColor(newVal){
+                this.setPosition({id:this.chartId,backgroundColor:newVal})
+                this.setIncreaseId(this.increaseId+1)
+            },
+            comBorderColor(newVal) {
+                this.setPosition({id:this.chartId,borderColor:newVal})
+                this.setIncreaseId(this.increaseId+1)
+            },
+            comBorderStyle(newVal) {
+                this.setPosition({id:this.chartId,borderStyle:newVal})
+                this.setIncreaseId(this.increaseId+1)
+            },
+            comBorderWidth(newVal){
+                this.setPosition({id:this.chartId,borderWidth:newVal})
+                this.setIncreaseId(this.increaseId+1)
+            },
+            comBorderRadius(newVal){
+                this.setPosition({id:this.chartId,borderRadius:newVal})
                 this.setIncreaseId(this.increaseId+1)
             },
             dialogProjectVisible(newVal){
@@ -547,9 +726,6 @@
                 this.$refs.dashboard.style[prefixStyle('transform')] = `scale(${percent}, ${percent})`
             }
         },
-        mounted(){
-
-        },
         beforeDestroy(){
             if(this.$monacoInstance){
                 this.$monacoInstance.dispose()
@@ -562,8 +738,16 @@
             }
         },
         methods:{
+            onBorderWidth(){
+                // this.setPosition({id:this.chartId,borderWidth:this.comBorderWidth})
+                // this.setIncreaseId(this.increaseId+1)
+            },
+            onBorderRadius(){
+                // this.setPosition({id:this.chartId,borderRadius:this.comBorderRadius})
+                // this.setIncreaseId(this.increaseId+1)
+            },
             onFullScreen(){
-                this.$refs.dashboard.style[prefixStyle('transform')] = `scale(0.558333, 0.558333)`
+                this.$refs.dashboard.style[prefixStyle('transform')] = `scale(1.0,1.0)`
             },
             handleNodeClick(){
                 // let his = this.$router.history.current.fullPath
@@ -735,12 +919,13 @@
                         dy:dy,
                         chartType:this.chartType
                     }
-                    //读取vuex中存储的图表配置
-                    let oldConfigs = Object.values(this.chartConfigs)
-                    let json = JSON.stringify({
-                        oldConfigs:oldConfigs,
-                        lastConfig:lastConfig
-                    })
+                    // //读取vuex中存储的图表配置
+                    // let oldConfigs = Object.values(this.chartConfigs)
+                    // let json = JSON.stringify({
+                    //     oldConfigs:oldConfigs,
+                    //     lastConfig:lastConfig
+                    // })
+                    let json = JSON.stringify(lastConfig)
                     socket.emit('onDragInControl',json)
                 }
                 this.chartType = -1
