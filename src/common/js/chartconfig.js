@@ -1,5 +1,4 @@
 import {baseConfigApi} from './config'
-import echarts from 'echarts'
 /**
  * 图表中柱状图的默认配置
  */
@@ -8,3 +7,7 @@ export const chartLineDemoConfig = {"commonConfig":{"tooltip":{"trigger":"axis",
 export const chartPieDemoConfig = {"commonConfig":{"tooltip":{"trigger": 'item', "formatter": "{a} <br/>{b} : {c} ({d}%)"},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"test1"},{"id":"SZFPZZMJ","name":"test2"}]},"dataUrl":`${baseConfigApi}/api/pie/ydys/v1`,"width":300,"height":300}
 export const chartRingDemoConfig = {"commonConfig":{"tooltip":{"trigger": 'item', "formatter": "{a} <br/>{b} : {c} ({d}%)"},"title":{"text":"","textStyle":{"color":"#D6BC28","fontSize":14}},"textStyle":{"color":"#fff"}},"userConfig":{"x":"TJDATE","y":[{"id":"GWYPZZMJ","name":"test1"},{"id":"SZFPZZMJ","name":"test2"}]},"dataUrl":`${baseConfigApi}/api/ring/ydys/v1`,"width":300,"height":300}
 export const chartScatterDemoConfig =  {"commonConfig":{},"userConfig":{"x":["year","region"],"y":[{"id":"POPULATION","name":"人口"},{"id":"ECONOMICS","name":"经济"}]},"dataUrl":`${baseConfigApi}/api/scatter/ydys/v1`,"width":300,"height":300}
+export const chartKDemoConfig = {"commonConfig":{tooltip: {}},"userConfig":{"x":"year","y":[{"id":"up","name":"开盘价"},{"id":"down","name":"收盘价"},{"id":"green","name":"上影线"},{"id":"red","name":"下影线"}]},"dataUrl":`${baseConfigApi}/api/k/ydys/v1`,"width":300,"height":300}
+export const chartRadarDemoConfig = {"commonConfig":{tooltip: {}},"userConfig":{"x":"category","y":[{"id":"sale",name:"销售"},{"id":"market",name:"市场"},{"id":"development",name:"研发"},{"id":"administrator",name:"管理"},{"id":"customsupport",name:"客服"}]},"dataUrl":`${baseConfigApi}/api/radar/ydys/v1`,"width":300,"height":300}
+export const chartTreeDemoConfig = {"commonConfig":{tooltip: { trigger: 'item',triggerOn: 'mousemove'}},"dataUrl":`${baseConfigApi}/api/tree/ydys/v1`,"width":300,"height":300}
+export const chartMapDemoConfig = {"commonConfig": {tooltip: {trigger: 'item',showDelay: 0,transitionDuration: 0.2,formatter: function (params) {let value = (params.value + '').split('.');value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');return params.seriesName + '<br/>' + params.name + ': ' + value;}},visualMap: {show:false,left: 'right',min: 420000,max: 500000,inRange: {color: ['#dd00aa', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8']},text:['High','Low'],calculable: true}},"userConfig":{x:"name",y:[{"id":"value",name:"坐标"}]},"dataUrl":`${baseConfigApi}/api/map/ydys/v1`,"width":300,"height":300}

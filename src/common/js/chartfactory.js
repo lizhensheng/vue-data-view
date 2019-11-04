@@ -30,16 +30,16 @@ let dbFactory = {
                 handle = new chartScatter.default()
                 break
             case K:
-                handle = new chartK()
+                handle = new chartK.default()
                 break
             case RADAR:
-                handle = new chartRadar()
+                handle = new chartRadar.default()
                 break
             case TREE:
-                handle = new chartTree()
+                handle = new chartTree.default()
                 break
             case MAP:
-                handle = new chartMap()
+                handle = new chartMap.default()
                 break
             case MAP_LINE:
                 handle = new chartMapLine()

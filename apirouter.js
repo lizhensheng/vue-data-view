@@ -135,6 +135,72 @@ apiRoutes.get('/scatter/ydys/v1', function (req,res) {
     }])
     res.json(json)
 })
+apiRoutes.get('/k/ydys/v1',function (req,res) {
+    let json = Mock.mock([{
+        "year":'2019/12/15',
+        "up":20,
+        "down":30,
+        "red":10,
+        "green":35
+    },{
+        "year":'2019/12/16',
+        "up":20,
+        "down":30,
+        "red":10,
+        "green":35
+    },{
+        "year":'2019/12/17',
+        "up":20,
+        "down":30,
+        "red":10,
+        "green":35
+    },{
+        "year":'2019/12/18',
+        "up":20,
+        "down":30,
+        "red":10,
+        "green":35
+    }])
+    res.json(json)
+})
+apiRoutes.get('/radar/ydys/v1',function (req,res) {
+    let json = Mock.mock([{
+        category:'预算',
+        sale:20,
+        market:56,
+        development:45,
+        administrator:55,
+        customsupport:58
+    },{
+        category:'实际',
+        sale:18,
+        market:48,
+        development:15,
+        administrator:65,
+        customsupport:78
+    }])
+    res.json(json)
+})
+apiRoutes.get('/tree/ydys/v1',function (req,res) {
+    let json = Mock.mock([{
+        id:1,
+        pid:0,
+        name:'父'
+    },{
+        id:2,
+        pid:1,
+        name:'子1'
+    },{
+        id:3,
+        pid:1,
+        name:'子2'
+    }])
+    res.json(json)
+})
+let jsonMap = require('./src/common/data/420000.json')
+apiRoutes.get('/map/ydys/v1',function (req,res) {
+    res.json(jsonMap)
+})
 apiRoutes.get('/getChartDataDynamic',async (req,res) => {
     let id = req.query.id
     if(id){

@@ -17,3 +17,27 @@ export let deepCopy = function (object) {
     }
     return resultObject;
 }
+
+export let constructTree = function (nodes,config) {
+    const id = config && config.id || 'id'
+    const pid = config && config.pid || 'pid'
+    const children = config && config.children || 'children'
+
+    const idMap = {}
+    const jsonTree = []
+
+    nodes.forEach((v) => { v && (idMap[v[id]] = v) })
+    nodes.forEach((v) => {
+        if (v) {
+            let parent = idMap[v[pid]]
+            if (parent) {
+                !parent[children] && (parent[children] = [])
+                parent[children].push(v)
+            } else {
+                jsonTree.push(v)
+            }
+        }
+    })
+
+    return jsonTree
+}

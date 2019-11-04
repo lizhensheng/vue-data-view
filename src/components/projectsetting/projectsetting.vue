@@ -163,6 +163,7 @@
                     <div class="editor-panel">
                         <el-menu :default-active="menuIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                             <el-menu-item index="1" >预览</el-menu-item>
+                            <el-menu-item index="1" >保存</el-menu-item>
                         </el-menu>
                         <div class="editor-body" v-if="!docdesc" @click="onClick">
                             <div class="containerWrapper">
@@ -581,7 +582,6 @@
         },
         mounted(){
           socket.on('reply',data => {
-              console.log(data)
               const d = JSON.parse(data)
               const dv = document.createElement('div')
               dv.id = `echart${d.el}`
