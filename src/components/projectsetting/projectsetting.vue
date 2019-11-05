@@ -13,7 +13,10 @@
             <keep-alive>
                 <el-tabs v-model="activeName">
                 <el-tab-pane label="工程管理" name="first">
-                    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="true"></el-tree>
+                    <div class="split"></div>
+                    <el-button round @click="clickAddProject" size="small">新建工程</el-button>
+                    <el-button round @click="clickAddPage" size="small">新建页面</el-button>
                 </el-tab-pane>
                 <el-tab-pane label="控件" name="second">
                     <el-collapse v-model="activeControls">
@@ -162,12 +165,12 @@
             <div class="editor">
                     <div class="editor-panel">
                         <el-menu :default-active="menuIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                            <el-menu-item index="1" >预览</el-menu-item>
+                            <el-menu-item index="0" ><router-link target="_blank" :to="{path:'/preview',query:{pageId:`${this.pageId}`}}"><div class="previewText">预览</div></router-link></el-menu-item>
                             <el-menu-item index="1" >保存</el-menu-item>
                         </el-menu>
-                        <div class="editor-body" v-if="!docdesc" @click="onClick">
+                        <div class="editor-body" @click="onClick">
                             <div class="containerWrapper">
-                                <div class="dashboard-background-image" ref="dashboard">
+                                <div class="dashboard-background-image" ref="dashboard" :class="{'active':this.pageId!=''}">
 
                                 </div>
                             </div>
@@ -177,9 +180,6 @@
                             <input class="range" type="range" min="10" max="200" step="1"  v-model="scaleValue" >
                             <input class="number" type="number" min="10" max="200" step="1"  v-model="scaleValue">
                             <i class="el-icon-full-screen" @click="onFullScreen"></i>
-                        </div>
-                        <div v-if="docdesc">
-                            文档
                         </div>
                     </div>
             </div>
@@ -194,8 +194,7 @@
                     <el-tabs type="border-card" @tab-click="onConfigPanelClick">
                         <el-tab-pane label="基础">
                             <div class="simple">
-                                <div class="tag"><el-tag size="small">图表id</el-tag></div>
-                                <div class="setting"><el-tag size="small">{{chartId}}</el-tag></div>
+                                <div class="tag"><el-tag size="small">{{chartId}}</el-tag>&nbsp;<el-button @click="onBaseChartRefresh" size="small"><i class="el-icon-refresh-left"></i>刷新图表</el-button></div>
                                 <div class="tag"><el-tag size="small">宽度</el-tag></div>
                                 <div class="setting"><el-input-number controls-position="right" v-model="localChartWidth"  :min="100" :max="2000" label="图表宽度" size="small" style="width: 205px"></el-input-number></div>
                                 <div class="tag"><el-tag size="small">高度</el-tag></div>
@@ -261,7 +260,7 @@
                               </div>
                             <div class="tag"><el-tag size="small">维度</el-tag></div>
                             <div class="setting">
-                                <el-select v-model="xData" placeholder="请选择">
+                                <el-select multiple v-model="xData" placeholder="请选择">
                                     <el-option
                                             v-for="item in dimensionality"
                                             :key="item.value"
@@ -318,6 +317,44 @@
             </div>
         </el-dialog>
         <!--保存数据源对话框end-->
+
+        <!--新建工程对话框start-->
+        <el-dialog title="新建工程" :visible.sync="dialogAddProjectVisible" :close-on-click-modal="false">
+            <el-form :model="form">
+                <el-form-item label="工程名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.projectname" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogAddProjectVisible = false">取 消</el-button>
+                <el-button type="primary" @click="clickAddProjectOk">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!--新建工程对话框end-->
+
+        <!--新建页面对话框start-->
+        <el-dialog title="新建页面" :visible.sync="dialogAddPageVisible" :close-on-click-modal="false">
+            <el-form :model="form">
+                <el-form-item label="选择工程" :label-width="formLabelWidth">
+                    <el-select v-model="projectnamevalue" placeholder="请选择" size="small">
+                        <el-option
+                                v-for="item in projectnamelist"
+                                :key="item._id"
+                                :label="item.label"
+                                :value="item._id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="新建页面" :label-width="formLabelWidth">
+                    <el-input v-model="form.pagename" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogAddPageVisible = false">取 消</el-button>
+                <el-button type="primary" @click="clickAddPageOk">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!--新建页面对话框end-->
 
         <el-dialog :title="sqleditstate?'修改SQL模型':'新增SQL模型'" :visible.sync="dialogProjectVisible" :close-on-click-modal="false">
             <el-form>
@@ -398,12 +435,11 @@
 </template>
 <script>
     import Vue from 'vue'
-    import {getTableNames,getDataset,setDataSource,getDataProjects,updateSqlDataSource} from 'api/dbhelper'
+    import {getTableNames,getDataset,setDataSource,getDataProjects,updateSqlDataSource,addPageProjectName,getPageProjectName,getAllPageProject,addPageName,getPageControlConfig,savePageControlConfig,deleteSingleControl} from 'api/dbhelper'
     import {socket} from "common/js/socket-client"
-    import Index from 'components/page/index'
-    import {mapGetters,mapMutations} from 'vuex'
     import BScroll from 'better-scroll'
     import * as monaco from 'monaco-editor'
+    import {constructTree} from 'common/js/imputil'
     let TOP_HEIGHT = 125
     let LEFT_WIDTH = 300
     import './projectsetting.styl'
@@ -413,6 +449,10 @@
     export default {
         data() {
             return {
+                projectnamelist:[],
+                projectnamevalue:'',
+                dialogAddPageVisible:false,
+                dialogAddProjectVisible:false,
                 mediaModules:[{
                     name:'图片',
                     value:1
@@ -519,7 +559,9 @@
                 tablefields:[],
                 moveflag:false,
                 form:{
-                    sourcename:''
+                    sourcename:'',
+                    projectname:'',
+                    pagename:''
                 },
                 formLabelWidth: '120px',
                 dialogFormVisible:false,
@@ -550,137 +592,75 @@
                 ],
                 activeName: 'first',
                 menuIndex: "1",
-                data: [{
-                    label: 'project01',
-                    children: [{
-                        label: 'index01'
-                    },{
-                        label: 'index02'
-                    },{
-                        label: 'index03'
-                    }]
-                }, {
-                    label: 'project02',
-                    children: [{
-                        label: 'index01'
-                    }]
-                }],
+                data: [],
                 defaultProps: {
                     children: 'children',
                     label: 'label'
                 },
-                docdesc:false
+                chartId:'',
+                pageId:''
             };
         },
         computed:{
-           ...mapGetters(
-               ['chartId','storePosition','chartConfigs','increaseId','increaseIdForData']
-           )
         },
         created(){
+            //定义一个变量,存储控件配置
+            this.controlConfigs = []
+            //定义一个变量,存储vue图表实例
+            this.chartInstances = new Map()
+            this._getProjectTree()
+            window.$controlevent = new Vue()
+            window.$controlevent.$on('saveSingleControl',conf=>{
+                if(conf) {
+                    let index = this._getControlConfigs(conf.chartId)
+                    conf.pageId = this.pageId
+                    if (index > -1) {
+                        this.controlConfigs[index] = conf
+                    } else {
+                        this.controlConfigs.push(conf)
+                    }
+                }
+            })
 
+            window.$controlevent.$on('deleteSingleControl',conf=>{
+                if(conf.chartId) {
+                    this._deleteSingleControl(conf.chartId)
+                }
+            })
+
+            window.$controlevent.$on('activeSingleControl',conf=>{
+                if(conf.chartId) {
+                    this.chartId = conf.chartId
+                    this.localChartWidth= conf.width
+                    this.localChartHeight= conf.height
+                    this.localChartX= conf.x
+                    this.localChartY= conf.y
+                    this.comBorderColor= conf.borderColor
+                    this.comBorderStyle= conf.borderStyle
+                    this.comBorderWidth= conf.borderWidth
+                    this.comBorderRadius= conf.borderRadius
+                    this.comBackgroundColor= conf.backgroundColor
+                    this.configproject = conf.dataId
+                    console.log(conf.dataId)
+                }
+            })
         },
         mounted(){
           socket.on('reply',data => {
-              const d = JSON.parse(data)
+              const d = data
               const dv = document.createElement('div')
               dv.id = `echart${d.el}`
               this.$refs.dashboard.appendChild(dv)
               const node = eval(d.code)
-              const instance = new Vue({
-                  render: h => h(node.default)
-              }).$mount(`#echart${d.el}`)
+              setTimeout(()=>{
+                  const instance = new Vue({
+                      render: h => h(node.default)
+                  }).$mount(`#echart${d.el}`)
+              },100)
+              //this.chartInstances.set(`${d.el}`,instance)
           })
         },
         watch:{
-            increaseId(){
-                let pos = this.storePosition(this.chartId)
-                this.localChartWidth = pos.width
-                this.localChartHeight = pos.height
-                this.localChartX = pos.x
-                this.localChartY = pos.y
-                this.comBackgroundColor = pos.backgroundColor
-                this.comBorderColor = pos.borderColor
-                this.comBorderRadius = pos.borderRadius
-                this.comBorderStyle = pos.borderStyle
-                this.comBorderWidth = pos.borderWidth
-            },
-            localChartWidth(newVal){
-                if(this.chartWidth == newVal){
-                    return
-                }
-                let pos = this.storePosition(this.chartId)
-                this.setPosition({id:this.chartId,x:pos.x,y:pos.y,width:newVal,height:pos.height})
-                let position = {
-                    dx:pos.x,
-                    dy:pos.y,
-                    width:newVal,
-                    height:pos.height,
-                    chartId:this.chartId
-                }
-            },
-            localChartHeight(newVal){
-                if(this.chartHeight == newVal){
-                    return
-                }
-                let pos = this.storePosition(this.chartId)
-                this.setPosition({id:this.chartId,x:pos.x,y:pos.y,width:pos.width,height:newVal})
-                let position = {
-                    dx:pos.x,
-                    dy:pos.y,
-                    width:pos.width,
-                    height:newVal,
-                    chartId:this.chartId
-                }
-            },
-            localChartX(newVal){
-                if(this.chartX == newVal){
-                    return
-                }
-                let pos = this.storePosition(this.chartId)
-                this.setPosition({id:this.chartId,x:newVal,y:pos.y,width:pos.width,height:pos.height})
-                let position = {
-                    dx:newVal,
-                    dy:pos.y,
-                    width:pos.width,
-                    height:pos.height,
-                    chartId:this.chartId
-                }
-            },
-            localChartY(newVal){
-                if(this.chartY == newVal){
-                    return
-                }
-                let pos = this.storePosition(this.chartId)
-                this.setPosition({id:this.chartId,x:pos.x,y:newVal,width:pos.width,height:pos.height})
-                let position = {
-                    dx:pos.x,
-                    dy:newVal,
-                    width:pos.width,
-                    height:pos.height,
-                    chartId:this.chartId
-                }
-            },
-            comBackgroundColor(newVal){
-                this.setPosition({id:this.chartId,backgroundColor:newVal})
-                this.setIncreaseId(this.increaseId+1)
-            },
-            comBorderColor(newVal) {
-                this.setPosition({id:this.chartId,borderColor:newVal})
-                this.setIncreaseId(this.increaseId+1)
-            },
-            comBorderStyle(newVal) {
-                this.setPosition({id:this.chartId,borderStyle:newVal})
-                this.setIncreaseId(this.increaseId+1)
-            },
-            comBorderWidth(newVal){
-                this.setPosition({id:this.chartId,borderWidth:newVal})
-                this.setIncreaseId(this.increaseId+1)
-            },
-            comBorderRadius(newVal){
-                this.setPosition({id:this.chartId,borderRadius:newVal})
-                this.setIncreaseId(this.increaseId+1)
-            },
             dialogProjectVisible(newVal){
                 //sql编辑器初始化
                 if(newVal){
@@ -738,25 +718,88 @@
             }
         },
         methods:{
-            onBorderWidth(){
-                // this.setPosition({id:this.chartId,borderWidth:this.comBorderWidth})
-                // this.setIncreaseId(this.increaseId+1)
+            _deleteSingleControl(chartId){
+                let instance = this.chartInstances.get(chartId)
+                if(instance){
+                    instance.$el.innerHTML = ''
+                    this.chartInstances.delete(chartId)
+                    let index = this._getControlConfigs(chartId)
+                    this.controlConfigs.splice(index,1)
+                    deleteSingleControl(chartId).then((res)=>{
+                        if(res.data.code == 0){
+                            this.$message({
+                                type:'success',
+                                message:'删除成功'
+                            })
+                        }else{
+                            this.$message({
+                                type:'error',
+                                message:'网络断线了'
+                            })
+                        }
+                    })
+                }
             },
-            onBorderRadius(){
-                // this.setPosition({id:this.chartId,borderRadius:this.comBorderRadius})
-                // this.setIncreaseId(this.increaseId+1)
+            _getControlConfigs(chartId){
+                let index = this.controlConfigs.findIndex(t=>t.chartId === chartId)
+                return index
+            },
+            _getProjectTree(){
+                getAllPageProject().then((res)=>{
+                    if(res.data.code == 0){
+                        let projects = res.data.data
+                        let out = constructTree(projects,{id:'_id',pid:'pid'})
+                        this.data = out
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '获取工程配置失败,错误码:'+res.data.code
+                        });
+                    }
+                })
             },
             onFullScreen(){
                 this.$refs.dashboard.style[prefixStyle('transform')] = `scale(1.0,1.0)`
             },
-            handleNodeClick(){
-                // let his = this.$router.history.current.fullPath
-                // if(his !== '/pindex'){
-                //     this.$router.replace('/pindex')
-                // }
+            handleNodeClick(data){
+                if(data.pid !== '0'){
+                    this.pageId = data._id
+                    this._getPageControlConfig(data._id)
+                }
+            },
+            _getPageControlConfig(pageId){
+                getPageControlConfig(pageId).then((res)=>{
+                    if(res.data.code === 0){
+                        let d = res.data.data
+                        if(d.length > 0){
+                            this.controlConfigs = d
+                        }else{
+                            this.controlConfigs = []
+                        }
+                        this.$refs.dashboard.innerHTML = ''
+                        this.controlConfigs.forEach(item=>{
+                            setTimeout(()=>{socket.emit('onDragInControl',item)},200)
+
+                        })
+                    }
+                })
             },
             handleSelect(item){
-                this.docdesc = item == 2
+                if(item == 1){
+                    savePageControlConfig(this.controlConfigs).then((res)=>{
+                        if (res.data.code == 0){
+                            this.$message({
+                                type:'success',
+                                message:'保存成功'
+                            })
+                        }else{
+                            this.$message({
+                                type:'error',
+                                message:'保存失败'
+                            })
+                        }
+                    })
+                }
             },
             changeDbType(item){
                 this.dbtablename = ''
@@ -908,10 +951,20 @@
             mouseUpProjectSetting(e){
                 this.clickControl = false
                 this.moveflag = false
+
                 this.$refs.moveflag.style.top = 0 + 'px'
                 this.$refs.moveflag.style.left = 0 + 'px'
                 let dx = e.x-LEFT_WIDTH
                 let dy = e.y-TOP_HEIGHT
+
+                if(dx>0&&dy>0&&this.chartType>0&&!this.pageId){
+                    this.$message({
+                        type:'error',
+                        message:'请先选择页面'
+                    })
+                    this.chartType = -1
+                    return
+                }
                 if(dx>0&&dy>0&&this.chartType>0){
                     //在坐标(dx,dy)处增加一个默认图表,图表类型是this.chartType
                     let lastConfig = {
@@ -925,14 +978,13 @@
                     //     oldConfigs:oldConfigs,
                     //     lastConfig:lastConfig
                     // })
-                    let json = JSON.stringify(lastConfig)
-                    socket.emit('onDragInControl',json)
+                    socket.emit('onDragInControl',lastConfig)
                 }
                 this.chartType = -1
             },
             onClick(e){
                 if (e.target.tagName != 'CANVAS'){
-                    this.setChartId('')
+                    this.chartId = ''
                 }
             },
             _getDataProjects(){
@@ -990,10 +1042,19 @@
                     })
                 })
                 let x = this.xData
+                let index = this._getControlConfigs(this.chartId)
+                let conf = this.controlConfigs[index]
+                conf.xData = x
+                conf.yData = this.yData
+                conf.yFields = y
+                conf.dataId = this.configproject
 
+                window.$controlevent.$emit('onDataChartRefresh',conf)
                 //let dataUrl = `${baseConfigApi}/getChartDataDynamic?id=${this.configproject}`
-                this.setPosition({id:this.chartId,xData:x,yData:this.yData,yFields:y,dataId:this.configproject})
-                this.setIncreaseIdForData(this.increaseIdForData+1)
+                // this.setPosition({id:this.chartId,xData:x,yData:this.yData,yFields:y,dataId:this.configproject})
+                // this.setIncreaseIdForData(this.increaseIdForData+1)
+                //先删除当前chart实例
+                //重新绘制chart
             },
             onProjectEdit(){
                 let index = this.configprojectsoptions.findIndex(item=>item.value == this.configproject)
@@ -1117,15 +1178,77 @@
 
                 })
             },
-            ...mapMutations({
-                setChartId:'SET_CHART_ID',
-                setPosition:'SET_POSITION',
-                setIncreaseId:'SET_INCREASE_ID',
-                setIncreaseIdForData:'SET_INCREASE_UPDATE_DATA'
-            })
-        },
-        components:{
-            Index
+            clickAddProject(){
+                this.dialogAddProjectVisible = true
+            },
+            clickAddPage(){//projectnamelist
+                this.dialogAddPageVisible = true
+                getPageProjectName().then((res)=>{
+                    if(res.data.code == 0){
+                        let d = res.data.data
+                        this.projectnamelist = d
+                    }
+                })
+            },
+            clickAddProjectOk(){
+                if(!this.form.projectname){
+                    return
+                }
+                addPageProjectName(this.form.projectname).then((res)=>{
+                    if(res.data.code == 0){
+                        this.dialogAddProjectVisible = false
+                        this.form.projectname = ''
+                        this.$message({
+                            type: 'success',
+                            message: '新建工程成功'
+                        });
+                        this._getProjectTree()
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '新建工程失败,错误码:'+res.data.code
+                        });
+                    }
+                })
+            },
+            clickAddPageOk(){
+                if(!this.projectnamevalue||!this.form.pagename){
+                    return
+                }
+                addPageName(this.projectnamevalue,this.form.pagename).then((res)=>{
+                    if(res.data.code == 0){
+                        this.dialogAddPageVisible = false
+                        this.form.pagename = ''
+                        this.projectnamevalue = ''
+                        this.$message({
+                            type: 'success',
+                            message: '新建页面成功'
+                        });
+                        this._getProjectTree()
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '新建页面失败,错误码:'+res.data.code
+                        });
+                    }
+                })
+            },
+            onBaseChartRefresh(){
+                let index = this._getControlConfigs(this.chartId)
+                if(index>-1){
+                    let conf = this.controlConfigs[index]
+                    conf.width = this.localChartWidth
+                    conf.height = this.localChartHeight
+                    conf.x = this.localChartX
+                    conf.y = this.localChartY
+                    conf.borderColor = this.comBorderColor
+                    conf.borderStyle = this.comBorderStyle
+                    conf.borderWidth = this.comBorderWidth
+                    conf.borderRadius = this.comBorderRadius
+                    conf.backgroundColor = this.comBackgroundColor
+                    window.$controlevent.$emit('onBaseChartRefresh', conf)
+                }
+            }
         }
     }
 </script>

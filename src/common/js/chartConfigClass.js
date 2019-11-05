@@ -1,5 +1,6 @@
 export const chartConfigClass = {
-    id:'',//图表id
+    pageId:'',//页面id
+    chartId:'',//图表id
     chartType:0,//图表类型
     x:0,//图表x坐标
     y:0,//图表y坐标

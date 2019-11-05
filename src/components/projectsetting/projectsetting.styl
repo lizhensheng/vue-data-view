@@ -131,6 +131,8 @@
         .el-menu-demo
           background-image url(/img/background/dragon.jpg)
           filter opacity(80%)
+          .previewText
+            display inline-block
         .editor-body
           position absolute
           left 0
@@ -151,12 +153,14 @@
               position: relative;
               width: 1920px;
               height: 1080px;
-              background: rgb(0, 0, 0);
-              transform: scale(1.0, 1.0);
-              transform-origin: 0 0;
-              user-select: none;
-              box-shadow: 0 0 10px 0 rgba(0,0,0,.5);
-              transition: all .3s linear;
+              background:none
+              &.active
+                background: rgb(0, 0, 0);
+                transform: scale(1.0, 1.0);
+                transform-origin: 0 0;
+                user-select: none;
+                box-shadow: 0 0 10px 0 rgba(0,0,0,.5);
+                transition: all .3s linear;
               //background url(/img/background/background-4.png) 0% 0% / 100% 100%
               //filter blur(0px)
               //opacity 0.7
@@ -213,4 +217,11 @@
     background-color rgba(150,150,150,0.8)
   .fieldsWrapper::-webkit-scrollbar-track,.editor-body::-webkit-scrollbar-track,.css-fullconfig .content::-webkit-scrollbar-track,.leftWrapper::-webkit-scrollbar-track
     background-color rgba(255,255,255,0.3)
+  .el-tabs__item:hover
+    color #ffa500
+  .el-tabs__item.is-active
+    color #ffa500
+  .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content
+      background-color #ffa500
+
 

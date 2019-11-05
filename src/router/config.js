@@ -1,12 +1,9 @@
 import Homepage from 'components/homepage/homepage'
-import Bar from 'components/chart/bar/bar'
-import Line from 'components/chart/line/line'
-import Preview from 'components/chart/preview/preview'
 import Login from 'views/login/login'
 import Register from 'views/register/register'
 import ProjectSetting from 'components/projectsetting/projectsetting'
 import EchartDemo from 'components/page/echartdemo'
-import Index from 'components/page/index'
+import Preview from 'components/preview/preview'
 export let routers = [
     {
         path: '/',
@@ -27,25 +24,8 @@ export let routers = [
         },
         children:[
             {
-                path:'/chart/bar',
-                component:Bar,
-                children:[
-                    {
-                        path:'/chart/bar/preview',
-                        component:Preview
-                    }
-                ],
-                meta:{
-                    requiresAuth:true
-                }
-            },
-            {
                 path:'/projectsetting',
                 component: ProjectSetting
-            },
-            {
-                path:'/chart/line',
-                component:Line
             }
         ]
     },
@@ -59,6 +39,6 @@ export let routers = [
     },
     {
         path:'/preview',
-        component:Index
+        component:Preview
     }
 ]

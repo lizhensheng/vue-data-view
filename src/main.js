@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import ElmentUI from 'element-ui'
 import 'common/css/index.css'
+import echarts from 'echarts'
+window.$echarts = echarts
 Vue.use(ElmentUI)
 import 'common/stylus/index.styl'
 import store from './store'

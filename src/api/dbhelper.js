@@ -19,3 +19,27 @@ export function updateSqlDataSource(sourceName,tableName,dbType,tableFields) {
 export function getDataProjects() {
     return instance.post('/config/getDataProjects',{})
 }
+//新建页面级工程
+export function addPageProjectName(projectname) {
+    return instance.post('/config/addPageProjectName',{projectname:projectname})
+}
+//获取配置的工程
+export function getPageProjectName() {
+    return instance.post('/config/getPageProjectName')
+}
+export function getAllPageProject() {
+    return instance.post('/config/getAllPageProject')
+}
+//新建页面
+export function addPageName(projectid,pagename) {
+    return instance.post('/config/addPageName',{projectid:projectid,pagename:pagename})
+}
+export function getPageControlConfig(pageid) {
+    return instance.post('/config/getPageControlConfig',{pageid:pageid})
+}
+export function savePageControlConfig(data) {
+    return instance.post('/config/savePageControlConfig',{data:data})
+}
+export function deleteSingleControl(chartId) {
+    return instance.post('/config/deleteSingleControl',{chartId:chartId})
+}
