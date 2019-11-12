@@ -3,111 +3,16 @@
   color white
   font-size 14px
   color #4f5d83
+  .split
+    height 10px
+    line-height 10px
   .moveflag
     position absolute
     width 20px
     height 20px
     z-index 100001
     border 1px dashed fuchsia
-  .leftWrapper
-    background-image url(/img/background/dragon.jpg)
-    background-size 280px
-    filter opacity(80%)
-    width 280px
-    padding-left 10px
-    bottom 0
-    top 60px
-    position absolute
-    overflow auto
-    .title
-      line-height 40px
-    .split
-      height 10px
-      line-height 10px
-    .divided
-      border-bottom 2px solid #5F82C8
-      margin-bottom 10px
-    .tablefields
-      h3
-        font-weight bold
-      .rowfields
-        margin-bottom 10px
-      .fields
-        text-align center
-      .fieldsWrapper
-        width 500px
-        height 500px
-        overflow-x hidden
 
-    .list-container
-      .tool-list
-        li
-          float left
-          width 33%
-          .tool-item
-            display inline-block
-            white-space nowrap
-            overflow hidden
-            cursor pointer
-            .tool-item__name
-              line-height 16px
-              font-size 12px
-              margin-bottom 4px
-              color #93A1BA
-              text-align center
-            .tool-item__icon
-              background-size 100% 100%
-              background-repeat no-repeat
-              position relative
-              display inline-block
-              height 44px
-              width 44px
-              margin 8px 16px 0
-              border-radius 2px
-              &.chart-1
-                background-image: url('/img/tool-items/line1_a6d1650.png')
-              &.chart-2
-                background-image: url('/img/tool-items/bar_ad67268.png')
-              &.chart-3
-                background-image: url('/img/tool-items/pie_5d94603.png')
-              &.chart-4
-                background-image: url('/img/tool-items/ring_a180e9f.png')
-              &.chart-5
-                background-image: url('/img/tool-items/scatter_d6f85f3.png')
-              &.chart-6
-                background-image: url('/img/tool-items/chart-k_836e235.png')
-              &.chart-7
-                background-image: url('/img/tool-items/radar_1481bc4.png')
-              &.chart-8
-                background-image: url('/img/tool-items/treemap_07eb65e.png')
-              &.chart-9
-                background-image: url('/img/tool-items/map-province-area_10e3262.png')
-              &.chart-10
-                background-image: url('/img/tool-items/map-province-line_2ab72d4.png')
-              &.chart-11
-                background-image: url('/img/tool-items/topology_0d77080.png')
-              &.chart-12
-                background-image: url('/img/tool-items/dashboard_c542010.png')
-              &.table-1
-                background-image: url('/img/tool-items/table_7c990ed.png')
-              &.table-2
-                background-image: url('/img/tool-items/table-play_90b76df.png')
-              &.text-1
-                background-image: url('/img/tool-items/simple-text_77655e6.png')
-              &.text-2
-                background-image: url('/img/tool-items/chart-link_92f0cd2.png')
-              &.text-3
-                background-image: url('/img/tool-items/chart-marquee_4702170.png')
-              &.media-1
-                background-image: url('/img/tool-items/chart-image_6e1723e.png')
-              &.media-2
-                background-image: url('/img/tool-items/slider_7665c04.png')
-              &.media-3
-                background-image: url('/img/tool-items/video_28cd4c6.png')
-              &.media-4
-                background-image: url('/img/tool-items/weather_05de0cb.png')
-          :hover
-            background-color #ebebeb
   .rightWrapper
     flex 1
     .editor
@@ -180,6 +85,25 @@
              margin-left: .5em
            .el-icon-full-screen
              margin-left: .5em
+      .loading
+        position absolute
+        display flex
+        align-items center
+        justify-content center
+        width 1150px
+        height 700px
+        z-index 20
+        .loading-container
+          background-color rgb(26, 188, 156)
+          padding 20px 40px
+          border-radius 5px
+          .loading-title
+            display flex
+            align-items center
+            justify-content center
+            height 30px
+            line-height 30px
+            color white
     .css-fullconfig
       background-image url(/img/background/dragon.jpg)
       filter opacity(80%)

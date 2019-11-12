@@ -1,5 +1,5 @@
 const pg = require('pg-then')
-let pgConfig = require('./dbbase')
+let pgConfig = require('./dbconfig')
 let dbPg = function dbPg() {
     this.conn = null
     this.createConnection = async ()=>{

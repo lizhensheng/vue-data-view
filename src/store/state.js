@@ -2,13 +2,9 @@
 const state = {
     token: window.sessionStorage.getItem('token'),
     username: '',
-    chartId:'',
-    chartWidth:0,
-    chartHeight:0,
-    chartX:0,
-    chartY:0,
-    storePosition: {},
-    increaseId:0,
-    increaseIdForData:0
+    dialogAddProjectVisible: false,
+    treeData:[],
+    dialogAddPageVisible:false,
+    projectNameList:[]
 };
 export default state

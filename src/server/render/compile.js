@@ -26,7 +26,6 @@ server.get('*', (req, res) => {
             });
         }
     })
-    console.log(app)
     renderer.renderToString(app, (err, html) => {
         if (err) {
             res.status(500).end('Internal Server Error')

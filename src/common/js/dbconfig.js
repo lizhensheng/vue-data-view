@@ -1,7 +1,7 @@
 let oracleConfig = {
-    host:'127.0.0.1/orcl',
-    username:'NMGYDYS',
-    password:'NMGYDYS'
+    host:'172.16.12.33/ORCL',
+    username:'TESTUSER',
+    password:'TESTUSER'
 }
 let mssqlConfig = {
     host:'127.0.0.1/orcl',

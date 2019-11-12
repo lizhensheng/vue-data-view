@@ -15,6 +15,13 @@ module.exports = {
         }
     },
     devServer: {
-        port: 8888
+        port: 8888,
+        // proxy: {
+        //     '/control': {
+        //         target: 'http://localhost:4444',
+        //         ws: false,
+        //         changeOrigin: false
+        //     }
+        // }
     }
 }

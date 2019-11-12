@@ -36,7 +36,9 @@ const projectPageConfigSchema = mongoose.Schema({
     pid:String,
     label:String
 })
-
+/**
+ * 控件配置表结构
+ */
 const controlConfigSchema = mongoose.Schema({
     pageId:String,//页面id
     chartId:String,//图表id
@@ -56,6 +58,22 @@ const controlConfigSchema = mongoose.Schema({
     borderStyle:String,//图表边框样式
     borderColor:String,//图表边框颜色
 })
+/**
+ * 页面样式配置表结构
+ */
+const pageConfigSchema = mongoose.Schema({
+    pageId:String,
+    backgroundImageUrl:String
+})
+/**
+ * 数据库配置表结构
+ */
+const dbConfigSchema = mongoose.Schema({
+    dbhost: String,
+    dbservername: String,
+    dbusername: String,
+    dbpassword: String
+})
 
 const user = mongoose.model('user',userSchema)
 
@@ -65,9 +83,15 @@ const projectPageConfig = mongoose.model('projectPageConfig',projectPageConfigSc
 
 const controlConfig = mongoose.model('controlConfig',controlConfigSchema)
 
+const pageConfig = mongoose.model('pageConfig',pageConfigSchema)
+
+const dbConfig = mongoose.model('dbConfig',dbConfigSchema)
+
 module.exports = {
     user,
     sourceConfig,
     projectPageConfig,
-    controlConfig
+    controlConfig,
+    pageConfig,
+    dbConfig
 }

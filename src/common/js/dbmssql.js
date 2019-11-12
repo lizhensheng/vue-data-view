@@ -1,5 +1,5 @@
 const sql  = require('mssql')
-let mssqlConfig = require('./dbbase')
+let mssqlConfig = require('./dbconfig')
 let dbMssql = function dbMssql() {
     this.conn = null
     this.createConnection = async ()=>{

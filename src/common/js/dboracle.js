@@ -1,6 +1,6 @@
 const oracledb = require('oracledb')
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT
-let {oracleConfig} = require('./dbbase')
+let {oracleConfig} = require('./dbconfig')
 let dbOracle = function dbOracle() {
     this.conn = null
     this.createConnection = async ()=>{
@@ -19,9 +19,6 @@ let dbOracle = function dbOracle() {
         callback(result.rows)
     }
     this.getDataset = async (tablefields,tablename,callback)=>{
-        if(tablename.indexOf(' ')>-1){
-            callback('')
-        }
         let sql = ''
         if(tablefields){
             sql = `select ${tablefields} from (select rownum,t.* from (${tablename}) t where rownum<21)`

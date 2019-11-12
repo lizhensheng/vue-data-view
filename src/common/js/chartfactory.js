@@ -10,6 +10,7 @@ let chartMap = require('./chartmap')
 let chartMapLine = require('./chartmapline')
 let chartRelation = require('./chartrelation')
 let chartDashboard = require('./chartdashboard')
+let chartBorder = require('./chartborder')
 let dbFactory = {
     createOperate : (operate)=>{
         let handle = null
@@ -50,6 +51,9 @@ let dbFactory = {
             case DASHBOARD:
                 handle = new chartDashboard()
                 break
+            case BORDER1:
+                handle = new chartBorder.default()
+                break
         }
         return handle
     }
@@ -67,4 +71,5 @@ const MAP='map'
 const MAP_LINE='map_line'
 const RELATION='relation'
 const DASHBOARD='dashboard'
+const BORDER1='border1'
 export default dbFactory

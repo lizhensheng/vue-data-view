@@ -1,5 +1,5 @@
 const mysql  = require('mysql')
-let {mysqlConfig} = require('./dbbase')
+let {mysqlConfig} = require('./dbconfig')
 let dbMysql = function dbMysql() {
     this.conn = null
     this.createConnection =  ()=>{

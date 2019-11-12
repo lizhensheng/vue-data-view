@@ -16,38 +16,17 @@ const mutations = {
         state.username = data;
         window.sessionStorage.setItem('username', data);
     },
-    [types.SET_CHART_ID](state,chartId){
-        state.chartId = chartId
+    [types.DIALOG_ADD_PROJECT_VISIBLE]: (state, data) => {
+        state.dialogAddProjectVisible = data;
     },
-    [types.SET_CHART_WIDTH](state,chartWidth){
-        state.chartWidth = chartWidth
+    [types.SET_TREE_DATA]: (state, data) => {
+        state.treeData = data;
     },
-    [types.SET_CHART_HEIGHT](state,chartHeight){
-        state.chartHeight = chartHeight
+    [types.DIALOG_ADD_PAGE_VISIBLE]: (state, data) => {
+        state.dialogAddPageVisible = data
     },
-    [types.SET_CHART_X](state,chartX){
-        state.chartX = chartX
-    },
-    [types.SET_CHART_Y](state,chartY){
-        state.chartY = chartY
-    },
-    [types.SET_POSITION](state,position){
-        if(state.storePosition[position.id]){
-            state.storePosition[position.id] = Object.assign({},state.storePosition[position.id],position)
-        }else{
-            state.storePosition[position.id] = position
-        }
-    },
-    [types.SET_DELETE_POSITION](state,position){
-        if(state.storePosition[position.id]){
-            delete state.storePosition[position.id]
-        }
-    },
-    [types.SET_INCREASE_ID](state,increaseId){
-        state.increaseId = increaseId
-    },
-    [types.SET_INCREASE_UPDATE_DATA](state,increaseIdForData){
-        state.increaseIdForData = increaseIdForData
+    [types.SET_PROJECT_NAME_LIST]: (state, data) => {
+        state.projectNameList = data
     }
 };
 export default mutations

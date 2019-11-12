@@ -2,7 +2,7 @@
 const express = require('express')
 const moment = require('moment')
 const dbFactory = require('./src/common/js/dbfactory')
-let {sourceConfig,projectPageConfig,controlConfig} = require('./src/server/db/db')
+let {sourceConfig,projectPageConfig,controlConfig,pageConfig,dbConfig} = require('./src/server/db/db')
 let configRoutes = express.Router()
 /**
  * 获取数据表
@@ -232,5 +232,56 @@ configRoutes.post('/deleteSingleControl',(req,res)=>{
             res.json({code:0})
         }
     })
+})
+configRoutes.post('/setBackgroundImage',(req,res)=>{
+    if(!req.body.pageId||!req.body.backgroundImageUrl){
+        return
+    }
+    pageConfig.find({pageId:req.body.pageId},(err,doc)=>{
+        if(err){
+            res.json({code:1})
+            return
+        }
+        if(doc.length>0){
+            doc.backgroundImageUrl = req.body.backgroundImageUrl
+
+            let query = { pageId:req.body.pageId };
+            pageConfig.findOneAndUpdate(query,{backgroundImageUrl:req.body.backgroundImageUrl},function(err, doc) {
+                if(err){
+                    res.json({code:500})
+                }else{
+                    res.json({code:0})
+                }
+            })
+        }else{
+            let s = new pageConfig({
+                pageId:req.body.pageId,
+                backgroundImageUrl:req.body.backgroundImageUrl
+            })
+            s.save(err=>{
+                if(err){
+                    res.json({code:1})
+                }else{
+                    res.json({code:0})
+                }
+            })
+        }
+    })
+})
+configRoutes.post('/getBackgroundImage',(req,res)=>{
+    if(!req.body.pageId){
+        res.json({code:800})
+        return
+    }
+    pageConfig.findOne({pageId:req.body.pageId},(err,doc)=> {
+        if(err){
+            res.json({code:1})
+        }else{
+            res.json({code:0,data:doc})
+        }
+    })
+})
+configRoutes.post('/getDbConfigs',(req,res)=>{
+
 })
 module.exports =  configRoutes

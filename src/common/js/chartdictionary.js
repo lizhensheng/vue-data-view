@@ -11,4 +11,5 @@ chartMap.set(9,'map')
 chartMap.set(10,'map_line')
 chartMap.set(11,'relation')
 chartMap.set(12,'dashboard')
+chartMap.set(13,'border1')
 export default chartMap

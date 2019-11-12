@@ -8,156 +8,10 @@
         </div>
         <!--移动选框end-->
 
-        <!--左侧面板start-->
-        <div class="leftWrapper">
-            <keep-alive>
-                <el-tabs v-model="activeName">
-                <el-tab-pane label="工程管理" name="first">
-                    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="true"></el-tree>
-                    <div class="split"></div>
-                    <el-button round @click="clickAddProject" size="small">新建工程</el-button>
-                    <el-button round @click="clickAddPage" size="small">新建页面</el-button>
-                </el-tab-pane>
-                <el-tab-pane label="控件" name="second">
-                    <el-collapse v-model="activeControls">
-                        <el-collapse-item title="图表" name="1">
-                            <template slot="title">
-                                &nbsp;&nbsp;图表<i class="header-icon el-icon-info"></i>
-                            </template>
-                            <div class="list-container">
-                                <ul class="tool-list">
-                                    <li @mousedown.prevent.stop="mouseClickControl" v-for="(item,index) in chartModules" :key="index"  :data-chart="item.value">
-                                        <span class="tool-item">
-                                            <div class="tool-item__icon" :class="`chart-${item.value}`"  :data-chart="item.value" ></div>
-                                            <div class="tool-item__name"  :data-chart="item.value" >{{item.name}}</div>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </el-collapse-item>
-                        <el-collapse-item name="2">
-                            <template slot="title">
-                                &nbsp;&nbsp;表格<i class="header-icon el-icon-info"></i>
-                            </template>
-                            <div class="list-container">
-                                <ul class="tool-list">
-                                    <li @mousedown.prevent.stop="mouseClickControl" v-for="(item,index) in tableModules" :key="index"  :data-chart="item.value">
-                                        <span class="tool-item">
-                                            <div class="tool-item__icon" :class="`table-${item.value}`"  :data-chart="item.value" ></div>
-                                            <div class="tool-item__name"  :data-chart="item.value" >{{item.name}}</div>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </el-collapse-item>
-                        <el-collapse-item name="3">
-                            <template slot="title">
-                                &nbsp;&nbsp;文字<i class="header-icon el-icon-info"></i>
-                            </template>
-                            <div class="list-container">
-                                <ul class="tool-list">
-                                    <li @mousedown.prevent.stop="mouseClickControl" v-for="(item,index) in textModules" :key="index"  :data-chart="item.value">
-                                        <span class="tool-item">
-                                            <div class="tool-item__icon" :class="`text-${item.value}`"  :data-chart="item.value" ></div>
-                                            <div class="tool-item__name"  :data-chart="item.value" >{{item.name}}</div>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </el-collapse-item>
-                        <el-collapse-item name="4">
-                            <template slot="title">
-                                &nbsp;&nbsp;媒体<i class="header-icon el-icon-info"></i>
-                            </template>
-                            <div class="list-container">
-                                <ul class="tool-list">
-                                    <li @mousedown.prevent.stop="mouseClickControl" v-for="(item,index) in mediaModules" :key="index"  :data-chart="item.value">
-                                        <span class="tool-item">
-                                            <div class="tool-item__icon" :class="`media-${item.value}`"  :data-chart="item.value" ></div>
-                                            <div class="tool-item__name"  :data-chart="item.value" >{{item.name}}</div>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </el-collapse-item>
-                    </el-collapse>
-
-                </el-tab-pane>
-                <el-tab-pane label="数据源" name="third">
-                    <div class="dbsource">
-                        <el-row>
-                            <el-col :span="8"><div class="grid-content bg-purple"><div class="title">数据源:</div></div></el-col>
-                            <el-col :span="16"><div class="grid-content bg-purple-light">
-                                <el-select v-model="dbtype" placeholder="请选择" @change="changeDbType" size="small">
-                                    <el-option
-                                            v-for="item in dbtypeoptions"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </div></el-col>
-                        </el-row>
-                    </div>
-                    <div class="split"></div>
-                    <div class="dbtablename">
-                        <el-row>
-                            <el-col :span="8"><div class="grid-content bg-purple"><div class="title">数据表:</div></div></el-col>
-                            <el-col :span="16"><div class="grid-content bg-purple-light">
-                                <el-select v-model="dbtablename" placeholder="请选择"  @change="changeTablename"  size="small">
-                                    <el-option
-                                            v-for="item in dbtablenameoptions"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </div></el-col>
-                        </el-row>
-                    </div>
-                    <div class="split"></div>
-                    <div class="split"></div>
-                    <div class="tablefields" v-if="tablefields.length>0" ref="tablefields">
-                        <div class="fieldsWrapper">
-                            <el-row :gutter="20">
-                                <el-col :span="6" class="fields"><h3>原始列名</h3></el-col>
-                                <el-col :span="7" class="fields"><h3>显示列名</h3></el-col>
-                                <el-col :span="7" class="fields"><h3>数据类型</h3></el-col>
-                                <el-col :span="4" class="fields"><h3>操作</h3></el-col>
-                            </el-row>
-                            <div class="split"></div>
-                            <div class="divided"></div>
-                            <el-row v-for="(item,index) in tablefields" :key="index" class="rowfields" :gutter="20">
-                                <el-col :span="6" class="fields"><div class="title">{{tablefields[index][Object.keys(item)[0]]}}</div></el-col>
-                                <el-col :span="7" class="fields"><div class="title">{{tablefields[index][Object.keys(item)[1]]}}</div></el-col>
-                                <el-col :span="7" class="fields">
-                                    <div class="title">
-                                        <div class="title">{{tablefields[index][Object.keys(item)[2]]}}</div>
-                                    </div>
-                                </el-col>
-                                <el-col :span="4" class="fields">
-                                    <div class="title"><i class="el-icon-delete" @click="onTableFieldsDelete(index)"></i></div>
-                                </el-col>
-                            </el-row>
-                        </div>
-                    </div>
-                    <div class="split"></div>
-                    <div class="divided"></div>
-                    <div class="search">
-                        <el-row>
-                            <el-col :span="8">
-                                <el-button round @click="clickSaveSource" size="small">保存数据源</el-button>
-                            </el-col>
-                            <el-col :span="6" :offset="10">
-                                <el-button round @click="clickSearch" size="small">查询</el-button>
-                            </el-col>
-                        </el-row>
-                    </div>
-                </el-tab-pane>
-            </el-tabs>
-            </keep-alive>
-        </div>
-        <!--左侧面板end-->
+        <left-setting @onPageControlConfig="_getPageControlConfig"
+                      @onMouseClickControl="onMouseClickControl"
+                      @onClickSaveSource="onClickSaveSource"
+                      @onClickSearch="onClickSearch"></left-setting>
 
         <!--中间和右侧面板start-->
         <div class="rightWrapper">
@@ -180,6 +34,12 @@
                             <input class="range" type="range" min="10" max="200" step="1"  v-model="scaleValue" >
                             <input class="number" type="number" min="10" max="200" step="1"  v-model="scaleValue">
                             <i class="el-icon-full-screen" @click="onFullScreen"></i>
+                        </div>
+                    </div>
+                    <div v-if="loading" class="loading">
+                        <div class="loading-container">
+                            <div><img src="/img/loading/grid.svg"></div>
+                            <div class="loading-title">加载中...</div>
                         </div>
                     </div>
             </div>
@@ -289,7 +149,12 @@
                     </el-tabs>
                 </div>
                 <div class="nocontent" v-if="!chartId">
-                    点击控件进行配置
+                    <div style="width: 300px">背景图片地址:</div>
+                    <div class="split"></div>
+                    <div style="width: 300px"><el-input v-model="backgroundImageUrl" size="small"></el-input></div>
+                    <div class="split"></div>
+                    <div><el-button size="small" @click="setBackgroundImageUrl">设置</el-button>&nbsp;<el-button size="small" @click="saveBackgroundImageUrl">保存</el-button></div>
+
                 </div>
             </div>
             <!--右侧面板end-->
@@ -297,7 +162,7 @@
         <!--中间和右侧面板end-->
 
         <!--预览数据对话框start-->
-        <el-dialog title="预览数据(展示前5条)" :visible.sync="dialogTableVisible">
+        <el-dialog title="预览数据" :visible.sync="dialogTableVisible">
             <el-table :data="gridData" v-if="gridData.length>0">
                 <el-table-column v-for="(item,index) in Object.keys(gridData[0])" :key="index" :property="item" :label="item" width="150"></el-table-column>
             </el-table>
@@ -326,7 +191,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogAddProjectVisible = false">取 消</el-button>
+                <el-button @click="setDialogAddProject(false)">取 消</el-button>
                 <el-button type="primary" @click="clickAddProjectOk">确 定</el-button>
             </div>
         </el-dialog>
@@ -338,7 +203,7 @@
                 <el-form-item label="选择工程" :label-width="formLabelWidth">
                     <el-select v-model="projectnamevalue" placeholder="请选择" size="small">
                         <el-option
-                                v-for="item in projectnamelist"
+                                v-for="item in projectNameList"
                                 :key="item._id"
                                 :label="item.label"
                                 :value="item._id">
@@ -350,7 +215,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogAddPageVisible = false">取 消</el-button>
+                <el-button @click="setDialogAddPage(false)">取 消</el-button>
                 <el-button type="primary" @click="clickAddPageOk">确 定</el-button>
             </div>
         </el-dialog>
@@ -426,18 +291,38 @@
             <div class="title">格式化后结果：</div>
             <br/>
             <div  ref="debugResult" style="height: 260px">
+                <json-viewer
+                        :value="debugJson"
+                        :expand-depth=5
+                        copyable
+                        boxed
+                        sort></json-viewer>
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogDebugVisible = false">确 定</el-button>
             </div>
         </el-dialog>
+
+        <el-dialog title="数据库连接"  :close-on-click-modal="false">
+            连接方式:
+            主机名:
+            数据库名:
+            用户名:
+            密码:
+        </el-dialog>
     </div>
 </template>
 <script>
     import Vue from 'vue'
-    import {getTableNames,getDataset,setDataSource,getDataProjects,updateSqlDataSource,addPageProjectName,getPageProjectName,getAllPageProject,addPageName,getPageControlConfig,savePageControlConfig,deleteSingleControl} from 'api/dbhelper'
-    import {socket} from "common/js/socket-client"
-    import BScroll from 'better-scroll'
+    import
+    {
+        getTableNames,setDataSource,getDataProjects,updateSqlDataSource,
+        addPageProjectName,getAllPageProject,addPageName,getPageControlConfig,
+        savePageControlConfig,deleteSingleControl,setBackgroundImage
+    } from 'api/dbhelper'
+    import {getControl} from "api/control"
+    //import {socket} from "common/js/socket-client"
+    import {mapGetters,mapMutations} from 'vuex'
     import * as monaco from 'monaco-editor'
     import {constructTree} from 'common/js/imputil'
     let TOP_HEIGHT = 125
@@ -446,81 +331,13 @@
     import {baseConfigApi} from 'common/js/config'
     import {getChartData} from "api/bar"
     import {prefixStyle} from 'common/js/dom'
+    import LeftSetting from 'components/leftsetting/leftsetting'
     export default {
         data() {
             return {
-                projectnamelist:[],
+                loading:false,
+                backgroundImageUrl:'http://datav.jiaminghi.com/demo/construction-data/img/bg.837e99ea.png',
                 projectnamevalue:'',
-                dialogAddPageVisible:false,
-                dialogAddProjectVisible:false,
-                mediaModules:[{
-                    name:'图片',
-                    value:1
-                },{
-                    name:'图片轮播',
-                    value:2
-                },{
-                    name:'视频',
-                    value:3
-                },{
-                    name:'天气预报',
-                    value:4
-                }],
-                textModules:[{
-                    name:'文本',
-                    value:1
-                },{
-                    name:'超链接',
-                    value:2
-                },{
-                    name:'跑马灯',
-                    value:3
-                }],
-                tableModules:[{
-                    name:'表格',
-                    value:1
-                },{
-                    name:'轮播表格',
-                    value:1
-                }],
-                chartModules:[{
-                    name:'折线图',
-                    value:1
-                },{
-                    name:'柱状图',
-                    value:2
-                },{
-                    name:'饼图',
-                    value:3
-                },{
-                    name:'圆环图',
-                    value:4
-                },{
-                    name:'散点图',
-                    value:5
-                },{
-                    name:'K线图',
-                    value:6
-                },{
-                    name:'雷达图',
-                    value:7
-                },{
-                    name:'树图',
-                    value:8
-                },{
-                    name:'地图',
-                    value:9
-                },{
-                    name:'飞线图',
-                    value:10
-                },{
-                    name:'关系图',
-                    value:11
-                },{
-                    name:'仪表盘',
-                    value:12
-                }],
-                activeControls:['1','2','3','4'],
                 comBorderColor:'rgba(255, 255, 255, 0)',
                 comBorderStyle:'',
                 comBorderStyleArray:[
@@ -556,7 +373,6 @@
                 localChartHeight:0,
                 localChartX:0,
                 localChartY:0,
-                tablefields:[],
                 moveflag:false,
                 form:{
                     sourcename:'',
@@ -567,11 +383,6 @@
                 dialogFormVisible:false,
                 dialogTableVisible:false,
                 gridData:[],
-                dbtablename:'',
-                dbtablenameoptions:[
-
-                ],
-                dbtype:'',
                 dbtypeoptions:[
                     {
                         value: 'oracle',
@@ -590,18 +401,20 @@
                         label: 'postgress'
                     }
                 ],
-                activeName: 'first',
+
                 menuIndex: "1",
-                data: [],
-                defaultProps: {
-                    children: 'children',
-                    label: 'label'
-                },
+                treeData: [],
                 chartId:'',
-                pageId:''
+                pageId:'',
+                debugJson:[]
             };
         },
         computed:{
+            ...mapGetters([
+                'dialogAddProjectVisible',
+                'dialogAddPageVisible',
+                'projectNameList'
+            ])
         },
         created(){
             //定义一个变量,存储控件配置
@@ -641,26 +454,29 @@
                     this.comBorderRadius= conf.borderRadius
                     this.comBackgroundColor= conf.backgroundColor
                     this.configproject = conf.dataId
-                    console.log(conf.dataId)
                 }
             })
         },
         mounted(){
-          socket.on('reply',data => {
-              const d = data
-              const dv = document.createElement('div')
-              dv.id = `echart${d.el}`
-              this.$refs.dashboard.appendChild(dv)
-              const node = eval(d.code)
-              setTimeout(()=>{
-                  const instance = new Vue({
-                      render: h => h(node.default)
-                  }).$mount(`#echart${d.el}`)
-              },100)
-              //this.chartInstances.set(`${d.el}`,instance)
-          })
+          // socket.on('reply',data => {
+          //     const d = data
+          //     if(d.pageId == this.pageId) {
+          //         const dv = document.createElement('div')
+          //         dv.id = `echart${d.el}`
+          //         this.$refs.dashboard.appendChild(dv)
+          //         const node = eval(d.code)
+          //         setTimeout(() => {
+          //             const instance = new Vue({
+          //                 render: h => h(node.default)
+          //             }).$mount(`#echart${d.el}`)
+          //             this.chartInstances.set(`${d.el}`, instance)
+          //         }, 100)
+          //         this.loading = false
+          //     }
+          // })
         },
         watch:{
+
             dialogProjectVisible(newVal){
                 //sql编辑器初始化
                 if(newVal){
@@ -689,16 +505,16 @@
                             })
                         }, 20)
                     }
-                    if(!this.$debugResult) {
-                        setTimeout(() => {
-                            this.$debugResult = monaco.editor.create(this.$refs.debugResult, {
-                                value: '',
-                                language: 'json',
-                                theme: 'vs-dark',
-                                automaticLayout: true
-                            })
-                        }, 20)
-                    }
+                    // if(!this.$debugResult) {
+                    //     setTimeout(() => {
+                    //         this.$debugResult = monaco.editor.create(this.$refs.debugResult, {
+                    //             value: '',
+                    //             language: 'json',
+                    //             theme: 'vs-dark',
+                    //             automaticLayout: true
+                    //         })
+                    //     }, 20)
+                    // }
                 }
             },
             scaleValue(newVal){
@@ -713,11 +529,145 @@
             if(this.$debugSql){
                 this.$debugSql.dispose()
             }
-            if(this.$debugResult){
-                this.$debugResult.dispose()
-            }
+            // if(this.$debugResult){
+            //     this.$debugResult.dispose()
+            // }
         },
         methods:{
+            loadControl(data){
+                console.log(data)
+                    const d = data
+                    if(d.pageId == this.pageId) {
+                        const dv = document.createElement('div')
+                        dv.id = `echart${d.el}`
+                        this.$refs.dashboard.appendChild(dv)
+                        const node = eval(d.code)
+                        setTimeout(() => {
+                            const instance = new Vue({
+                                render: h => h(node.default)
+                            }).$mount(`#echart${d.el}`)
+                            this.chartInstances.set(`${d.el}`, instance)
+                        }, 100)
+                        this.loading = false
+                    }
+            },
+            saveBackgroundImageUrl(){
+                if(this.pageId&&this.backgroundImageUrl)
+                setBackgroundImage(this.pageId,this.backgroundImageUrl).then(res=>{
+                    if(res.data.code == 0){
+                        this.$message({
+                            type:'success',
+                            message:'保存成功'
+                        })
+                    }else{
+                        this.$message({
+                            type:'error',
+                            message:'网络断线了'
+                        })
+                    }
+                })
+            },
+            setBackgroundImageUrl(){
+                if(this.pageId){
+                    this.$refs.dashboard.style.backgroundImage = `url(${this.backgroundImageUrl})`
+                }
+            },
+            onClickSearch(gridData){
+                this.gridData = gridData
+                this.dialogTableVisible = true
+            },
+            onClickSaveSource(obj){
+                this.dialogFormVisible = true
+                this.dbtablename = obj.dbtablename
+                this.dbtype = obj.dbtype
+                this.tablefields = obj.tablefields
+            },
+            clickSaveSourceOk(){
+                if(this.dbtablename&&this.dbtype&&this.form.sourcename) {
+                    let mtags = []
+                    this.tablefields.forEach((item)=>{
+                        let keys = Object.keys(item)
+                        let tag = {}
+                        tag['value'] = item[keys[0]]
+                        tag['label'] = item[keys[1]]
+                        tag['type'] = item[keys[2]]
+                        mtags.push(tag)
+                    })
+                    setDataSource(this.dbtablename,this.dbtype,this.form.sourcename,JSON.stringify(mtags)).then((res)=>{
+                        if(res.data.code==0){
+                            this.dialogFormVisible = false
+                            this.form.sourcename = ''
+                            this.$message({
+                                type: 'success',
+                                message: '保存成功'
+                            });
+                        }else if(res.data.code==1){
+                            this.$message({
+                                type: 'error',
+                                message: '数据源名称重复'
+                            });
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '保存异常'
+                            });
+                        }
+                    })
+                }else{
+                    this.$message({
+                        type: 'success',
+                        message: '无数据'
+                    });
+                }
+            },
+            onMouseClickControl(data){
+                this.moveflag = data.moveFlag
+                this.clickControl = data.clickControl
+                this.chartType = data.chartType
+            },
+            clickAddProjectOk(){
+                if(!this.form.projectname){
+                    return
+                }
+                addPageProjectName(this.form.projectname).then((res)=>{
+                    if(res.data.code == 0){
+                        this.setDialogAddProject(false)
+                        this.form.projectname = ''
+                        this.$message({
+                            type: 'success',
+                            message: '新建工程成功'
+                        });
+                        this._getProjectTree()
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '新建工程失败,错误码:'+res.data.code
+                        });
+                    }
+                })
+            },
+            clickAddPageOk(){
+                if(!this.projectnamevalue||!this.form.pagename){
+                    return
+                }
+                addPageName(this.projectnamevalue,this.form.pagename).then((res)=>{
+                    if(res.data.code == 0){
+                        this.setDialogAddPage(false)
+                        this.form.pagename = ''
+                        this.projectnamevalue = ''
+                        this.$message({
+                            type: 'success',
+                            message: '新建页面成功'
+                        });
+                        this._getProjectTree()
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '新建页面失败,错误码:'+res.data.code
+                        });
+                    }
+                })
+            },
             _deleteSingleControl(chartId){
                 let instance = this.chartInstances.get(chartId)
                 if(instance){
@@ -749,7 +699,7 @@
                     if(res.data.code == 0){
                         let projects = res.data.data
                         let out = constructTree(projects,{id:'_id',pid:'pid'})
-                        this.data = out
+                        this.setTreeData(out)
                     }else{
                         this.$message({
                             type: 'error',
@@ -761,25 +711,28 @@
             onFullScreen(){
                 this.$refs.dashboard.style[prefixStyle('transform')] = `scale(1.0,1.0)`
             },
-            handleNodeClick(data){
-                if(data.pid !== '0'){
-                    this.pageId = data._id
-                    this._getPageControlConfig(data._id)
-                }
-            },
+
             _getPageControlConfig(pageId){
+                this.pageId = pageId
                 getPageControlConfig(pageId).then((res)=>{
                     if(res.data.code === 0){
                         let d = res.data.data
                         if(d.length > 0){
                             this.controlConfigs = d
+                            this.loading = true
                         }else{
                             this.controlConfigs = []
                         }
                         this.$refs.dashboard.innerHTML = ''
                         this.controlConfigs.forEach(item=>{
-                            setTimeout(()=>{socket.emit('onDragInControl',item)},200)
-
+                            //setTimeout(()=>{socket.emit('onDragInControl',item)},10)
+                            console.log(item.chartId)
+                            if(!item.chartId){
+                                return
+                            }
+                            getControl(item).then((res)=>{
+                                this.loadControl(res.data)
+                            })
                         })
                     }
                 })
@@ -820,128 +773,10 @@
                     }
                 })
             },
-            _getDataType(data){
-                if(typeof data == 'number'){
-                    return 'number'
-                }else if(/^\d{4}-\d{2}-\d{2}.+/.test(data)){
-                    return  'date'
-                }else{
-                    return 'string'
-                }
-            },
-            changeTablename(){
-                if(this.dbtablename&&this.dbtype){
-                    getDataset('',this.dbtablename,this.dbtype).then((res)=>{
-                        if(res.status == 200){
-                            if(res.data.length>0){
-                                let arrNames = Object.keys(res.data[0])
-                                let arrValues = Object.values(res.data[0])
-                                if(arrNames[0] == 'ROWNUM'){
-                                    arrNames.splice(0,1)
-                                    arrValues.splice(0,1)
-                                }
-                                let formfields = []
-                                arrNames.forEach((item,index) =>{
-                                    let aform = {}
-                                    aform[item] = item
-                                    aform[`${item}_nickname`] = item
-                                    aform[`${item}_datetype`] = this._getDataType(arrValues[index])
-                                    formfields.push(aform)
-                                })
-                                this.tablefields = formfields
-                                window.setTimeout(()=>{
-                                    this.$scroll = new BScroll(this.$refs.tablefields,{
-                                        scrollX: true,
-                                        click: true
-                                    })
-                                },50)
-                            }else{
-                                this.tablefields = []
-                                this.$message({
-                                    type: 'info',
-                                    message: '暂无数据'
-                                });
-                            }
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: '获取表结构出现异常'
-                            });
-                        }
-                    })
-                }
-            },
-            clickSearch(){
-                if(this.dbtablename&&this.dbtype){
-                    let searchStr = ''
-                    if(this.tablefields.length>0){
-                        this.tablefields.forEach((item)=>{
-                            searchStr +=`${item[Object.keys(item)[0]]} ${item[Object.keys(item)[1]]},`
-                        })
-                        searchStr = searchStr.substr(0,searchStr.length-1)
-                    }
-                    getDataset(searchStr,this.dbtablename,this.dbtype).then((res)=>{
-                        if(res.status == 200){
-                            this.dialogTableVisible = true
-                            this.gridData = res.data
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: '获取数据集结果出现异常'
-                            });
-                        }
-                    })
-                }
-            },
-            clickSaveSource(){
-                if(this.dbtablename&&this.dbtype){
-                    this.dialogFormVisible = true
-                }else{
-                    this.$message({
-                        type: 'info',
-                        message: '请选择数据源'
-                    });
-                }
-            },
-            clickSaveSourceOk(){
-                if(this.dbtablename&&this.dbtype&&this.form.sourcename) {
-                    let mtags = []
-                    this.tablefields.forEach((item)=>{
-                        let keys = Object.keys(item)
-                        let tag = {}
-                        tag['value'] = item[keys[0]]
-                        tag['label'] = item[keys[1]]
-                        tag['type'] = item[keys[2]]
-                        mtags.push(tag)
-                    })
-                    setDataSource(this.dbtablename,this.dbtype,this.form.sourcename,JSON.stringify(mtags)).then((res)=>{
-                        if(res.data.code==0){
-                            this.dialogFormVisible = false
-                            this.form.sourcename = ''
-                            this.$message({
-                                type: 'success',
-                                message: '保存成功'
-                            });
-                        }else if(res.data.code==1){
-                            this.$message({
-                                type: 'error',
-                                message: '数据源名称重复'
-                            });
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: '保存异常'
-                            });
-                        }
-                    })
-                }
-            },
-            mouseClickControl(e){
-                this.clickControl = true
-                this.moveflag = true
-                //获取点击的图形的类型
-                this.chartType = e.target.dataset.chart
-            },
+
+
+
+
             mouseProjectSetting(e){
                 if(this.clickControl){
                     this.$refs.moveflag.style.top = e.y-10 + 'px'
@@ -970,7 +805,8 @@
                     let lastConfig = {
                         dx:dx,
                         dy:dy,
-                        chartType:this.chartType
+                        chartType:this.chartType,
+                        pageId:this.pageId
                     }
                     // //读取vuex中存储的图表配置
                     // let oldConfigs = Object.values(this.chartConfigs)
@@ -978,7 +814,11 @@
                     //     oldConfigs:oldConfigs,
                     //     lastConfig:lastConfig
                     // })
-                    socket.emit('onDragInControl',lastConfig)
+                    //socket.emit('onDragInControl',lastConfig)
+                    getControl(lastConfig).then((res)=>{
+                        this.loadControl(res.data)
+                    })
+                    this.loading = true
                 }
                 this.chartType = -1
             },
@@ -1030,10 +870,6 @@
                 this._changeBingFields()
             },
             clickRefreshChart(){
-                if(!this.xData || this.yData.length === 0)
-                {
-                    return
-                }
                 let y = []
                 this.yData.forEach(item=>{
                     y.push({
@@ -1050,11 +886,6 @@
                 conf.dataId = this.configproject
 
                 window.$controlevent.$emit('onDataChartRefresh',conf)
-                //let dataUrl = `${baseConfigApi}/getChartDataDynamic?id=${this.configproject}`
-                // this.setPosition({id:this.chartId,xData:x,yData:this.yData,yFields:y,dataId:this.configproject})
-                // this.setIncreaseIdForData(this.increaseIdForData+1)
-                //先删除当前chart实例
-                //重新绘制chart
             },
             onProjectEdit(){
                 let index = this.configprojectsoptions.findIndex(item=>item.value == this.configproject)
@@ -1095,9 +926,7 @@
                 },200)
                 this.dialogProjectVisible = true
             },
-            onTableFieldsDelete(index){
-                this.tablefields.splice(index,1)
-            },
+
             onSqlTableFieldsDelete(index){
                 this.sqltablefields.splice(index,1)
             },
@@ -1172,67 +1001,14 @@
                         this.$debugSql.setValue(originSql)
                     },100)
                     setTimeout(()=>{
-                        this.$debugResult.setValue(JSON.stringify(resJson))
+                        this.debugJson = resJson
+                        //this.$debugResult.setValue(JSON.stringify(resJson))
                     },100)
 
 
                 })
             },
-            clickAddProject(){
-                this.dialogAddProjectVisible = true
-            },
-            clickAddPage(){//projectnamelist
-                this.dialogAddPageVisible = true
-                getPageProjectName().then((res)=>{
-                    if(res.data.code == 0){
-                        let d = res.data.data
-                        this.projectnamelist = d
-                    }
-                })
-            },
-            clickAddProjectOk(){
-                if(!this.form.projectname){
-                    return
-                }
-                addPageProjectName(this.form.projectname).then((res)=>{
-                    if(res.data.code == 0){
-                        this.dialogAddProjectVisible = false
-                        this.form.projectname = ''
-                        this.$message({
-                            type: 'success',
-                            message: '新建工程成功'
-                        });
-                        this._getProjectTree()
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: '新建工程失败,错误码:'+res.data.code
-                        });
-                    }
-                })
-            },
-            clickAddPageOk(){
-                if(!this.projectnamevalue||!this.form.pagename){
-                    return
-                }
-                addPageName(this.projectnamevalue,this.form.pagename).then((res)=>{
-                    if(res.data.code == 0){
-                        this.dialogAddPageVisible = false
-                        this.form.pagename = ''
-                        this.projectnamevalue = ''
-                        this.$message({
-                            type: 'success',
-                            message: '新建页面成功'
-                        });
-                        this._getProjectTree()
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: '新建页面失败,错误码:'+res.data.code
-                        });
-                    }
-                })
-            },
+
             onBaseChartRefresh(){
                 let index = this._getControlConfigs(this.chartId)
                 if(index>-1){
@@ -1248,7 +1024,15 @@
                     conf.backgroundColor = this.comBackgroundColor
                     window.$controlevent.$emit('onBaseChartRefresh', conf)
                 }
-            }
+            },
+            ...mapMutations({
+                setDialogAddProject:'DIALOG_ADD_PROJECT_VISIBLE',
+                setTreeData:'SET_TREE_DATA',
+                setDialogAddPage:'DIALOG_ADD_PAGE_VISIBLE',
+            })
+        },
+        components:{
+            LeftSetting:LeftSetting
         }
     }
 </script>
