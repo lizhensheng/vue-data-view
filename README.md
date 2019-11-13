@@ -31,6 +31,10 @@ $ yarn serve
 
 本项目使用了mongodb做用户的信息保存,请先下载安装mongodb就可以注册或登陆系统
 
+### 联系我
+
+邮箱 1841084366@qq.com
+
 # 项目截图
 
 <img src="https://raw.githubusercontent.com/lizhensheng/vue-echart-design/master/docs/screenshot/designwindow.png"></img>
