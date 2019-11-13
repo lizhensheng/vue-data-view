@@ -7,19 +7,30 @@ let configRoutes = express.Router()
 /**
  * 获取数据表
  */
-configRoutes.post('/getTableNames',async (req,res) => {
-    if (req.body.dbtype){
-        let dbtype = req.body.dbtype
-        let handle = dbFactory.createOperate(dbtype)
-        await handle.createConnection()
-        await handle.getTableNames((result)=>{
-            handle.closeConnection()
-            if(result){
-                res.json(result)
-            }else{
+configRoutes.post('/getTableNames', (req,res) => {
+    if (req.body.id){
+        let id = req.body.id
+        dbFactory.getConnection(id)
+            .then(async r=>{
+                if(!res){
+                    res.json({code:500})
+                    return
+                }
+                let handle = dbFactory.createOperate(r.dbtype)
+                await handle.createConnection(r.dbhost,r.dbservername,r.dbusername,r.dbpassword)
+                await handle.getTableNames((result)=>{
+                    handle.closeConnection()
+                    if(result){
+                        res.json(result)
+                    }else{
+                        res.json({code:500})
+                    }
+                })
+            })
+            .catch(err=>{
+                console.log(err)
                 res.json({code:500})
-            }
-        })
+            })
     }else{
         res.json({code:500})
     }
@@ -28,20 +39,27 @@ configRoutes.post('/getTableNames',async (req,res) => {
  * 获取数据表数据
  */
 configRoutes.post('/getDataset',async (req,res)=>{
-    if(req.body.tablename&&req.body.dbtype){
+    if(req.body.tablename&&req.body.id){
         let tablefields = req.body.tablefields
         let tablename = req.body.tablename
-        let dbtype = req.body.dbtype
-        let handle = dbFactory.createOperate(dbtype)
-        await handle.createConnection()
-        await handle.getDataset(tablefields,tablename,(result)=>{
-            handle.closeConnection()
-            if(result){
-                res.json(result)
-            }else{
+        let id = req.body.id
+        dbFactory.getConnection(id)
+            .then(async r=>{
+                let handle = dbFactory.createOperate(r.dbtype)
+                await handle.createConnection(r.dbhost,r.dbservername,r.dbusername,r.dbpassword)
+                await handle.getDataset(tablefields,tablename,(result)=>{
+                    handle.closeConnection()
+                    if(result){
+                        res.json(result)
+                    }else{
+                        res.json({code:500})
+                    }
+                })
+            })
+            .catch(e=>{
+                console.log(e)
                 res.json({code:500})
-            }
-        })
+            })
     }else{
         res.json({code:500})
     }
@@ -68,12 +86,12 @@ configRoutes.post('/testConnection',(req,res)=>{
  * 保存数据源配置
  */
 configRoutes.post('/setDataSource',(req,res)=>{
-    if(!req.body.tablename||!req.body.dbtype||!req.body.sourcename||!req.body.tablefields){
+    if(!req.body.tablename||!req.body.sourceid||!req.body.sourcename||!req.body.tablefields){
         res.json({code:800})
         return
     }
     let s = new sourceConfig({
-        dbtype:req.body.dbtype,
+        sourceid:req.body.sourceid,
         tablename:req.body.tablename,
         sourcename:req.body.sourcename,
         tablefields:req.body.tablefields
@@ -97,6 +115,19 @@ configRoutes.post('/setDataSource',(req,res)=>{
         })
     })
 })
+configRoutes.post('/deleteDataSource',(req,res)=>{
+    if(!req.body.id){
+        res.json({code:800})
+        return
+    }
+    sourceConfig.remove({_id:req.body.id},err=>{
+        if(err){
+            res.json({code:500})
+        }else{
+            res.json({code:0})
+        }
+    })
+})
 configRoutes.post('/getDataProjects',(req,res)=>{
     sourceConfig.find({},(err,doc)=>{
         if(err){
@@ -107,12 +138,12 @@ configRoutes.post('/getDataProjects',(req,res)=>{
     })
 })
 configRoutes.post('/updateSqlDataSource',(req,res)=>{
-    if(!req.body.tablename||!req.body.dbtype||!req.body.sourcename||!req.body.tablefields){
+    if(!req.body.tablename||!req.body.sourceid||!req.body.sourcename||!req.body.tablefields){
         res.json({code:800})
         return
     }
     let query = { sourcename: req.body.sourcename };
-    sourceConfig.findOneAndUpdate(query,{'tablename':req.body.tablename,dbtype:req.body.dbtype,tablefields:req.body.tablefields},function(err, doc) {
+    sourceConfig.findOneAndUpdate(query,{'tablename':req.body.tablename,sourceid:req.body.sourceid,tablefields:req.body.tablefields},function(err, doc) {
         if(err){
             res.json({code:500})
         }else{
@@ -309,6 +340,33 @@ configRoutes.post('/getDbConfigs',(req,res)=>{
         }
     })
 })
+configRoutes.post('/getDbConfig',(req,res)=>{
+    if(!req.body.id){
+        res.json({code:800})
+        return
+    }
+    dbConfig.findOne({_id:req.body.id},(err,doc)=>{
+        if(err){
+            res.json({code:500})
+        }
+        else{
+            res.json({code:0,data:doc})
+        }
+    })
+})
+configRoutes.post('/deleteDbConfig',(req,res)=>{
+    if(!req.body.id){
+        res.json({code:800})
+        return
+    }
+    dbConfig.remove({_id:req.body.id},(err)=>{
+        if(err){
+            res.json({code:500})
+        }else{
+            res.json({code:0})
+        }
+    })
+})
 configRoutes.post('/saveDbConfig',(req,res)=>{
     if(!req.body.dbconnectionname||!req.body.dbtype||!req.body.dbhost||!req.body.dbservername||!req.body.dbusername||!req.body.dbpassword){
         res.json({code:800})
@@ -339,5 +397,26 @@ configRoutes.post('/saveDbConfig',(req,res)=>{
             }
         }
     })
+})
+configRoutes.post('/updateDbConfig',(req,res)=>{
+    if(!req.body.dbconnectionname||!req.body.dbtype||!req.body.dbhost||!req.body.dbservername||!req.body.dbusername||!req.body.dbpassword){
+        res.json({code:800})
+        return
+    }
+    let query = { dbconnectionname:req.body.dbconnectionname }
+    dbConfig.findOneAndUpdate(query,
+        {
+            dbtype:req.body.dbtype,
+            dbhost: req.body.dbhost,
+            dbservername: req.body.dbservername,
+            dbusername: req.body.dbusername,
+            dbpassword: req.body.dbpassword
+        },function(err, doc) {
+            if(err){
+                res.json({code:500})
+            }else{
+                res.json({code:0})
+            }
+        })
 })
 module.exports =  configRoutes

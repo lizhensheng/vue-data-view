@@ -208,24 +208,36 @@ apiRoutes.get('/getChartDataDynamic',async (req,res) => {
             if(err){
                 res.json([])
             }else{
-                let dbtype = doc.dbtype
-                let tablename = doc.tablename
-                let tablefields = JSON.parse(doc.tablefields)
-                let fields = []
-                tablefields.forEach((item)=>{
-                    fields.push(item.value)
-                })
-                let ff = fields.join(',')
-                let handle = dbFactory.createOperate(dbtype)
-                await handle.createConnection()
-                await handle.getDataset(ff,tablename,(result)=>{
-                    handle.closeConnection()
-                    if(result){
-                        res.json(result)
-                    }else{
+                let sourceid = doc.sourceid
+                dbFactory.getConnection(sourceid)
+                    .then(async r=> {
+                            if (!r) {
+                                res.json([])
+                                return
+                            }
+                            let tablename = doc.tablename
+                            let tablefields = JSON.parse(doc.tablefields)
+                            let fields = []
+                            tablefields.forEach((item)=>{
+                                fields.push(item.value)
+                            })
+                            let ff = fields.join(',')
+                            let handle = dbFactory.createOperate(r.dbtype)
+                            await handle.createConnection(r.dbhost,r.dbservername,r.dbusername,r.dbpassword)
+                            await handle.getDataset(ff,tablename,(result)=>{
+                                handle.closeConnection()
+                                if(result){
+                                    res.json(result)
+                                }else{
+                                    res.json([])
+                                }
+                            })
+                        }
+                    ).catch(e=>{
+                        console.log(e)
                         res.json([])
-                    }
-                })
+                    })
+
             }
         })
     }

@@ -11,6 +11,7 @@
         <left-setting @onPageControlConfig="_getPageControlConfig"
                       @onMouseClickControl="onMouseClickControl"
                       @onSourcePlus="onSourcePlus"
+                      @onSourceEdit="onSourceEdit"
                       @onClickSaveSource="onClickSaveSource"
                       @onClickSearch="onClickSearch"></left-setting>
 
@@ -104,7 +105,7 @@
                             <div class="setting"><el-radio v-model="dataBingType" label="1"><el-tag size="small">SQL建模</el-tag></el-radio></div>
                             <div class="setting">
                                 <el-row>
-                                    <el-col :span="14">
+                                    <el-col :span="8">
                                         <el-select v-model="configproject" placeholder="请选择"  @change="changeConfigProjects"  size="small">
                                             <el-option
                                                     v-for="item in configprojectsoptions"
@@ -114,7 +115,10 @@
                                             </el-option>
                                         </el-select>
                                     </el-col>
-                                    <el-col :span="9" :offset="1"> <el-button @click="onProjectEdit" size="small"><i class="el-icon-edit"></i></el-button><el-button @click="onProjectPlus" size="small"><i class="el-icon-plus"></i></el-button>
+                                    <el-col :span="14" :offset="1">
+                                        <el-button @click="onProjectEdit" size="small"><i class="el-icon-edit"></i></el-button>
+                                        <el-button @click="onProjectPlus" size="small"><i class="el-icon-plus"></i></el-button>
+                                        <el-button @click="onProjectDelete" size="small"><i class="el-icon-delete"></i></el-button>
                                     </el-col>
                                 </el-row>
 
@@ -228,12 +232,12 @@
                     <el-input v-model="sqlModelShowName" autocomplete="off" :disabled="sqleditstate"></el-input>
                 </el-form-item>
                 <el-form-item label="数据源" :label-width="formLabelWidth">
-                    <el-select v-model="sqldbtype" placeholder="请选择" @change="changeDbType" size="small">
+                    <el-select v-model="dbsource" placeholder="请选择" size="small">
                         <el-option
-                                v-for="item in dbtypeoptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                v-for="item in dbsourceconfigs"
+                                :key="item._id"
+                                :label="item.dbconnectionname"
+                                :value="item._id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -256,7 +260,7 @@
                             <el-col :span="6" class="fields"><el-input v-model="sqltablefields[index][Object.keys(item)[1]]" autocomplete="off" size="small"></el-input></el-col>
                             <el-col :span="6" class="fields">
                                 <div class="title">
-                                    <el-select v-model="sqltablefields[index][Object.keys(item)[2]]" placeholder="请选择"  @change="changeTablename"  size="small">
+                                    <el-select v-model="sqltablefields[index][Object.keys(item)[2]]" placeholder="请选择"   size="small">
                                         <el-option
                                                 v-for="item in tablefieldsoptions"
                                                 :key="item.value"
@@ -304,10 +308,10 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="数据库连接" :visible.sync="dialogSourceVisible"  :close-on-click-modal="false">
+        <el-dialog :title="this.isSourceEdit?'修改数据库':'新增数据库'" :visible.sync="dialogSourceVisible"  :close-on-click-modal="false">
             <el-form>
                 <el-form-item label="连接名" :label-width="formLabelWidth">
-                    <el-input v-model="sourceConnectionName" autocomplete="off"></el-input>
+                    <el-input v-model="sourceConnectionName" autocomplete="off" :disabled="this.isSourceEdit"></el-input>
                 </el-form-item>
                 <el-form-item label="连接方式" :label-width="formLabelWidth">
                     <el-select
@@ -345,10 +349,10 @@
     import Vue from 'vue'
     import
     {
-        getTableNames,setDataSource,getDataProjects,updateSqlDataSource,
+        setDataSource,getDataProjects,updateSqlDataSource,
         addPageProjectName,getAllPageProject,addPageName,getPageControlConfig,
         savePageControlConfig,deleteSingleControl,setBackgroundImage,saveDbConfig,
-        testConnection
+        testConnection,getDbConfigs,deleteDataSource,updateDbConfig,getDbConfig
     } from 'api/dbhelper'
     import {getControl} from "api/control"
     //import {socket} from "common/js/socket-client"
@@ -365,6 +369,8 @@
     export default {
         data() {
             return {
+                dbsource:'',
+                dbsourceconfigs:[],
                 sourceConnectionName:'',
                 sourceHostname:'',
                 sourceDbname:'',
@@ -388,7 +394,6 @@
                 scaleValue:100,
                 dialogDebugVisible:false,
                 sqlstatement:'',
-                sqldbtype:'',
                 sqlModelShowName:'',
                 sqleditstate:true,
                 sqltablefields:[],
@@ -575,8 +580,16 @@
             // }
         },
         methods:{
+            _getSourceConfigs(){
+                getDbConfigs().then(res=>{
+                    if(res.data.code == 0){
+                        this.dbsourceconfigs = res.data.data
+                    }
+                }).catch(e=>{
+                    console.log(e)
+                })
+            },
             loadControl(data){
-                console.log(data)
                     const d = data
                     if(d.pageId == this.pageId) {
                         const dv = document.createElement('div')
@@ -588,7 +601,7 @@
                                 render: h => h(node.default)
                             }).$mount(`#echart${d.el}`)
                             this.chartInstances.set(`${d.el}`, instance)
-                        }, 100)
+                        }, 20)
                         this.loading = false
                     }
             },
@@ -620,11 +633,11 @@
             onClickSaveSource(obj){
                 this.dialogFormVisible = true
                 this.dbtablename = obj.dbtablename
-                this.dbtype = obj.dbtype
+                this.dbsource = obj.id
                 this.tablefields = obj.tablefields
             },
             clickSaveSourceOk(){
-                if(this.dbtablename&&this.dbtype&&this.form.sourcename) {
+                if(this.dbtablename&&this.dbsource&&this.form.sourcename) {
                     let mtags = []
                     this.tablefields.forEach((item)=>{
                         let keys = Object.keys(item)
@@ -634,7 +647,7 @@
                         tag['type'] = item[keys[2]]
                         mtags.push(tag)
                     })
-                    setDataSource(this.dbtablename,this.dbtype,this.form.sourcename,JSON.stringify(mtags)).then((res)=>{
+                    setDataSource(this.dbtablename,this.dbsource,this.form.sourcename,JSON.stringify(mtags)).then((res)=>{
                         if(res.data.code==0){
                             this.dialogFormVisible = false
                             this.form.sourcename = ''
@@ -767,7 +780,6 @@
                         this.$refs.dashboard.innerHTML = ''
                         this.controlConfigs.forEach(item=>{
                             //setTimeout(()=>{socket.emit('onDragInControl',item)},10)
-                            console.log(item.chartId)
                             if(!item.chartId){
                                 return
                             }
@@ -795,29 +807,6 @@
                     })
                 }
             },
-            changeDbType(item){
-                this.dbtablename = ''
-                getTableNames(item).then((res)=>{
-                    if(res.status == 200){
-                        this.dbtablenameoptions=[]
-                        res.data.forEach((item)=>{
-                           this.dbtablenameoptions.push({
-                               value: item.TABLE_NAME,
-                               label: item.TABLE_NAME
-                           })
-                        })
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: '获取表名出现异常'
-                        });
-                    }
-                })
-            },
-
-
-
-
             mouseProjectSetting(e){
                 if(this.clickControl){
                     this.$refs.moveflag.style.top = e.y-10 + 'px'
@@ -900,7 +889,7 @@
                     this.xData = ''
                     this.yData = []
                     let tt = JSON.parse(this.ConfigProjects[index].tablefields)
-                    this.sqldbtype = this.ConfigProjects[index].dbtype
+                    this.dbsource = this.ConfigProjects[index].sourceid
                     this.sqltablefields = tt
                     this.sqlstatement = this.ConfigProjects[index].tablename
                     this.dimensionality = tt.filter(t=>t.type !== 'number')
@@ -933,7 +922,8 @@
                 if(index>-1){
                     this.sqlModelShowName = this.configprojectsoptions[index].label
                     this.sqlstatement = this.ConfigProjects[index].tablename
-                    this.sqldbtype =  this.ConfigProjects[index].dbtype
+                    this._getSourceConfigs()
+                    this.dbsource =  this.ConfigProjects[index].sourceid
                     this.sqltablefields = JSON.parse(this.ConfigProjects[index].tablefields)
                 }else{
                     return
@@ -954,20 +944,54 @@
                 }
                 setTimeout(()=>{
                     this.$monacoInstance.setValue(this.sqlstatement)
-                },200)
+                },100)
             },
             onProjectPlus(){
-                this.sqldbtype = ''
                 this.sqltablefields = []
                 this.sqlModelShowName = ""
                 this.sqleditstate = false
                 this.sqlstatement =''
+                this.dbsource = ''
+                this._getSourceConfigs()
                 setTimeout(()=>{
                     this.$monacoInstance.setValue(this.sqlstatement)
-                },200)
+                },100)
                 this.dialogProjectVisible = true
             },
-
+            onProjectDelete(){
+                if(!this.configproject){
+                    return
+                }
+                this.$confirm('此操作将永久删除该数据源, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    deleteDataSource(this.configproject).then(res=>{
+                        if(res.data.code == 0){
+                            this.$message({
+                                type: 'success',
+                                message: '已删除'
+                            });
+                            this.configproject = ''
+                            this._getDataProjects()
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '删除错误'
+                            });
+                        }
+                    })
+                    .catch(e=>{
+                        console.log(e)
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '已取消删除'
+                    });
+                });
+            },
             onSqlTableFieldsDelete(index){
                 this.sqltablefields.splice(index,1)
             },
@@ -981,7 +1005,7 @@
             _saveProject(){
                 //保存项目的SQL模型配置
                 if(this.sqleditstate){
-                    updateSqlDataSource(this.sqlModelShowName,this.$monacoInstance.getValue().replace(/\r\n/g,''),this.sqldbtype,JSON.stringify(this.sqltablefields))
+                    updateSqlDataSource(this.sqlModelShowName,this.$monacoInstance.getValue().replace(/\r\n/g,''),this.dbsource,JSON.stringify(this.sqltablefields))
                         .then((res)=>{
                             if(res.data.code == 0){
                                 this.$message({
@@ -997,7 +1021,7 @@
                             }
                         })
                 }else{
-                    setDataSource(this.$monacoInstance.getValue().replace(/\r\n/g,''),this.sqldbtype,this.sqlModelShowName,JSON.stringify(this.sqltablefields))
+                    setDataSource(this.$monacoInstance.getValue().replace(/\r\n/g,''),this.dbsource,this.sqlModelShowName,JSON.stringify(this.sqltablefields))
                         .then((res)=>{
                             if(res.data.code==0){
                                 this._getDataProjects()
@@ -1067,34 +1091,79 @@
                 }
             },
             onSourcePlus(){
+                this.isSourceEdit = false
                 this.dialogSourceVisible = true
+                this.sourceConnectionName =''
+                this.chooseDbtype = ''
+                this.sourceHostname = ''
+                this.sourceDbname = ''
+                this.sourceUsername = ''
+                this.sourcePassword = ''
+            },
+            onSourceEdit(item){
+                this.isSourceEdit = true
+                this.dialogSourceVisible = true
+                getDbConfig(item._id)
+                    .then(res=>{
+                        if(res.data.code == 0){
+                            let d = res.data.data
+                            this.sourceConnectionName = d.dbconnectionname
+                            this.chooseDbtype = d.dbtype
+                            this.sourceHostname = d.dbhost
+                            this.sourceDbname = d.dbservername
+                            this.sourceUsername = d.dbusername
+                            this.sourcePassword = d.dbpassword
+                        }
+                    })
             },
             saveSourceDbConfig(){
                 if(!this.sourceConnectionName||!this.sourceHostname||!this.sourceDbname||!this.sourceUsername||!this.sourcePassword||!this.chooseDbtype){
                    return
                 }
-                saveDbConfig(this.sourceConnectionName,this.chooseDbtype,this.sourceHostname,this.sourceDbname,this.sourceUsername,this.sourcePassword)
-                    .then(res=>{
-                        if(res.data.code == 0){
-                            this.$message({
-                                type: 'success',
-                                message: '保存成功'
-                            });
-                        }else if(res.data.code == 300){
-                            this.$message({
-                                type: 'error',
-                                message: '连接名重复,请重试'
-                            });
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: '网络断线了'
-                            });
-                        }
-                    })
-                    .catch(e=>{
-                        console.log(e)
-                    })
+                if(this.isSourceEdit){
+                    updateDbConfig(this.sourceConnectionName,this.chooseDbtype,this.sourceHostname,this.sourceDbname,this.sourceUsername,this.sourcePassword)
+                        .then(res=>{
+                            if(res.data.code == 0){
+                                this.$message({
+                                    type: 'success',
+                                    message: '更新成功'
+                                });
+                                this.dialogSourceVisible = false
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '网络断线了'
+                                });
+                            }
+                        })
+                        .catch(e=>{
+                            console.log(e)
+                        })
+                }else{
+                    saveDbConfig(this.sourceConnectionName,this.chooseDbtype,this.sourceHostname,this.sourceDbname,this.sourceUsername,this.sourcePassword)
+                        .then(res=>{
+                            if(res.data.code == 0){
+                                this.$message({
+                                    type: 'success',
+                                    message: '保存成功'
+                                });
+                                this.dialogSourceVisible = false
+                            }else if(res.data.code == 300){
+                                this.$message({
+                                    type: 'error',
+                                    message: '连接名重复,请重试'
+                                });
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '网络断线了'
+                                });
+                            }
+                        })
+                        .catch(e=>{
+                            console.log(e)
+                        })
+                }
             },
             textConnection(){
                 if(!this.sourceHostname||!this.sourceDbname||!this.sourceUsername||!this.sourcePassword||!this.chooseDbtype){
@@ -1102,7 +1171,6 @@
                 }
                 testConnection(this.chooseDbtype,this.sourceHostname,this.sourceDbname,this.sourceUsername,this.sourcePassword)
                     .then(res=>{
-                        console.log(res)
                         if(res.data.code == 0){
                             this.$message({
                                 type: 'success',

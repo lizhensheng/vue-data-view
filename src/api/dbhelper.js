@@ -1,19 +1,23 @@
 import instance from "../axios"
 //获取数据表
-export function getTableNames(dbType){
-    return instance.post('/config/getTableNames', {dbtype:dbType});
+export function getTableNames(id){
+    return instance.post('/config/getTableNames', {id});
 }
 //获取数据集
-export function getDataset(tablefields,tableName,dbType) {
-    return instance.post('/config/getDataset',{tablefields:tablefields,tablename:tableName,dbtype:dbType})
+export function getDataset(tablefields,tableName,id) {
+    return instance.post('/config/getDataset',{tablefields:tablefields,tablename:tableName,id:id})
 }
 //保存数据源配置
-export function setDataSource(tableName,dbType,sourceName,tableFields) {
-    return instance.post('/config/setDataSource',{tablename:tableName,dbtype:dbType,sourcename:sourceName,tablefields: tableFields})
+export function setDataSource(tableName,sourceId,sourceName,tableFields) {
+    return instance.post('/config/setDataSource',{tablename:tableName,sourceid:sourceId,sourcename:sourceName,tablefields: tableFields})
+}
+//删除数据源配置
+export function deleteDataSource(id) {
+    return instance.post('/config/deleteDataSource',{id})
 }
 //更新SQL模型数据配置
-export function updateSqlDataSource(sourceName,tableName,dbType,tableFields) {
-    return instance.post('/config/updateSqlDataSource',{sourcename:sourceName,tablename:tableName,dbtype:dbType,tablefields: tableFields})
+export function updateSqlDataSource(sourceName,tableName,sourceId,tableFields) {
+    return instance.post('/config/updateSqlDataSource',{sourcename:sourceName,tablename:tableName,sourceid:sourceId,tablefields: tableFields})
 }
 //获取配置的工程
 export function getDataProjects() {
@@ -52,8 +56,17 @@ export function getBackgroundImage(pageId) {
 export function saveDbConfig(dbconnectionname,dbtype,dbhost,dbservername,dbusername,dbpassword) {
     return instance.post('/config/saveDbConfig',{dbconnectionname,dbtype,dbhost,dbservername,dbusername,dbpassword})
 }
+export function updateDbConfig(dbconnectionname,dbtype,dbhost,dbservername,dbusername,dbpassword) {
+    return instance.post('/config/updateDbConfig',{dbconnectionname,dbtype,dbhost,dbservername,dbusername,dbpassword})
+}
 export function getDbConfigs() {
     return instance.post('/config/getDbConfigs',{})
+}
+export function getDbConfig(id) {
+    return instance.post('/config/getDbConfig',{id})
+}
+export function deleteDbConfig(id) {
+    return instance.post('/config/deleteDbConfig',{id})
 }
 export function testConnection(dbtype,dbhost,dbservername,dbusername,dbpassword) {
     return instance.post('/config/testConnection',{dbtype,dbhost,dbservername,dbusername,dbpassword})

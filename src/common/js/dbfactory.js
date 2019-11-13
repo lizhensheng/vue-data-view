@@ -2,6 +2,7 @@ let dbOracle = require('./dboracle')
 let dbMssql = require('./dbmssql')
 let dbPg = require('./dbpg')
 let dbMysql = require('./dbmysql')
+let {dbConfig} = require('../../server/db/db')
 let dbFactory = {
     createOperate : (operate)=>{
         let handle = null
@@ -20,6 +21,17 @@ let dbFactory = {
                 break
         }
         return handle
+    },
+    getConnection : (id)=>{
+       return new Promise((req,rej)=>{
+           dbConfig.findOne({_id:id},(err,doc)=>{
+               if(err) {
+                   rej(err)
+                   return
+               }
+               req(doc)
+           })
+       })
     }
 }
 

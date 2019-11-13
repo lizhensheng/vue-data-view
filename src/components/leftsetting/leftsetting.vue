@@ -110,12 +110,12 @@
                                 <div class="grid-content bg-purple"><div class="title">&nbsp;数据源:</div></div>
                                 <el-row>
                                     <el-col :span="8"  :offset="1">
-                                        <el-select v-model="dbtype" placeholder="请选择" @change="changeDbType" size="small">
+                                        <el-select v-model="dbsource" placeholder="请选择" @change="changeDbType" size="small">
                                             <el-option
-                                                    v-for="item in dbtypeoptions"
-                                                    :key="item.value"
-                                                    :label="item.label"
-                                                    :value="item.value">
+                                                    v-for="item in dbsourceconfigs"
+                                                    :key="item._id"
+                                                    :label="item.dbconnectionname"
+                                                    :value="item._id">
                                             </el-option>
                                         </el-select>
                                     </el-col>
@@ -207,7 +207,7 @@
     import {constructTree} from 'common/js/imputil'
     import {chart,border,table,media,text} from "common/js/controlconfig"
     import {mapMutations,mapGetters} from 'vuex'
-    import {getTableNames,getDataset,getPageProjectName,getAllPageProject} from 'api/dbhelper'
+    import {getTableNames,getDataset,getPageProjectName,getAllPageProject,getDbConfigs,deleteDbConfig} from 'api/dbhelper'
     export default {
         data(){
             return {
@@ -225,6 +225,8 @@
                 mediaModules:media,
                 textModules:text,
                 dbtype:'',
+                dbsource:'',
+                dbsourceconfigs:[],
                 dbtypeoptions:[
                     {
                         value: 'oracle',
@@ -257,6 +259,7 @@
         },
         created(){
             this._getProjectTree()
+            this._getSourceConfigs()
         },
         computed:{
           ...mapGetters([
@@ -264,6 +267,15 @@
           ])
         },
         methods:{
+            _getSourceConfigs(){
+                getDbConfigs().then(res=>{
+                    if(res.data.code == 0){
+                        this.dbsourceconfigs = res.data.data
+                    }
+                }).catch(e=>{
+                    console.log(e)
+                })
+            },
             _getProjectTree(){
                 getAllPageProject().then((res)=>{
                     if(res.data.code == 0){
@@ -303,8 +315,8 @@
                 this.$emit('onMouseClickControl',{clickControl:true,moveFlag:true,chartType:chartType})
             },
             changeTablename(){
-                if(this.dbtablename&&this.dbtype){
-                    getDataset('',this.dbtablename,this.dbtype).then((res)=>{
+                if(this.dbtablename&&this.dbsource){
+                    getDataset('',this.dbtablename,this.dbsource).then((res)=>{
                         if(res.status == 200){
                             if(res.data.length>0){
                                 let arrNames = Object.keys(res.data[0])
@@ -377,8 +389,8 @@
                 this.tablefields.splice(index,1)
             },
             clickSaveSource(){
-                if(this.dbtablename&&this.dbtype){
-                    this.$emit('onClickSaveSource',{dbtablename:this.dbtablename,dbtype:this.dbtype,tablefields:this.tablefields})
+                if(this.dbtablename&&this.dbsource){
+                    this.$emit('onClickSaveSource',{dbtablename:this.dbtablename,id:this.dbsource,tablefields:this.tablefields})
                 }else{
                     this.$message({
                         type: 'success',
@@ -388,7 +400,7 @@
             },
 
             clickSearch(){
-                if(this.dbtablename&&this.dbtype){
+                if(this.dbtablename&&this.dbsource){
                     let searchStr = ''
                     if(this.tablefields.length>0){
                         this.tablefields.forEach((item)=>{
@@ -396,7 +408,7 @@
                         })
                         searchStr = searchStr.substr(0,searchStr.length-1)
                     }
-                    getDataset(searchStr,this.dbtablename,this.dbtype).then((res)=>{
+                    getDataset(searchStr,this.dbtablename,this.dbsource).then((res)=>{
                         if(res.status == 200){
                             let gridData = res.data
                             this.$emit('onClickSearch',gridData)
@@ -410,13 +422,48 @@
                 }
             },
             onSourceEdit(){
-
+                let item = this.dbsourceconfigs[this.dbsourceconfigs.findIndex(i=>i._id === this.dbsource)]
+                if(item){
+                    this.$emit('onSourceEdit', item)
+                }
             },
             onSourcePlus(){
                 this.$emit('onSourcePlus')
             },
             onSourceDelete(){
-
+                if(!this.dbsource){
+                    return
+                }
+                this.$confirm('此操作将永久删除该数据源, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    deleteDbConfig(this.dbsource)
+                        .then(res=>{
+                            if(res.data.code == 0){
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功'
+                                });
+                                this._getSourceConfigs()
+                                this.dbsource = ''
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '网络断线了'
+                                });
+                            }
+                        })
+                        .catch(e=>{
+                            console.log(e)
+                        })
+                }).catch(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '已取消删除'
+                    });
+                });
             },
             ...mapMutations({
                 setDialogAddProject:'DIALOG_ADD_PROJECT_VISIBLE',

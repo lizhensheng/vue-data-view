@@ -23,7 +23,7 @@ const userSchema = mongoose.Schema({
  * 数据源配置表结构
  */
 const sourceConfigSchema = mongoose.Schema({
-    dbtype:String,
+    sourceid:String,
     tablename:String,
     sourcename:String,
     tablefields:String,
