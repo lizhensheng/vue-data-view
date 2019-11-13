@@ -1,9 +1,29 @@
 const mysql  = require('mysql')
-let {mysqlConfig} = require('./dbconfig')
 let dbMysql = function dbMysql() {
     this.conn = null
-    this.createConnection =  ()=>{
-        this.conn =  mysql.createConnection(`mysql://${mysqlConfig.username}:${mysqlConfig.password}@${mysqlConfig.host}/${mysqlConfig.database}`)
+    this.host = null
+    this.database = null
+    this.username = null
+    this.password = null
+    this.createConnection = (host,database,username,password)=>{
+        this.host = host
+        this.database = database
+        this.username = username
+        this.password = password
+        this.conn =  mysql.createConnection(`mysql://${username}:${password}@${host}/${database}`)
+    }
+    this.testConnection = (host,database,username,password)=>{
+        return new Promise((req,rej)=>{
+            let conn = mysql.createConnection(`mysql://${username}:${password}@${host}/${database}`)
+            conn.connect(function(err) {
+                if (err) {
+                    console.error('error connecting: ' +err.code);
+                    rej(err)
+                }
+                conn.end()
+                req()
+            })
+        })
     }
     this.excuteSql = async (sql,callback)=>{
         await this.conn.query(sql, (error, result, fields) => {
@@ -14,7 +34,7 @@ let dbMysql = function dbMysql() {
         })
     }
     this.getTableNames = async (callback)=> {
-            await this.conn.query(`select table_name from information_schema.tables where table_schema='${mysqlConfig.database}'`,  (error, result, fields) => {
+            await this.conn.query(`select table_name from information_schema.tables where table_schema='${this.database}'`,  (error, result, fields) => {
                 if (error) {
                     console.log(error)
                 }
@@ -54,7 +74,7 @@ let dbMysql = function dbMysql() {
     this.closeConnection =  ()=>{
         if(this.conn) {
             try {
-                 //this.conn.release()
+                this.conn.end()
             }
             catch(e){
                 // eslint-disable-next-line no-console

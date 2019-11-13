@@ -69,6 +69,8 @@ const pageConfigSchema = mongoose.Schema({
  * 数据库配置表结构
  */
 const dbConfigSchema = mongoose.Schema({
+    dbconnectionname:String,
+    dbtype:String,
     dbhost: String,
     dbservername: String,
     dbusername: String,

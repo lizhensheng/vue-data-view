@@ -10,6 +10,7 @@
 
         <left-setting @onPageControlConfig="_getPageControlConfig"
                       @onMouseClickControl="onMouseClickControl"
+                      @onSourcePlus="onSourcePlus"
                       @onClickSaveSource="onClickSaveSource"
                       @onClickSearch="onClickSearch"></left-setting>
 
@@ -303,12 +304,40 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="数据库连接"  :close-on-click-modal="false">
-            连接方式:
-            主机名:
-            数据库名:
-            用户名:
-            密码:
+        <el-dialog title="数据库连接" :visible.sync="dialogSourceVisible"  :close-on-click-modal="false">
+            <el-form>
+                <el-form-item label="连接名" :label-width="formLabelWidth">
+                    <el-input v-model="sourceConnectionName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="连接方式" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="chooseDbtype" placeholder="请选择"  size="small">
+                        <el-option
+                                v-for="item in dbtypeoptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="主机名" :label-width="formLabelWidth">
+                    <el-input v-model="sourceHostname" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="数据库名" :label-width="formLabelWidth">
+                    <el-input v-model="sourceDbname" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="用户名" :label-width="formLabelWidth">
+                    <el-input v-model="sourceUsername" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" :label-width="formLabelWidth">
+                    <el-input v-model="sourcePassword" autocomplete="off"  show-password></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="textConnection">测 试</el-button>
+                <el-button @click="dialogSourceVisible = false">取 消</el-button>
+                <el-button  type="primary" @click="saveSourceDbConfig">保 存</el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -318,7 +347,8 @@
     {
         getTableNames,setDataSource,getDataProjects,updateSqlDataSource,
         addPageProjectName,getAllPageProject,addPageName,getPageControlConfig,
-        savePageControlConfig,deleteSingleControl,setBackgroundImage
+        savePageControlConfig,deleteSingleControl,setBackgroundImage,saveDbConfig,
+        testConnection
     } from 'api/dbhelper'
     import {getControl} from "api/control"
     //import {socket} from "common/js/socket-client"
@@ -335,6 +365,12 @@
     export default {
         data() {
             return {
+                sourceConnectionName:'',
+                sourceHostname:'',
+                sourceDbname:'',
+                sourceUsername:'',
+                sourcePassword:'',
+                dialogSourceVisible:false,
                 loading:false,
                 backgroundImageUrl:'http://datav.jiaminghi.com/demo/construction-data/img/bg.837e99ea.png',
                 projectnamevalue:'',
@@ -383,22 +419,27 @@
                 dialogFormVisible:false,
                 dialogTableVisible:false,
                 gridData:[],
+                chooseDbtype:'',
                 dbtypeoptions:[
                     {
                         value: 'oracle',
-                        label: 'oracle'
+                        label: 'oracle',
+                        disabled: false
                     },
                     {
                         value: 'mssql',
-                        label: 'mssql'
+                        label: 'mssql',
+                        disabled: true
                     },
                     {
                         value: 'mysql',
-                        label: 'mysql'
+                        label: 'mysql',
+                        disabled: false
                     },
                     {
                         value: 'postgress',
-                        label: 'postgress'
+                        label: 'postgress',
+                        disabled: true
                     }
                 ],
 
@@ -1024,6 +1065,63 @@
                     conf.backgroundColor = this.comBackgroundColor
                     window.$controlevent.$emit('onBaseChartRefresh', conf)
                 }
+            },
+            onSourcePlus(){
+                this.dialogSourceVisible = true
+            },
+            saveSourceDbConfig(){
+                if(!this.sourceConnectionName||!this.sourceHostname||!this.sourceDbname||!this.sourceUsername||!this.sourcePassword||!this.chooseDbtype){
+                   return
+                }
+                saveDbConfig(this.sourceConnectionName,this.chooseDbtype,this.sourceHostname,this.sourceDbname,this.sourceUsername,this.sourcePassword)
+                    .then(res=>{
+                        if(res.data.code == 0){
+                            this.$message({
+                                type: 'success',
+                                message: '保存成功'
+                            });
+                        }else if(res.data.code == 300){
+                            this.$message({
+                                type: 'error',
+                                message: '连接名重复,请重试'
+                            });
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '网络断线了'
+                            });
+                        }
+                    })
+                    .catch(e=>{
+                        console.log(e)
+                    })
+            },
+            textConnection(){
+                if(!this.sourceHostname||!this.sourceDbname||!this.sourceUsername||!this.sourcePassword||!this.chooseDbtype){
+                    return
+                }
+                testConnection(this.chooseDbtype,this.sourceHostname,this.sourceDbname,this.sourceUsername,this.sourcePassword)
+                    .then(res=>{
+                        console.log(res)
+                        if(res.data.code == 0){
+                            this.$message({
+                                type: 'success',
+                                message: '连接成功'
+                            });
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '连接错误,请重试'
+                            });
+                        }
+                    })
+                    .catch(err=>{
+                        console.log(err)
+                        this.$message({
+                            type: 'error',
+                            message: '连接错误,请重试'
+                        });
+                    })
             },
             ...mapMutations({
                 setDialogAddProject:'DIALOG_ADD_PROJECT_VISIBLE',

@@ -47,6 +47,24 @@ configRoutes.post('/getDataset',async (req,res)=>{
     }
 })
 /**
+ * 测试数据库连接
+ */
+configRoutes.post('/testConnection',(req,res)=>{
+    if(req.body.dbtype&&req.body.dbhost&&req.body.dbservername&&req.body.dbusername&&req.body.dbpassword){
+        let dbtype = req.body.dbtype
+        let handle = dbFactory.createOperate(dbtype)
+        handle.testConnection(req.body.dbhost,req.body.dbservername,req.body.dbusername,req.body.dbpassword)
+            .then(()=>{
+                res.json({code:0})
+            })
+            .catch((err)=>{
+                res.json({code:1})
+            })
+    }else{
+        res.json({code:500})
+    }
+})
+/**
  * 保存数据源配置
  */
 configRoutes.post('/setDataSource',(req,res)=>{
@@ -67,7 +85,7 @@ configRoutes.post('/setDataSource',(req,res)=>{
             return
         }
         if(doc){
-            res.json({code:1})
+            res.json({code:500})
             return
         }
         s.save((err)=>{
@@ -117,7 +135,7 @@ configRoutes.post('/addPageProjectName',(req,res)=>{
             return
         }
         if(doc){
-            res.json({code:1})
+            res.json({code:500})
             return
         }
         s.save((err)=>{
@@ -158,7 +176,7 @@ configRoutes.post('/addPageName',(req,res)=>{
             return
         }
         if(doc){
-            res.json({code:1})
+            res.json({code:500})
             return
         }else{
             let s = new projectPageConfig({
@@ -201,13 +219,13 @@ configRoutes.post('/savePageControlConfig',(req,res)=>{
     Promise.resolve(new Promise((req,rej)=>{
             controlConfig.remove({pageId:d[0].pageId},err=>{
                 if(err){
-                    rej({code:1})
+                    rej({code:500})
                 }
                 d.forEach((item)=>{
                     let s = new controlConfig(item)
                     s.save((err)=>{
                         if(err){
-                            rej({code:1})
+                            rej({code:500})
                         }
                     })
                 })
@@ -227,7 +245,7 @@ configRoutes.post('/deleteSingleControl',(req,res)=>{
     }
     controlConfig.remove({chartId:req.body.chartId},err=>{
         if(err){
-            res.json({code:1})
+            res.json({code:500})
         }else{
             res.json({code:0})
         }
@@ -239,7 +257,7 @@ configRoutes.post('/setBackgroundImage',(req,res)=>{
     }
     pageConfig.find({pageId:req.body.pageId},(err,doc)=>{
         if(err){
-            res.json({code:1})
+            res.json({code:500})
             return
         }
         if(doc.length>0){
@@ -260,7 +278,7 @@ configRoutes.post('/setBackgroundImage',(req,res)=>{
             })
             s.save(err=>{
                 if(err){
-                    res.json({code:1})
+                    res.json({code:500})
                 }else{
                     res.json({code:0})
                 }
@@ -275,13 +293,51 @@ configRoutes.post('/getBackgroundImage',(req,res)=>{
     }
     pageConfig.findOne({pageId:req.body.pageId},(err,doc)=> {
         if(err){
-            res.json({code:1})
+            res.json({code:500})
         }else{
             res.json({code:0,data:doc})
         }
     })
 })
 configRoutes.post('/getDbConfigs',(req,res)=>{
-
+    dbConfig.find({},(err,doc)=>{
+        if(err){
+            res.json({code:500})
+        }
+        else{
+            res.json({code:0,data:doc})
+        }
+    })
+})
+configRoutes.post('/saveDbConfig',(req,res)=>{
+    if(!req.body.dbconnectionname||!req.body.dbtype||!req.body.dbhost||!req.body.dbservername||!req.body.dbusername||!req.body.dbpassword){
+        res.json({code:800})
+        return
+    }
+    dbConfig.findOne({dbconnectionname:req.body.dbconnectionname},(err,doc)=> {
+        if(err){
+            res.json({code:500})
+        }else{
+            if(doc){
+                res.json({code:300})
+            }else{
+                let s = new dbConfig({
+                    dbconnectionname:req.body.dbconnectionname,
+                    dbtype:req.body.dbtype,
+                    dbhost: req.body.dbhost,
+                    dbservername: req.body.dbservername,
+                    dbusername: req.body.dbusername,
+                    dbpassword: req.body.dbpassword
+                })
+                s.save(err=>{
+                    if(err){
+                        res.json({code:500})
+                    }else{
+                        res.json({code:0})
+                    }
+                })
+            }
+        }
+    })
 })
 module.exports =  configRoutes

@@ -413,7 +413,7 @@
 
             },
             onSourcePlus(){
-
+                this.$emit('onSourcePlus')
             },
             onSourceDelete(){
 

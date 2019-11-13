@@ -1,13 +1,37 @@
 const oracledb = require('oracledb')
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT
-let {oracleConfig} = require('./dbconfig')
 let dbOracle = function dbOracle() {
     this.conn = null
-    this.createConnection = async ()=>{
+    this.host = null
+    this.database = null
+    this.username = null
+    this.password = null
+    this.createConnection = async (host,database,username,password)=>{
+        this.host = host
+        this.database = database
+        this.username = username
+        this.password = password
         this.conn = await oracledb.getConnection({
-            user : oracleConfig.username,
-            password : oracleConfig.password,
-            connectString : oracleConfig.host
+            user : username,
+            password : password,
+            connectString : `${host}/${database}`
+        })
+    }
+    this.testConnection = (host,database,username,password)=>{
+        return new Promise(async (req,rej)=>{
+            try {
+                let conn = await oracledb.getConnection({
+                    user : username,
+                    password : password,
+                    connectString : `${host}/${database}`
+                })
+                conn.close()
+                req()
+            }
+            catch(e){
+                console.log(e)
+                rej(e)
+            }
         })
     }
     this.excuteSql = async (sql,callback)=>{
@@ -15,7 +39,7 @@ let dbOracle = function dbOracle() {
         callback(result)
     }
     this.getTableNames = async (callback)=>{
-        const result = await this.conn.execute(`select table_name from user_tables where TABLESPACE_NAME is not null and  user='${oracleConfig.username}'`)
+        const result = await this.conn.execute(`select table_name from user_tables where TABLESPACE_NAME is not null and  user='${this.username}'`)
         callback(result.rows)
     }
     this.getDataset = async (tablefields,tablename,callback)=>{

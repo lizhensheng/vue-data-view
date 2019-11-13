@@ -49,3 +49,13 @@ export function setBackgroundImage(pageId,backgroundImageUrl) {
 export function getBackgroundImage(pageId) {
     return instance.post('/config/getBackgroundImage',{pageId})
 }
+export function saveDbConfig(dbconnectionname,dbtype,dbhost,dbservername,dbusername,dbpassword) {
+    return instance.post('/config/saveDbConfig',{dbconnectionname,dbtype,dbhost,dbservername,dbusername,dbpassword})
+}
+export function getDbConfigs() {
+    return instance.post('/config/getDbConfigs',{})
+}
+export function testConnection(dbtype,dbhost,dbservername,dbusername,dbpassword) {
+    return instance.post('/config/testConnection',{dbtype,dbhost,dbservername,dbusername,dbpassword})
+}
+
