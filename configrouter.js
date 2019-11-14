@@ -282,6 +282,19 @@ configRoutes.post('/deleteSingleControl',(req,res)=>{
         }
     })
 })
+configRoutes.post('/deleteControls',(req,res)=>{
+    if(!req.body.pageId){
+        res.json({code:800})
+        return
+    }
+    controlConfig.remove({pageId:req.body.pageId},err=>{
+        if(err){
+            res.json({code:500})
+        }else{
+            res.json({code:0})
+        }
+    })
+})
 configRoutes.post('/setBackgroundImage',(req,res)=>{
     if(!req.body.pageId||!req.body.backgroundImageUrl){
         return

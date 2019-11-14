@@ -242,6 +242,51 @@ apiRoutes.get('/getChartDataDynamic',async (req,res) => {
         })
     }
 })
+apiRoutes.get('/getTableDataDynamic',async (req,res) => {
+    let id = req.query.id
+    if(id){
+        await sourceConfig.findOne({_id:id}, async (err,doc)=>{
+            if(err){
+                console.log(err)
+                res.json([])
+            }else{
+                let sourceid = doc.sourceid
+                console.log('1',sourceid)
+                dbFactory.getConnection(sourceid)
+                    .then(async r=> {
+                        console.log('2',r)
+                        if (!r) {
+                            res.json([])
+                            return
+                        }
+                        console.log('3')
+                        let tablename = doc.tablename
+                        let tablefields = JSON.parse(doc.tablefields)
+                        let fields = []
+                        tablefields.forEach((item)=>{
+                            fields.push(`${item.value} ${item.label}`)
+                        })
+                        let ff = fields.join(',')
+                        let handle = dbFactory.createOperate(r.dbtype)
+                        await handle.createConnection(r.dbhost,r.dbservername,r.dbusername,r.dbpassword)
+                        await handle.getDataset(ff,tablename,(result)=>{
+                            handle.closeConnection()
+                            if(result){
+                                res.json(result)
+                            }else{
+                                res.json([])
+                            }
+                        })
+                    }).catch(e=>{
+                    console.log(e)
+                    res.json([])
+                })
+
+            }
+        })
+    }
+})
+
 /**
  * 登录
  */

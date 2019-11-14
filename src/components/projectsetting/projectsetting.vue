@@ -23,6 +23,7 @@
                         <el-menu :default-active="menuIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                             <el-menu-item index="0" ><router-link target="_blank" :to="{path:'/preview',query:{pageId:`${this.pageId}`}}"><div class="previewText">预览</div></router-link></el-menu-item>
                             <el-menu-item index="1" >保存</el-menu-item>
+                            <el-menu-item index="2" ><div @click="clearPage">清屏</div></el-menu-item>
                         </el-menu>
                         <div class="editor-body" @click="onClick">
                             <div class="containerWrapper">
@@ -352,7 +353,8 @@
         setDataSource,getDataProjects,updateSqlDataSource,
         addPageProjectName,getAllPageProject,addPageName,getPageControlConfig,
         savePageControlConfig,deleteSingleControl,setBackgroundImage,saveDbConfig,
-        testConnection,getDbConfigs,deleteDataSource,updateDbConfig,getDbConfig
+        testConnection,getDbConfigs,deleteDataSource,updateDbConfig,getDbConfig,
+        deleteControls
     } from 'api/dbhelper'
     import {getControl} from "api/control"
     //import {socket} from "common/js/socket-client"
@@ -369,6 +371,7 @@
     export default {
         data() {
             return {
+                isSourceEdit:false,
                 dbsource:'',
                 dbsourceconfigs:[],
                 sourceConnectionName:'',
@@ -488,6 +491,7 @@
             })
 
             window.$controlevent.$on('activeSingleControl',conf=>{
+                console.log(this.chartId,conf.chartId)
                 if(conf.chartId) {
                     this.chartId = conf.chartId
                     this.localChartWidth= conf.width
@@ -504,25 +508,9 @@
             })
         },
         mounted(){
-          // socket.on('reply',data => {
-          //     const d = data
-          //     if(d.pageId == this.pageId) {
-          //         const dv = document.createElement('div')
-          //         dv.id = `echart${d.el}`
-          //         this.$refs.dashboard.appendChild(dv)
-          //         const node = eval(d.code)
-          //         setTimeout(() => {
-          //             const instance = new Vue({
-          //                 render: h => h(node.default)
-          //             }).$mount(`#echart${d.el}`)
-          //             this.chartInstances.set(`${d.el}`, instance)
-          //         }, 100)
-          //         this.loading = false
-          //     }
-          // })
+         
         },
         watch:{
-
             dialogProjectVisible(newVal){
                 //sql编辑器初始化
                 if(newVal){
@@ -580,6 +568,26 @@
             // }
         },
         methods:{
+            clearPage(){
+                if(this.pageId){
+                    deleteControls(this.pageId).then((res)=>{
+                        if(res.data.code === 0){
+                            this.controlConfigs = []
+                            this.chartInstances.clear()
+                            this.$message({
+                                type:'success',
+                                message:'清除成功'
+                            })
+                            this.$refs.dashboard.innerHTML = ''
+                        }else{
+                            this.$message({
+                                type:'error',
+                                message:'清除失败'
+                            })
+                        }
+                    })
+                }
+            },
             _getSourceConfigs(){
                 getDbConfigs().then(res=>{
                     if(res.data.code == 0){
@@ -854,7 +862,7 @@
             },
             onClick(e){
                 if (e.target.tagName != 'CANVAS'){
-                    this.chartId = ''
+                    //this.chartId = ''
                 }
             },
             _getDataProjects(){

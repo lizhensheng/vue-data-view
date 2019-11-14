@@ -4,6 +4,7 @@ import Register from 'views/register/register'
 import ProjectSetting from 'components/projectsetting/projectsetting'
 import EchartDemo from 'components/page/echartdemo'
 import Preview from 'components/preview/preview'
+import Baseform from "../base/form/baseform"
 export let routers = [
     {
         path: '/',
@@ -40,5 +41,10 @@ export let routers = [
     {
         path:'/preview',
         component:Preview
+    },
+    {
+        name:'baseform',
+        path:'/baseform',
+        component:Baseform
     }
 ]

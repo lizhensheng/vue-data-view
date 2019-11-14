@@ -50,6 +50,9 @@ export function deleteSingleControl(chartId) {
 export function setBackgroundImage(pageId,backgroundImageUrl) {
     return instance.post('/config/setBackgroundImage',{pageId,backgroundImageUrl})
 }
+export function deleteControls(pageId){
+    return instance.post('/config/deleteControls',{pageId})
+}
 export function getBackgroundImage(pageId) {
     return instance.post('/config/getBackgroundImage',{pageId})
 }
