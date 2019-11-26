@@ -7,30 +7,32 @@ import JsonViewer from 'vue-json-viewer'
 window.$echarts = echarts
 Vue.use(ElmentUI)
 Vue.use(JsonViewer)
+import LkUI from './base/index'
+Vue.use(LkUI)
 import 'common/stylus/index.styl'
 import store from './store'
 import router from "./router"
 import VueDraggableResizable from 'vue-draggable-resizable'
 import {borderBox1} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox1)
+Vue.use(borderBox1)
 import {borderBox2} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox2)
+Vue.use(borderBox2)
 import {borderBox3} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox3)
+Vue.use(borderBox3)
 import {borderBox4} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox4)
+Vue.use(borderBox4)
 import {borderBox5} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox5)
+Vue.use(borderBox5)
 import {borderBox6} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox6)
+Vue.use(borderBox6)
 import {borderBox7} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox7)
+Vue.use(borderBox7)
 import {borderBox8} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox8)
+Vue.use(borderBox8)
 import {borderBox9} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox9)
+Vue.use(borderBox9)
 import {borderBox10} from '@jiaminghi/data-view'
-Vue.component('dv-border-box-1', borderBox10)
+Vue.use(borderBox10)
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 import 'common/css/iconfont.css'
 Vue.component('vue-draggable-resizable', VueDraggableResizable)

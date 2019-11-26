@@ -10,8 +10,8 @@
             <el-input type="password" v-model="ruleForm.pass" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
+            <el-button  @click="submitForm('ruleForm')">登录</el-button>
+            <el-button  @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -107,7 +107,14 @@ export default {
   margin: 0 auto;
 }
 .el-tabs__item {
-  text-align: center;
-  width: 60px;
+}
+.el-tabs__item:hover {
+    color: #ddd;
+}
+.el-tabs__item.is-active {
+    color: #ddd;
+}
+.el-tabs__active-bar {
+    background-color: #ddd;
 }
 </style>

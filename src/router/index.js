@@ -4,7 +4,8 @@ import store from '../store'
 Vue.use(Router)
 import {routers} from './config'
 const router =  new Router({
-    routes: routers
+    routes: routers,
+    mode:'history'
 })
 
 //注册全局钩子用来拦截导航

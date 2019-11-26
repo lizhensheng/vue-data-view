@@ -52,6 +52,23 @@ let dbOracle = function dbOracle() {
         const result = await this.conn.execute(sql)
         callback(result.rows)
     }
+    this.getPagingData = async (pageindex,pagesize,tablefields,tablename,callback)=>{
+        let sql = ''
+        let countSql = ''
+        let totalCount = 0
+        if(tablefields){
+            sql = `select ${tablefields} from (select rownum as rowno,t.* from (${tablename}) t where  rownum<=${pageindex*pagesize}) t where t.rowno>${(pageindex-1)*pagesize}`
+            countSql = `select count(*) cnt from (select rownum,t.* from (${tablename}) t)`
+        }else{
+            sql = `select *from (select rownum as rowno,t.* from ${tablename} t where  rownum<=${pageindex*pagesize}) t where t.rowno>${(pageindex-1)*pagesize}`
+            countSql = `select count(*) cnt from ${tablename} t`
+        }
+        totalCount = await this.conn.execute(countSql)
+        console.log(totalCount)
+        totalCount = totalCount.rows[0].CNT
+        let result = await this.conn.execute(sql)
+        callback({totalCount:totalCount,data:result.rows})      
+    }
     // this.getTableCols = async (tablename)=>{
     //     const result = await this.conn.execute(`SELECT column_name, data_type FROM all_tab_cols WHERE table_name = '${tablename}'`)
     //     // eslint-disable-next-line no-console

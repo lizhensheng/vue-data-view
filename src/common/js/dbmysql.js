@@ -60,6 +60,36 @@ let dbMysql = function dbMysql() {
             callback(result)
         })
     }
+    this.getPagingData = async (pageindex,pagesize,tablefields,tablename,callback) => {
+        let sql = ''
+        let countSql = ''
+        let totalCount = 0
+        if(tablefields){
+            if(tablename.toUpperCase().includes('SELECT')){
+                sql = `select ${tablefields} from (${tablename}) t limit ${(pageindex-1)*pagesize},${pagesize}`
+                countSql = `select count(*) cnt from (${tablename}) t`
+            }
+            else{
+                sql = `select ${tablefields} from ${tablename} t  limit ${(pageindex-1)*pagesize},${pagesize}`
+                countSql = `select count(*) cnt from ${tablename}`
+            }
+        }else{
+            sql = `select *from ${tablename}  limit ${(pageindex-1)*pagesize},${pagesize}`
+            countSql = `select count(*) cnt from ${tablename}`
+        }
+        await this.conn.query(countSql,  (error, result, fields) => {
+            if (error) {
+                console.log(error)
+            }
+            totalCount = result[0].CNT
+            this.conn.query(sql,  (error, result, fields) => {
+                if (error) {
+                    console.log(error)
+                }
+                callback({totalCount:totalCount,data:result})
+            })  
+        })  
+    }
     // this.getTableCols = (tablename)=> {
     //     return new Promise((resolve, reject) => {
     //         this.conn.query(`select column_name, data_type from information_schema.columns where table_schema ='${mysqlConfig.database}' and table_name = '${tablename}'`, function (error, result, fields) {

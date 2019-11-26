@@ -2,9 +2,8 @@ import Homepage from 'components/homepage/homepage'
 import Login from 'views/login/login'
 import Register from 'views/register/register'
 import ProjectSetting from 'components/projectsetting/projectsetting'
-import EchartDemo from 'components/page/echartdemo'
 import Preview from 'components/preview/preview'
-import Baseform from "../base/form/baseform"
+import Test from 'views/test/test'
 export let routers = [
     {
         path: '/',
@@ -14,10 +13,7 @@ export let routers = [
         }
     },
     {
-        path:'/test',
-        component:EchartDemo
-    },
-    {
+        name:'homepage',
         path: '/homepage',
         component: Homepage,
         meta:{
@@ -25,26 +21,30 @@ export let routers = [
         },
         children:[
             {
+                name:'projectsetting',
                 path:'/projectsetting',
                 component: ProjectSetting
             }
         ]
     },
     {
+        name:'login',
         path:'/login',
         component:Login
     },
     {
+        name:'register',
         path:'/register',
         component:Register
     },
     {
+        name:'preview',
         path:'/preview',
         component:Preview
     },
     {
-        name:'baseform',
-        path:'/baseform',
-        component:Baseform
+        name:'test',
+        path:'/test',
+        component:Test
     }
 ]

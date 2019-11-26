@@ -8,7 +8,9 @@
         </div>
         <!--移动选框end-->
 
-        <left-setting @onPageControlConfig="_getPageControlConfig"
+        <left-setting
+                      ref="leftSetting"  
+                      @onPageControlConfig="_getPageControlConfig"
                       @onMouseClickControl="onMouseClickControl"
                       @onSourcePlus="onSourcePlus"
                       @onSourceEdit="onSourceEdit"
@@ -776,6 +778,7 @@
 
             _getPageControlConfig(pageId){
                 this.pageId = pageId
+                this.chartId = ''
                 getPageControlConfig(pageId).then((res)=>{
                     if(res.data.code === 0){
                         let d = res.data.data
@@ -861,8 +864,9 @@
                 this.chartType = -1
             },
             onClick(e){
-                if (e.target.tagName != 'CANVAS'){
-                    //this.chartId = ''
+                if (e.target.className.indexOf('dashboard-background-image')){
+                    this.chartId = ''
+                    window.$controlevent.$emit('inactiveControls')
                 }
             },
             _getDataProjects(){
@@ -1155,6 +1159,7 @@
                                     type: 'success',
                                     message: '保存成功'
                                 });
+                                this.$refs.leftSetting.getSourceConfigs()
                                 this.dialogSourceVisible = false
                             }else if(res.data.code == 300){
                                 this.$message({

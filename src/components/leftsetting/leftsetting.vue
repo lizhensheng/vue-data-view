@@ -259,7 +259,7 @@
         },
         created(){
             this._getProjectTree()
-            this._getSourceConfigs()
+            this.getSourceConfigs()
         },
         computed:{
           ...mapGetters([
@@ -267,7 +267,7 @@
           ])
         },
         methods:{
-            _getSourceConfigs(){
+            getSourceConfigs(){
                 getDbConfigs().then(res=>{
                     if(res.data.code == 0){
                         this.dbsourceconfigs = res.data.data
@@ -446,7 +446,7 @@
                                     type: 'success',
                                     message: '删除成功'
                                 });
-                                this._getSourceConfigs()
+                                this.getSourceConfigs()
                                 this.dbsource = ''
                             }else{
                                 this.$message({
