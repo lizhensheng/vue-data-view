@@ -1,0 +1,38 @@
+.lk-navbar-collapse
+    position absolute
+    top 50%
+    width 20px
+    height 50px
+    z-index 3
+    right 0
+    .lk-navbar-collapse__inner
+        top -50%
+        position relative
+        overflow hidden
+        .lk-navbar-collapse__bg
+            position absolute
+            top 0
+            right 0
+            left auto
+            height 50px
+            width 0
+            right: 0;
+            left: auto;
+            box-sizing:border-box
+            border-bottom: 9px solid transparent;
+            border-left: none;
+            border-right: 13px solid #f7f7f7;
+            border-top: 9px solid transparent;
+        .lk-navbar-collapse__wrapper
+            position relative
+            height 50px
+            right -7px
+            cursor pointer
+            i
+                color #546478
+                display none
+                z-index 4
+                line-height 50px
+                left 0
+            i.is-show
+                display inline-block

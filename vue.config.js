@@ -2,26 +2,33 @@ function resolve(name){
     return __dirname + '/' + name
 }
 module.exports = {
+    assetsDir:"static",
+    pages:{
+        index:{
+            entry:'client/main.js',
+            filename:'index.html'
+        }
+    },
     configureWebpack: {
         resolve:{
             alias:{
-                'src':resolve('src'),
-                'common':resolve('src/common'),
-                "components":resolve('src/components'),
-                'api':resolve('src/api'),
-                'base':resolve('src/base'),
-                'views':resolve('src/views')
+                'src':resolve('client'),
+                'common':resolve('client/common'),
+                "components":resolve('client/components'),
+                'api':resolve('client/api'),
+                'base':resolve('client/base'),
+                'views':resolve('client/views')
             }
         }
     },
     devServer: {
-        port: 8888,
-        // proxy: {
-        //     '/control': {
-        //         target: 'http://localhost:4444',
-        //         ws: false,
-        //         changeOrigin: false
-        //     }
-        // }
+        proxy: {
+            '/': {
+                target: 'http://localhost:4000',
+                ws: false,
+                changeOrigin: false,
+                pathRewrite:{}
+            }
+        }
     }
 }

@@ -201,18 +201,18 @@ let jsonMap = require('./src/common/data/420000.json')
 apiRoutes.get('/map/ydys/v1',function (req,res) {
     res.json(jsonMap)
 })
-apiRoutes.get('/getChartDataDynamic',async (req,res) => {
+apiRoutes.get('/getAllData',async (req,res) => {
     let id = req.query.id
     if(id){
         await sourceConfig.findOne({_id:id}, async (err,doc)=>{
             if(err){
-                res.json([])
+                res.json({code:500})
             }else{
                 let sourceid = doc.sourceid
                 dbFactory.getConnection(sourceid)
                     .then(async r=> {
                             if (!r) {
-                                res.json([])
+                                res.json({code:500})
                                 return
                             }
                             let tablename = doc.tablename
@@ -227,15 +227,15 @@ apiRoutes.get('/getChartDataDynamic',async (req,res) => {
                             await handle.getDataset(ff,tablename,(result)=>{
                                 handle.closeConnection()
                                 if(result){
-                                    res.json(result)
+                                    res.json({code:0,data:result})
                                 }else{
-                                    res.json([])
+                                    res.json({code:500})
                                 }
                             })
                         }
                     ).catch(e=>{
                         console.log(e)
-                        res.json([])
+                        res.json({code:500})
                     })
 
             }
@@ -244,22 +244,22 @@ apiRoutes.get('/getChartDataDynamic',async (req,res) => {
 })
 apiRoutes.get('/getTableDataDynamic',async (req,res) => {
     let id = req.query.id
+    let pageIndex = req.query.pageIndex
+    let pageSize = req.query.pageSize
     if(id){
         await sourceConfig.findOne({_id:id}, async (err,doc)=>{
             if(err){
                 console.log(err)
-                res.json([])
+                res.json({code:500})
             }else{
                 let sourceid = doc.sourceid
-                console.log('1',sourceid)
                 dbFactory.getConnection(sourceid)
                     .then(async r=> {
-                        console.log('2',r)
                         if (!r) {
-                            res.json([])
+                            console.log('excute code getConnection error')
+                            res.json({code:500})
                             return
                         }
-                        console.log('3')
                         let tablename = doc.tablename
                         let tablefields = JSON.parse(doc.tablefields)
                         let fields = []
@@ -269,17 +269,13 @@ apiRoutes.get('/getTableDataDynamic',async (req,res) => {
                         let ff = fields.join(',')
                         let handle = dbFactory.createOperate(r.dbtype)
                         await handle.createConnection(r.dbhost,r.dbservername,r.dbusername,r.dbpassword)
-                        await handle.getDataset(ff,tablename,(result)=>{
+                        await handle.getPagingData(pageIndex,pageSize,ff,tablename,(result)=>{
                             handle.closeConnection()
-                            if(result){
-                                res.json(result)
-                            }else{
-                                res.json([])
-                            }
+                            res.json({code:0,data:result})
                         })
                     }).catch(e=>{
                     console.log(e)
-                    res.json([])
+                    res.json({code:500})
                 })
 
             }

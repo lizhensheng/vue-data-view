@@ -14,7 +14,8 @@ module.exports = {
     // required to lint *.vue files
     plugins: [
         'html',
-        'vue'
+        'vue',
+        'js'
     ],
     // add your custom rules here
     //it is base on https://github.com/vuejs/eslint-config-vue

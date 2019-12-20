@@ -1,0 +1,56 @@
+@import "~common/stylus/variable.styl"
+.m-header
+  width 100%
+  height 50px
+  line-height 50px
+  background white
+  filter opacity(90%)
+  color rgb(255, 106, 0)
+  webkit-box-shadow: 0 1px 4px 0 rgba(0,0,0,.08);
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,.08);
+  .icon
+    display inline-block
+    vertical-align top
+    width 50px
+    height 42px
+    background url('~common/image/logo.svg')
+    margin-left 21px
+    margin-top 18px
+  .title
+    vertical-align top
+    display inline-block
+    font-size 16px
+  .right-menu
+    float right
+    height 100%
+    line-height 50px
+    &focus
+      outline none
+    .right-menu-item
+      display inline-block
+      padding 0 8px
+      height 100%
+      font-size 18px
+      color #5a5e66
+      vertical-align text-bottom
+      &.hover-effect 
+        cursor pointer
+        transition background .3s
+        &hover 
+          background rgba(0, 0, 0, .025)
+    .avatar-container 
+      margin-right 30px
+      .avatar-wrapper 
+        margin-top 10px
+        position relative
+        .user-avatar 
+          cursor pointer
+          width 30px
+          height 30px
+          border-radius 50%
+        .el-icon-caret-bottom 
+          cursor pointer
+          position absolute
+          right -15px
+          top 15px
+          font-size 12px

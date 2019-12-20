@@ -63,7 +63,9 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {}
+    "rules": {
+      "no-console":"off"
+    }
   },
   "postcss": {
     "plugins": {
@@ -73,10 +75,5 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ],
-  "vuePlugins": {
-    "service": [
-      "proxy.js"
-    ]
-  }
+  ]
 }
