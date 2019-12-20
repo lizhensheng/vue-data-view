@@ -1,5 +1,4 @@
-# 这是客户端 服务端在我的另一个项目vue-data-server中 
-  
+
 ## DataView是干什么的?
 
 * DataView是一个基于**Vue**的数据可视化设计框架（集成dataV,echart）
