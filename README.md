@@ -22,10 +22,6 @@ $ npm install
 $ yarn serve
 ```
 
-### 使用
-
-启动了当前程序后,再启动我的另一个程序vue-data-server
-
 ### 登陆
 
 本项目使用了mongodb做用户的信息保存,请先下载安装mongodb就可以注册或登陆系统
