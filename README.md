@@ -1,5 +1,4 @@
-# 这是客户端 服务端在我的另一个项目vue-data-server中 
-  
+
 ## DataView是干什么的?
 
 * DataView是一个基于**Vue**的数据可视化设计框架（集成dataV,echart）
@@ -22,10 +21,6 @@ $ npm run serve
 $ npm install
 $ yarn serve
 ```
-
-### 使用
-
-启动了当前程序后,再启动我的另一个程序vue-data-server
 
 ### 登陆
 
