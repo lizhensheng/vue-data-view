@@ -1,18 +1,44 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import actions from './actions'
-import mutations from './mutations'
-import state from './state'
-import * as getters from './getters'
-import createLogger from "vuex/dist/logger"
+
+// 各个模块
+import editor from './modules/editor'
+import user from './modules/user'
+
+
+import { Message } from 'element-ui'
+/**
+ * 全局状态管理
+ */
+const state = {
+
+};
+const actions = {
+
+	/**
+	 * 显示提示 msg.type 类型  msg.data 消息内容
+	 * @param commit
+	 * @param msg
+	 */
+	showMassage(store, msg) {
+		console.log(msg)
+		Message({
+			type: msg.type,
+			message: msg.message || msg.data
+		})
+	},
+};
+const mutations = {};
+const getters = {};
+
 Vue.use(Vuex);
-//const debug = process.env.NODE_ENV !== 'production'
-const debug = false
 export default new Vuex.Store({
-    state,
-    mutations,
-    actions,
-    getters,
-    strict:debug,
-    plugins:debug?[createLogger()]:[]
+	state,
+	getters,
+	actions,
+	mutations,
+	modules: {
+		editor,
+		user
+	}
 });

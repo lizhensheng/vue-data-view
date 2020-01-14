@@ -1,45 +1,66 @@
 import Vue from 'vue'
 import App from './App.vue'
-import ElmentUI from 'element-ui'
-import 'common/css/index.css'
-import echarts from 'echarts'
-import JsonViewer from 'vue-json-viewer'
-window.$echarts = echarts
-Vue.use(ElmentUI)
-Vue.use(JsonViewer)
-import LkUI from './base/index'
-import './base/theme/default/index.styl'
-Vue.use(LkUI)
-import 'common/stylus/index.styl'
+import router from './router'
 import store from './store'
-import router from "./router"
-import VueDraggableResizable from 'vue-draggable-resizable'
-import {borderBox1} from '@jiaminghi/data-view'
-Vue.use(borderBox1)
-import {borderBox2} from '@jiaminghi/data-view'
-Vue.use(borderBox2)
-import {borderBox3} from '@jiaminghi/data-view'
-Vue.use(borderBox3)
-import {borderBox4} from '@jiaminghi/data-view'
-Vue.use(borderBox4)
-import {borderBox5} from '@jiaminghi/data-view'
-Vue.use(borderBox5)
-import {borderBox6} from '@jiaminghi/data-view'
-Vue.use(borderBox6)
-import {borderBox7} from '@jiaminghi/data-view'
-Vue.use(borderBox7)
-import {borderBox8} from '@jiaminghi/data-view'
-Vue.use(borderBox8)
-import {borderBox9} from '@jiaminghi/data-view'
-Vue.use(borderBox9)
-import {borderBox10} from '@jiaminghi/data-view'
-Vue.use(borderBox10)
-import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
-import 'common/css/iconfont.css'
-Vue.component('vue-draggable-resizable', VueDraggableResizable)
+import httpServer from '@client/service/httpServer' // axios拦截器配置
+import '@/permission' // 权限控制
+import * as mUtils from '@/common/js/mUtils'
+import config from '@/config'
+import filters from './filter/index'
+import AES from '@/common/js/secret'
+import userModel from '@client/mixins/userModel'
+
+import Element from 'element-ui'
+import '@/common/styles/element-variable.scss'
+import '@/common/styles/index.scss' // 自定义 css
+import 'animate.css'
+import VueClipboard from 'vue-clipboard2'
+
+Vue.use(Element);
+Vue.use(VueClipboard)
+
+/**
+ * 引入公共方法mUtils
+ */
+Vue.prototype.$mUtils = mUtils;
+Vue.prototype.AES = AES
+Vue.prototype.$axios = httpServer;
+
+/**
+ * 公共配置信息
+ */
+Vue.prototype.$config = config
+
+// 注册全局过滤器
+Object.keys(filters).forEach(key => {
+	Vue.filter(key, filters[key])
+})
+
+// 全局注册mixins
+Vue.mixin(userModel); // 公共mixins
+
+
+// 登录后跳转方法
+Vue.prototype.goBeforeLoginUrl = () => {
+	let url = mUtils.Cookie.get('beforeLoginUrl')
+	url = decodeURIComponent(url)
+	if (!url || url.indexOf('/author') != -1) {
+		router.push('/')
+	} else {
+		router.push(url)
+		mUtils.Cookie.set('beforeLoginUrl', '', 1 / 24 / 60, window.location.host, window.location.pathname.substring(0, window.location.pathname.length - 1))
+	}
+};
+
+
+String.prototype.replaceAll = function(s1, s2) {
+	return this.replace(new RegExp(s1, "gm"), s2);
+}
+
 Vue.config.productionTip = false
+
 new Vue({
-  render: h => h(App),
   router,
-  store
+  store,
+  render: h => h(App)
 }).$mount('#app')

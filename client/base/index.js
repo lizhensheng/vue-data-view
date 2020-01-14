@@ -1,14 +1,8 @@
-import Baseform from './baseform'
-import Scrollform from './scrollform'
-import Simpletext from './simpletext'
 import Tabs from "./tabs"
 import TabPane from './tabpane'
 import NavbarCollapse from './navbarcollapse'
 import Tree from './tree'
 const components = [
-    Baseform,
-    Scrollform,
-    Simpletext,
     Tabs,
     TabPane,
     NavbarCollapse,
@@ -24,9 +18,6 @@ if(typeof window !== 'undefined' && window.Vue){
 }
 export default {
     install,
-    Baseform,
-    Scrollform,
-    Simpletext,
     Tabs,
     TabPane,
     NavbarCollapse,
