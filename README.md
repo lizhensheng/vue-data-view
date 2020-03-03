@@ -7,17 +7,3 @@
 * 表格,图片,文字组件
 * 一键生成数据大屏
 
-### npm安装
-
-```shell
-$ npm install
-$ npm run serve
-```
-
-### 或者yarn安装
-
-```shell
-$ npm install
-$ yarn serve
-```
-
