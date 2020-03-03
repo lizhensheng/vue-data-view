@@ -1,10 +1,9 @@
 
-## DataView是干什么的?
+## 简介
 
-* DataView是一个基于**Vue**的数据可视化设计框架（集成dataV,echart）
+* DataView是一个基于**Vue**的数据可视化设计框架
 * 提供用于可拖拽的控件
 * 提供常用的**图表**如折线图等
-* 飞线图/轮播表等其他组件
 * 表格,图片,文字组件
 * 一键生成数据大屏
 
@@ -21,16 +20,4 @@ $ npm run serve
 $ npm install
 $ yarn serve
 ```
-
-### 登陆
-
-本项目使用了mongodb做用户的信息保存,请先下载安装mongodb就可以注册或登陆系统
-
-### 联系我
-
-邮箱 1841084366@qq.com
-
-# 项目截图
-
-<img src="https://raw.githubusercontent.com/lizhensheng/vue-echart-design/master/docs/screenshot/designwindow.png"></img>
 
