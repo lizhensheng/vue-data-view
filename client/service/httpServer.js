@@ -24,8 +24,8 @@ axios.interceptors.response.use(response => {
     return Promise.resolve(response.data)
   } else {
     store.dispatch('showMassage', {
-      type: 'error',
-	    message: response.data.message || response.data.msg || response.data.errMsg
+        type: 'error',
+        message: response.data.message || response.data.msg || response.data.errMsg
     });
     return Promise.reject(response)
   }

@@ -7,14 +7,18 @@ Vue.use(Router)
 export default new Router({
 	routes: [{
 		path: '/',
-		name: 'Home',
+		name: 'home',
 		component: () => import('@/pages/home/index'),
-		redirect: {name: 'pageList'},
+		redirect: { name: 'projectCreate' },
 		children: [{
-			path: 'page-list',
-			name: 'pageList',
-			component: () => import('@/pages/home/page-list'),
+			path: 'project-create',
+			name: 'projectCreate',
+			component: () => import('@/pages/home/project-create'),
 		}, {
+			path: 'data-create',
+			name: 'dataCreate',
+			component: () => import('@/pages/home/data-create'),
+		},  {
 			path: 'my-template',
 			name: 'myTemplate',
 			component: () => import('@/pages/home/my-template'),
@@ -47,11 +51,15 @@ export default new Router({
 	{
 		path: '/login',
 		name: 'Login',
-		component: () => import('@/pages/login'),
+		component: () => import('@/pages/loginfor'),
 		meta: {
 			hideHeader: true,
 			trust: true,
 			noNeedLogin: true
 		}
+	},{
+		path: 'template-create',
+		name: 'templateCreate',
+		component: () => import('@/pages/home/template-create'),
 	}]
 })

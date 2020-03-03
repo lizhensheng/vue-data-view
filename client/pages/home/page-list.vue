@@ -461,7 +461,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        float: left;
       }
     }
     .page-item-data-pv {
@@ -528,6 +527,10 @@
 </style>
 <style lang="scss">
   .my-page-list{
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     .page-search-wrapper{
       .el-tabs__header{
         margin: 0;

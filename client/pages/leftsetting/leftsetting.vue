@@ -464,7 +464,6 @@
 
             removeBtnPlus(e,node, data) {
                 console.log(node,data)
-                debugger
                 getConfigByFunctionName('deleteProjectPageConfig',{_id:data._id}).then((res)=>{
                     if(res.data.code === 0){
                         this.$refs.treeProjects.remove(data)
@@ -507,7 +506,6 @@
                 }
             },
             updateFileName(e,node){
-                debugger
                 if(node.data._id){
                     if(e.target.value == e.target._value){
                         node.setEdit(!node.isEdit)

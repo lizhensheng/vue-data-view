@@ -41,7 +41,8 @@ app.use(koajwt({secret:SECRET}).unless({
         /^\/common\/html2canvas\/corsproxy/,
         /^\/page\/view/,
         /^\/auth\/login/,
-        /^\/auth\/register/
+        /^\/auth\/register/,
+        /^\/menus\/add/
     ]
 }))
 

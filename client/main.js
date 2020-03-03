@@ -13,9 +13,13 @@ import userModel from '@client/mixins/userModel'
 import Element from 'element-ui'
 import '@/common/styles/element-variable.scss'
 import '@/common/styles/index.scss' // 自定义 css
+import '@/common/stylus/index.styl'// 自定义 css
+import YouDu from '@/base/index'// 自定义基础组件
+import '@/base/theme/default/index.styl'// 自定义基础组件css
 import 'animate.css'
 import VueClipboard from 'vue-clipboard2'
 
+Vue.use(YouDu)
 Vue.use(Element);
 Vue.use(VueClipboard)
 

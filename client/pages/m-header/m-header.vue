@@ -1,7 +1,6 @@
 <template>
     <div class="m-header">
-        <i class="el-icon-set-up" style="width:40px;height:40px;line-height:40px;text-align:center;"></i>
-        <div class="title">数据可视化</div>
+        <div class="m-logo_wrapper ibox" @click="onCollapsed"><img src='./menu-right.svg' v-if="isCollapsed"/><img src='./menu-left.svg' v-else/></div>
         <div class="right-menu" ref="rightMenu">
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
                 <div class="avatar-wrapper">
@@ -11,9 +10,6 @@
                 <el-dropdown-menu slot="dropdown">
                     <router-link to="/profile/index">
                         <el-dropdown-item>个人中心</el-dropdown-item>
-                    </router-link>
-                    <router-link to="/">
-                        <el-dropdown-item>首页</el-dropdown-item>
                     </router-link>
                     <a target="_blank" href="#">
                         <el-dropdown-item>Github</el-dropdown-item>
@@ -31,10 +27,26 @@
 
     import './header.styl'
     export default {
+        name:'mheader',
+        data(){
+            return {
+            }
+        },
+        props:{
+            collapsed:Boolean
+        },
+        computed:{
+            isCollapsed(){
+                return this.collapsed
+            }
+        },
         methods:{
             logout(){
-                this.$store.dispatch('UserLogout')
+                this.$store.dispatch('doLogout')
                 this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+            },
+            onCollapsed(){
+                this.$emit('collapsed')
             }
         }
     }

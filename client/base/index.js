@@ -1,12 +1,12 @@
-import Tabs from "./tabs"
-import TabPane from './tabpane'
-import NavbarCollapse from './navbarcollapse'
-import Tree from './tree'
+import YDialog from './dialog'
+import YSelect from './select'
+import YInput from './input'
+import YButton from './button'
 const components = [
-    Tabs,
-    TabPane,
-    NavbarCollapse,
-    Tree
+    YDialog,
+    YSelect,
+    YInput,
+    YButton
 ]
 const install = function (Vue){
     if(install.installed) return
@@ -18,8 +18,8 @@ if(typeof window !== 'undefined' && window.Vue){
 }
 export default {
     install,
-    Tabs,
-    TabPane,
-    NavbarCollapse,
-    Tree
+    YDialog,
+    YSelect,
+    YInput,
+    YButton
 }
