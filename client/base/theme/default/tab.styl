@@ -1,21 +1,36 @@
-.lk-tabs__item
-    height 32px
-    line-height 32px
-    padding 0 10px
-    background #D9DEE4
-    color #666
-    font-size 14px
-    text-align center
-    display inline-block
-    &.is-active
-        background #546478
-        color #FFFFFF
-    .lk-tab-pane
-        color black
-    .lk-tabs__active-bar
-        position absolute
-        bottom 0
-        left 0
-        height 2px
-        background-color #ff6633
-        z-index 1
+.ui-tabs{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    color: #bcc9d4;
+    .ui-tabs_header{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 50px;
+        background: rgb(25,28,33);
+        .ui-tabs_navitem{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            &.active{
+               color: rgb(37,124,245);
+               border-left: 2px solid  rgb(37,124,245);
+               background: rgb(20,22,26);
+            }
+        }
+    }
+    .ui-tabs_content{
+        display:flex;
+        width: 100%;
+        background: rgb(19,22,26);
+        .ui-tab-panel{
+            display:flex;
+            width: 100%;
+            overflow: auto;
+        }
+    }
+}

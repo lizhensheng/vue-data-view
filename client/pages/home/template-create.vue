@@ -37,6 +37,11 @@ export default {
         methods:{
             onGoback(){
                 this.$router.history.go(-1)
+            },
+            onNewProject(){
+                this.$router.push({
+                    name: 'PowerEditor'
+                })
             }
         }
 }

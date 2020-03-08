@@ -1,0 +1,23 @@
+.ui-range{
+    display: flex;
+    align-items: center;
+    .ui-range_input{
+            background: linear-gradient(to right, rgb(0, 251, 255), rgb(0, 176, 255) 5%, rgb(38, 42, 53) 55.5556%, rgb(38, 42, 53));
+            -webkit-appearance: none;
+            height: 2px;
+            &::-webkit-slider-thumb{
+                -webkit-appearance: none;
+                width: 8px;
+                height: 8px;
+                background: white;
+            }
+    }
+    i.el-icon-minus{
+        cursor: zoom-out;
+        margin: 0 10px;
+    }
+    i.el-icon-plus{
+        cursor: zoom-in;
+        margin: 0 10px;
+    }
+}

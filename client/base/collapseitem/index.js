@@ -1,4 +1,4 @@
-import Component from '../tabs/src/tab-pane'
+import Component from '../collapse/src/collapse-item'
 Component.install = Vue => {
     Vue.Component(Component.name,Component)
 }

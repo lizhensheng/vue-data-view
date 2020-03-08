@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 // 各个模块
 import editor from './modules/editor'
 import user from './modules/user'
+import scale from './modules/scale'
 
 
 import { Message } from 'element-ui'
@@ -39,6 +40,7 @@ export default new Vuex.Store({
 	mutations,
 	modules: {
 		editor,
-		user
+		user,
+		scale
 	}
 });

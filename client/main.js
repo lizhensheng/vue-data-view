@@ -18,6 +18,7 @@ import YouDu from '@/base/index'// 自定义基础组件
 import '@/base/theme/default/index.styl'// 自定义基础组件css
 import 'animate.css'
 import VueClipboard from 'vue-clipboard2'
+import EventBus from './eventBus/index'
 
 Vue.use(YouDu)
 Vue.use(Element);
@@ -34,7 +35,23 @@ Vue.prototype.$axios = httpServer;
  * 公共配置信息
  */
 Vue.prototype.$config = config
-
+Vue.prototype.$bus = EventBus
+//监控窗体的大小
+window.addEventListener('resize', function(){
+	Vue.prototype.$window = {
+		clientWidth: document.body.clientWidth,
+		clientHeight: document.body.clientHeight,
+		offsetWidth: document.body.offsetWidth,
+		offsetHeight: document.body.offsetHeight
+	}
+	EventBus.$emit('winowResize')
+})
+Vue.prototype.$window  =  {
+	clientWidth: document.body.clientWidth,
+	clientHeight: document.body.clientHeight,
+	offsetWidth: document.body.offsetWidth,
+	offsetHeight: document.body.offsetHeight
+}
 // 注册全局过滤器
 Object.keys(filters).forEach(key => {
 	Vue.filter(key, filters[key])

@@ -44,6 +44,10 @@ export default new Router({
 		name: 'Editor',
 		component: () => import('@/pages/editor/index')
 	},{
+		path: '/power-editor',
+		name: 'PowerEditor',
+		component: () => import('@/pages/power-editor/power-editor')
+	},{
 		path: '/mine',
 		name: 'Mine',
 		component: () => import('@/pages/mine')

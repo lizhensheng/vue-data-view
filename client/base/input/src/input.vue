@@ -1,6 +1,7 @@
 <template>
     <div class="ui-input" tabindex="2" :class="{'focus': isFocus}">
-        <input type="text" value="我的"  tabindex="6" @blur="onBlur" @focus="onFocus" @change="onChange"/>
+        <input type="text" :value="value"  tabindex="6" @blur="onBlur" @focus="onFocus" @change="onChange" :placeholder="placeholder"/>
+        <div class="ibox icon-wrap" v-show="suffixIcon"><i :class="suffixIcon" /></div>
     </div>
 </template>
 
@@ -13,7 +14,9 @@ export default {
         }
     },
     props:{
-        input: String
+        value: String,
+        placeholder: String,
+        suffixIcon: String
     },
     methods:{
         onFocus(){
