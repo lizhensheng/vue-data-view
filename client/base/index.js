@@ -7,6 +7,9 @@ import YTabPanel from './tabpanel'
 import YCollapse from './collapse'
 import YCollapseItem from './collapseitem'
 import YRange from './range'
+import YFormItem from './formitem'
+import YInputNumber from './inputnumber'
+import MessageBox from './messagebox'
 const components = [
     YDialog,
     YSelect,
@@ -16,12 +19,18 @@ const components = [
     YTabPanel,
     YCollapse,
     YCollapseItem,
-    YRange
+    YRange,
+    YFormItem,
+    YInputNumber
 ]
 const install = function (Vue){
     if(install.installed) return
     install.installed = true
     components.map(component => Vue.component(component.name,component))
+
+    Vue.prototype.$msgbox = MessageBox
+    Vue.prototype.$alert = MessageBox.alert
+    Vue.prototype.$confirm = MessageBox.confirm
 }
 if(typeof window !== 'undefined' && window.Vue){
     install(window.Vue)
@@ -36,5 +45,7 @@ export default {
     YTabPanel,
     YCollapse,
     YCollapseItem,
-    YRange
+    YRange,
+    YFormItem,
+    YInputNumber
 }

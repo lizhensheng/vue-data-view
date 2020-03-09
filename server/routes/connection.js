@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Connection = require('../models/connection')
+const Conn = require('../models/connection')
 const router = require('koa-router')()
 const dbFactory = require('../db/dbfactory')
 
@@ -55,48 +55,61 @@ router.post('/getDataset',ctx=>{
         })
 })
 
-router.post('/testConnection',ctx=>{
+router.post('/testConnection',async ctx=>{
     let data = ctx.request.body
     let dbtype = data.dbtype
-    let handle = dbFactory.createOperate(dbtype)
-    handle.testConnection(req.body.dbhost,req.body.dbservername,req.body.dbusername,req.body.dbpassword)
-        .then(()=>{
-            ctx.body= '连接成功'
-        })
-        .catch((err)=>{
-            ctx.status=202
-            ctx.body='获取数据失败'
-        })
+    try{
+        let handle = dbFactory.createOperate(dbtype)
+        await handle.testConnection(data.dbhost,data.dbservername,data.dbusername,data.dbpassword)
+            .then(()=>{
+                ctx.body= '连接成功'
+            })
+            .catch((err)=>{
+                ctx.body= '连接失败'
+            })
+    }
+    catch(e){
+        ctx.body = e.message
+    }
 })
 
 router.post('/all',async ctx=>{
-    ctx.body = await Connection.find({})
+    ctx.body = await Conn.find({})
 })
 
 router.post('/detail/:_id',async ctx=>{
     let _id = mongoose.mongo.ObjectId(ctx.params._id)
-    ctx.body = await Connection.findOne({_id})
+    ctx.body = await Conn.findOne({_id})
 })
-
+/**
+ *  数据未加密
+ */
 router.post('/add',async ctx=>{
     let data = ctx.request.body
-    ctx.body = await Connection.Create({
-        ...data.toObject(),
-        _id: mongoose.mongo.ObjectId()
-    })
+    try{
+        ctx.body = await Conn.create({
+            ...data,
+            dbcreatetime: new Date().getTime(),
+            _id: mongoose.mongo.ObjectId()
+        })
+    }
+    catch(e){
+        ctx.status = 503
+        ctx.body = e.message
+    }
 })
 
 router.post('/update/:_id',async ctx=>{
     let _id = mongoose.mongo.ObjectId(ctx.params._id)
     let data = ctx.request.body
-    ctx.body = await Connection.updateOne({_id},{$set:data},{
+    ctx.body = await Conn.updateOne({_id},{$set:data},{
         runValidators:true
     })
 })
 
 router.post('/delete/:_id',async ctx=>{
     let _id = mongoose.mongo.ObjectId(ctx.params._id)
-    ctx.body = await Connection.deleteOne({_id})
+    ctx.body = await Conn.deleteOne({_id})
 })
 
 module.exports = router

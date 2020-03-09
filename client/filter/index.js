@@ -1,3 +1,4 @@
+import moment  from 'moment'
 const filter={
     booleanToText:function(value){
         return value?'是':'否'
@@ -9,6 +10,9 @@ const filter={
         } else{
             return ''
         }
+    },
+    todate(value){
+        return moment(value).format('YYYY/MM/DD HH:mm:ss') 
     }
 }
 

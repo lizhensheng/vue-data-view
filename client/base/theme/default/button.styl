@@ -1,7 +1,7 @@
 .ui-button{
     display: flex;
     flex-direction: row;
-    min-width: 100px;
+    min-width: 35px;
     min-height: 35px;
     justify-content: center;
     align-items: center;
@@ -13,5 +13,12 @@
     color: #fff;
     &:hover{
         background: rgba(38,129,255,0.8);
+    }
+    &.hollow{
+        background: none
+        border: 1px solid  rgb(38,129,255);
+        &:hover{
+            background: rgb(38,129,255);
+        }
     }
 }

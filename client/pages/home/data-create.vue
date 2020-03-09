@@ -33,38 +33,21 @@
                  </div>
              </div>
             <div class="project-list_body">
-               <div class="project-list_main_storage">
+               <div class="project-list_main_storage" v-for="item in datasourceList" :key="item._id">
                    <div class="project-list_storage_type">
                        <div class="storage_type_wrapper">
                             <i class="el-icon-document storage_type"></i>
-                            <div>CSV</div>
+                            <div>{{item.dbtype.length > 3 ? item.dbtype.substr(0,3) : item.dbtype}}</div>
                        </div>
-                       <span class="title font-size-12">CSV</span>
+                       <span class="title font-size-12">{{item.dbtype}}</span>
                    </div>
                    <div class="project-list_storage_operate">
-                       <i class="el-icon-edit"></i>
-                       <i class="el-icon-delete"></i>
+                       <i class="el-icon-edit" @click="onEditData" :data-id="item._id"></i>
+                       <i class="el-icon-delete" @click="onDeleteData" :data-id="item._id"></i>
                    </div>
                    <div class="project-list_storage_info">
-                       <div class="info-name">a</div>
-                       <div class="info-time">2020年3月3日21:57:31</div>
-                   </div>
-               </div>
-               <div class="project-list_main_storage">
-                   <div class="project-list_storage_type">
-                       <div class="storage_type_wrapper">
-                            <i class="el-icon-document storage_type"></i>
-                            <div>CSV</div>
-                       </div>
-                       <span class="title font-size-12">CSV</span>
-                   </div>
-                   <div class="project-list_storage_operate">
-                       <i class="el-icon-edit"></i>
-                       <i class="el-icon-delete"></i>
-                   </div>
-                   <div class="project-list_storage_info">
-                       <div class="info-name">a</div>
-                       <div class="info-time">2020年3月3日21:57:31</div>
+                       <div class="info-name">{{item.dbconnectionname}}</div>
+                       <div class="info-time">{{item.dbcreatetime | todate}}</div>
                    </div>
                </div>
             </div>
@@ -78,25 +61,32 @@
                         </div>
                         <div class="marginB10"><span class="red">*</span>名称</div>
                         <div class="marginB10">
-                            <y-input v-model="txtDefaultVal"></y-input>
+                            <y-input v-model="txtNameVal"></y-input>
                         </div>
                         <div class="marginB10"><span class="red">*</span>域名</div>
                         <div class="marginB10">
-                            <y-input v-model="txtDefaultVal"></y-input>
+                            <y-input v-model="txtHostVal"></y-input>
                         </div>
                         <div class="marginB10"><span class="red">*</span>用户名</div>
                         <div class="marginB10">
-                            <y-input v-model="txtDefaultVal"></y-input>
+                            <y-input v-model="txtUserNameVal"></y-input>
                         </div>
                         <div class="marginB10"><span class="red">*</span>密码</div>
                         <div class="marginB10">
-                            <y-input v-model="txtDefaultVal"></y-input>
+                            <y-input v-model="txtPasswordVal" type="password"></y-input>
                         </div>
                         <div class="marginB10"><span class="red">*</span>Service Name</div>
                         <div class="marginB10">
-                            <y-input v-model="txtDefaultVal"></y-input>
+                            <y-input v-model="txtServiceNameVal"></y-input>
                         </div>
                         <div class="project-list_confirm marginT20">
+                            <y-button text="测试连接" 
+                                      :width="150" 
+                                      :showIcon="false" 
+                                      @click="onTest" 
+                                      :hollow="true" 
+                                      popper="marginR20"
+                            ></y-button>
                             <y-button text="确定" :width="150" :showIcon="false" @click="onConfirm"></y-button>
                         </div>
                     </div>
@@ -110,34 +100,163 @@
         return {
             showAddDialog: false,
             dbTypeOtions: [{
-                value: '选项1',
-                label: '黄金糕'
+                value: 'ORACLE',
+                label: 'ORACLE'
                 }, {
-                value: '选项2',
-                label: '双皮奶'
-                }, {
-                value: '选项3',
-                label: '蚵仔煎'
-                }, {
-                value: '选项4',
-                label: '龙须面'
-                }, {
-                value: '选项5',
-                label: '北京烤鸭'
-            }],
-            dbTypeDefaultVal: '选项1',
-            txtDefaultVal:'开心'
+                value: 'MYSQL',
+                label: 'MYSQL'
+                }],
+            dbTypeDefaultVal: 'ORACLE',
+            txtNameVal:'',
+            txtHostVal:'',
+            txtUserNameVal:'',
+            txtPasswordVal:'',
+            txtServiceNameVal:'',
+            datasourceList: [],
+            actionType: 'add'
         }
     },
+    mounted(){
+        this.initData()
+    },
     methods:{
+        getIndex(_id){
+            let dIndex = -1;
+            this.datasourceList.map((item,index) => {
+                if(item._id === _id){
+                    dIndex = index
+                }
+            })
+            return dIndex
+        },
+        initData(){
+            this.$axios.post('/connection/all')
+            .then((res) => {
+                if(res.code === 200){
+                    this.datasourceList = res.body
+                }
+            })
+            .catch((e) => {
+                console.warn(e)
+            })
+        },
+        onTest(){
+            let data = {
+                dbtype: this.dbTypeDefaultVal,
+                dbhost: this.txtHostVal,
+                dbservername: this.txtServiceNameVal,
+                dbusername: this.txtUserNameVal,
+                dbpassword: this.txtPasswordVal
+            }
+            this.$axios.post('/connection/testConnection', data)
+            .then((res)=>{
+                if(res.code === 200){
+                    this.$msgbox({
+                        title: '提示',
+                        message: res.body,
+                        iconClass: 'el-icon-success'
+                    })
+                }
+            })
+            .catch((e) => {
+                console.warn(e)
+            })
+        },
+        onEditData(e){
+            this.actionType = 'edit'
+            let _id = e.target.dataset.id
+            this.editId = _id
+            let info = null
+            info = this.datasourceList.filter((item) => {
+                return item._id === _id
+            })
+            if(info && info.length>0){
+                this.dbTypeDefaultVal = info[0].dbtype
+                this.txtNameVal = info[0].dbconnectionname
+                this.txtHostVal = info[0].dbhost
+                this.txtUserNameVal = info[0].dbusername
+                this.txtPasswordVal = info[0].dbpassword
+                this.txtServiceNameVal = info[0].dbservername
+                this.showAddDialog = true
+            }
+        },
+        onDeleteData(e){
+            this.$confirm( '确定删除?', '提示', {
+                iconClass: 'el-icon-warning',
+                callback: (res)=>{
+                    if(res.action === 'confirm'){
+                        let _id = e.target.dataset.id
+                        this.$axios.post('/connection/delete/' + e.target.dataset.id)
+                        .then((res) => {
+                            if(res.code === 200){
+                                let dIndex = this.getIndex(_id)
+                                this.datasourceList.splice(dIndex,1)
+                                this.$msgbox({
+                                    title: '提示',
+                                    message: '删除成功',
+                                    iconClass: 'el-icon-success'
+                                })
+                            }
+                        })
+                        .catch((e) => {
+                            console.warn(e)
+                        })
+                    }
+                }
+            })
+        },
         onAddClick(){
+            this.actionType = 'add'
             this.showAddDialog = true
         },
         onCloseDialog(){
             this.showAddDialog = false
         },
         onConfirm(){
-            this.showAddDialog = false
+            let data = {
+                    dbconnectionname: this.txtNameVal,
+                    dbtype: this.dbTypeDefaultVal,
+                    dbhost: this.txtHostVal,
+                    dbservername: this.txtServiceNameVal,
+                    dbusername: this.txtUserNameVal,
+                    dbpassword: this.txtPasswordVal
+            }
+            if(this.actionType == 'add'){
+                this.$axios.post('/connection/add', data)
+                .then((res) => {
+                    if(res.code === 200){
+                        this.datasourceList.push(res.body)
+                        this.showAddDialog = false
+                        this.$msgbox({
+                            title: '提示',
+                            message: '添加成功',
+                            iconClass: 'el-icon-success'
+                        })
+                    }
+                })
+                .catch((e)=>{
+                    console.warn(e)
+                })
+            }
+            else {
+                this.$axios.post('/connection/update/' + this.editId, data)
+                .then((res) => {
+                    if(res.code === 200){
+                        let dIndex = this.getIndex(this.editId)
+                        let item = Object.assign({}, this.datasourceList[dIndex], data)
+                        this.$set(this.datasourceList, dIndex, item)
+                        this.showAddDialog = false
+                        this.$msgbox({
+                            title: '提示',
+                            message: '更新成功',
+                            iconClass: 'el-icon-success'
+                        })
+                    }
+                })
+                .catch((e)=>{
+                    console.warn(e)
+                })
+            }
         }
     }
   }

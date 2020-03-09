@@ -1,0 +1,37 @@
+.ui-inputnumber{
+    display: flex;
+    flex-direction: row;
+    min-width:100px;
+    .ui-inputnumber_wrap{
+        display: flex;
+        flex: 1;
+        width: 100%;
+        input{
+            width: 100%;
+            background: rgb(38,44,51);
+            color: #fff;
+            border: 1px solid #000;
+            &:hover{
+                border: 1px solid #2681ff;
+            }
+            &.warn{
+                border: 1px solid red;
+            }
+        }
+    }
+    .ui-inputnumber_spwrap{
+        display: flex;
+        flex-direction: column;
+        width:20px;
+        align-items: center;
+        justify-content: center;
+        .ui-inputnumber_add, .ui-inputnumber_dec{
+            background: rgb(38,44,51);
+            border: 1px solid #000;
+            width: 20px;
+            text-align: center;
+            color: #bcc9d4;
+            cursor: pointer;
+        }
+    }
+}

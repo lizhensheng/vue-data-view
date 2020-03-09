@@ -1,6 +1,4 @@
 const dbOracle = require('./dboracle')
-const dbMssql = require('./dbmssql')
-const dbPg = require('./dbpg')
 const dbMysql = require('./dbmysql')
 const Connecton = require('../models/connection')
 let dbFactory = {
@@ -10,14 +8,8 @@ let dbFactory = {
             case ORACLE:
                 handle = new dbOracle()
                 break
-            case MSSQL:
-                handle = new dbMssql()
-                break
             case MYSQL:
                 handle = new dbMysql()
-                break
-            case PGSQL:
-                handle = new dbPg()
                 break
         }
         return handle
@@ -35,9 +27,7 @@ let dbFactory = {
     }
 }
 
-const ORACLE='oracle'
-const MSSQL='mssql'
-const MYSQL='mysql'
-const PGSQL='postgress'
+const ORACLE='ORACLE'
+const MYSQL='MYSQL'
 
 module.exports = dbFactory

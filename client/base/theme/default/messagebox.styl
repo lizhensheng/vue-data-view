@@ -1,0 +1,75 @@
+.ui-messagebox{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    .messagebox-mask{
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 9999;
+    }
+    .messagebox-wrap{
+        min-width: 300px;
+        max-width: 80%;
+        max-height: 555px;
+        display:flex;
+        flex-direction: column;
+        background: rgb(48,54,64);
+        z-index: 100001;
+        font-size: 13px;
+        .messagebox-header_wrap{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            height: 55px;
+            width: 100%;
+            color: #2681ff;
+            border-top:2px solid rgb(86,198,255);
+            padding:0 20px;
+            .messagebox-header_title{
+                display: flex;
+                align-items: center;
+                width: 100%;
+                >i{
+                    font-size: 15px;
+                    margin-right: 5px;
+                }
+            }
+            >i{
+                transition: 0.4s;
+                font-size: 20px;
+                cursor: pointer;
+                &:hover{
+                transform: rotate(90deg) 
+                }
+            }
+        }
+        .messagebox-body_wrap{
+            padding:10px 20px 10px 20px;
+            overflow: auto;
+            color: #fff;
+        }
+        .messagebox-footer{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            .messagebox-cancel{
+                margin-left: 10px;
+                border: 1px solid #2681ff;
+                background: none;
+                &:hover{
+                    background: #2681ff;
+                }
+            }
+        }
+    }
+}

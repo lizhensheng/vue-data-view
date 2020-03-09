@@ -1,5 +1,5 @@
 <template>
-    <div class="ui-button" :style="{width:width+'px'}" @click="onClick">
+    <div class="ui-button" :style="{width:width+'px'}" @click="onClick" :class="[popper, {'hollow': hollow}]" >
         <i :class="iconClass" class="marginR5" v-show="showIcon"></i>
         <div class="ibox">
             {{text}}
@@ -28,6 +28,14 @@ export default{
         width:{
             type: Number,
             default: 200
+        },
+        popper:{
+            type: String,
+            default: ''
+        },
+        hollow: {
+            type: Boolean,
+            default: false
         }
     },
     methods:{

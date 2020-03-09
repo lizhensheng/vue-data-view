@@ -20,8 +20,8 @@ import 'animate.css'
 import VueClipboard from 'vue-clipboard2'
 import EventBus from './eventBus/index'
 
+Vue.use(Element)
 Vue.use(YouDu)
-Vue.use(Element);
 Vue.use(VueClipboard)
 
 /**

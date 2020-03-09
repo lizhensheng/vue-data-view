@@ -35,16 +35,18 @@ render(app,{
     cache: false,
     debug: false
 })
-
-app.use(koajwt({secret:SECRET}).unless({
-    path:[
-        /^\/common\/html2canvas\/corsproxy/,
-        /^\/page\/view/,
-        /^\/auth\/login/,
-        /^\/auth\/register/,
-        /^\/menus\/add/
-    ]
-}))
+//调式阶段不使用koajwt
+if(process.argv.slice(2).length > 0 && process.argv.slice(2)[0] === '--production')
+{
+    app.use(koajwt({secret:SECRET}).unless({
+        path:[
+            /^\/common\/html2canvas\/corsproxy/,
+            /^\/page\/view/,
+            /^\/auth\/login/,
+            /^\/auth\/register/
+        ]
+    }))
+}
 
 router.use(async (ctx,next)=>{
     let token = ctx.headers.authorization

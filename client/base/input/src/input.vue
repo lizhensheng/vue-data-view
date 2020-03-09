@@ -1,6 +1,7 @@
 <template>
-    <div class="ui-input" tabindex="2" :class="{'focus': isFocus}">
-        <input type="text" :value="value"  tabindex="6" @blur="onBlur" @focus="onFocus" @change="onChange" :placeholder="placeholder"/>
+    <div class="ui-input" tabindex="2" :class="{'focus': isFocus}" :style="{'height': height + 'px'}">
+        <div class="ibox icon-wrap" v-show="prevIcon"><i :class="prevIcon" /></div>
+        <input :type="type" :value="value"  tabindex="6" @blur="onBlur" @focus="onFocus" @change="onChange" :placeholder="placeholder"/>
         <div class="ibox icon-wrap" v-show="suffixIcon"><i :class="suffixIcon" /></div>
     </div>
 </template>
@@ -16,7 +17,23 @@ export default {
     props:{
         value: String,
         placeholder: String,
-        suffixIcon: String
+        suffixIcon: String,
+        prevIcon: String,
+        height: {
+            type: Number,
+            default: 30
+        },
+        type: {
+            type: String,
+            default: 'text',
+            validator: (value) =>{
+                if(value === 'password' || value === 'text')
+                {
+                    return true
+                }
+                return false
+            }
+        }
     },
     methods:{
         onFocus(){
