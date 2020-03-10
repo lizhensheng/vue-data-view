@@ -254,7 +254,7 @@ export default {
             .panel-controls_item{
                  display: flex;
                  flex-direction: column;
-                 width: 80px;
+                 width: 75px;
                  height: 80px;
                  margin-bottom: 6px;
                  background: rgb(24,26,28);

@@ -22,22 +22,11 @@ export default {
     },
     data(){
         return {
-            clientWidth: 0,
-            clientHeight: 0
+            clientWidth: 2320,
+            clientHeight: 1480
         }
     },
     computed:{
-        // screenWidth(){
-        //     let percent = this.scalePercent / 100
-        //     let paintWidth = this.$config.editorWrapPanelWidth * percent
-        //     let maxWidth = Math.max( this.clientWidth, paintWidth)
-        //      //保存屏幕的高度
-        //     // this.$store.dispatch('setScreenShot', {
-        //     //     width: maxWidth,
-        //     //     height: this.screenShot.height
-        //     // })
-        //     return maxWidth
-        // },
         screen(){
             let percent = this.scalePercent / 100
             let paintWidth = this.$config.editorWrapPanelWidth * percent
@@ -64,6 +53,7 @@ export default {
         })
     },
     created(){
+
     },
     mounted(){
         this.canvaswpInstance = this.$refs.canvaswp

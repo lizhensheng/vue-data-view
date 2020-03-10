@@ -1,6 +1,6 @@
 <template>
     <div class="editor-header">
-        <div class="header_left dv"></div>
+        <div class="header_left dv"><i class="el-icon-arrow-left icon marginL20" @click="onBack"></i></div>
         <div class="header_center dv"><i class="el-icon-data-line paddingR10"></i><span class="paddingR5">-</span>{{projectName}}</div>
         <div class="header_right dv">
             <el-tooltip content="保存"><div class="header-icon_wrap save"><i class="el-icon-check icon"></i></div></el-tooltip>
@@ -19,7 +19,11 @@ export default {
         }
     },
     methods:{
-
+        onBack(){
+            this.$router.push({
+                name: 'projectCreate'
+            })
+        }
     }
 }
 </script>
@@ -34,6 +38,14 @@ export default {
     background: rgb(29,30,31);
     .dv{
         flex: 1;
+    }
+    .header_left{
+        i{
+            background: rgba(161,174,179,0.5);
+            color: #fff;
+            cursor: pointer;
+        }
+        
     }
     .header_center{
         text-align: center;
