@@ -1,13 +1,13 @@
 <!--test.vue-->
 <template>
-  <div class="qk-textarea">
+  <div class="c-textarea">
     <textarea class="qk-textarea-item" :placeholder="placeholder" v-model="tempValue"/>
   </div>
 </template>
 
 <script>
 	export default {
-		name: 'QkTextarea',
+		name: 'CTextarea',
 		props: {
 			placeholder: {
 				type: String,

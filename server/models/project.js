@@ -4,14 +4,15 @@ const ObjectId = mongoose.Types.ObjectId
 
 const schema = new Schema({
     _id: { type: ObjectId },
-    title: { type: String, default:'未命名项目' },
-    coverImage: { type: String, default:''},
-    description: { type: String, default:'一个项目设计完成了'},
+    title: { type: String, default:'' },
+    backgroundImage: { type: String, default:''},
+    backgroundColor: { type: String, default:''},
+    thumbnailImage: { type: String, default:''},
     shareConfig: {
         shareWx: false,
         coverImage: { type:String, default:''},
-        title: { type:String, default:'这是'},
-        description: { type:String, default:'这是'}
+        title: { type:String, default:''},
+        description: { type:String, default:''}
     },
     pages: Schema.Types.Mixed,
     script: { type:String, default:''},
@@ -19,9 +20,9 @@ const schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
-    width: { type:Number, default:375},
-    height: { type:Number, default:611},
-    pageMode: { type:String, default:'pc'},
+    screenWidth: { type:Number, default:1920},
+    screenHeight: { type:Number, default:1080},
+    pageMode: { type:String, default:'PC'},
     flipType: { type:Number, default:0},
     slideNumber: {type:Boolean, default:false},
     add_timer: Number,
@@ -32,6 +33,6 @@ const schema = new Schema({
     members: [mongoose.Schema.Types.ObjectId],
 },{timestamps: {createdAt:'created',updateAt:'updated'}})
 
-const model = mongoose.model('page',schema,'page')
+const model = mongoose.model('project',schema,'project')
 
 module.exports = model

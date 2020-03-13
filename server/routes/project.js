@@ -1,35 +1,39 @@
 const mongoose = require('mongoose')
-const Page = require('../models/page')
+const Project = require('../models/project')
 const router = require('koa-router')()
 
 router.get('/view/:_id', async ctx=>{
     let _id=mongoose.mongo.ObjectId(ctx.params._id)
-    let page=await Page.findOne({_id})
+    let page=await Project.findOne({_id})
     ctx.status=201
     let pageMode={
-        'h5':'h5-swiper',
-        'longPage':'h5-long',
-        'relativePage':'h5-relative',
         'pc':'pc'
     }
     await ctx.render(pageMode[page.pageMode],{pageData:page})
 })
 
-router.get('/myPages', async ctx=>{
-    let author=ctx.state.user_id
-    author=mongoose.mongo.ObjectId(author)
+router.get('/myProjects', async ctx=>{
+    let author=ctx.state.user._id
     if(ctx.query.type==='share'){
-        ctx.body=await Page.find({pageMode:ctx.query.pageMode,isTemplate:{$ne:true},members:{$elemMatch:{$in:author}}})
+        ctx.body=await Project.find({pageMode:ctx.query.pageMode,isTemplate:{$ne:true},members:{$elemMatch:{$in:author}}})
         return
     }
-    ctx.body=await Page.find({author:author,pageMode:ctx.query.pageMode}).ne('isTemplate',true)
+    ctx.body=await Project.find({author:author}).ne('isTemplate',true)
+})
+
+router.post('/modifyName/:_id', async ctx=>{
+    let _id = ctx.params._id
+    let data = ctx.request.body
+    ctx.body = await Project.updateOne({_id},{$set: data},{
+        runValidators:true
+    })
 })
 
 router.get('/myPages/count',async ctx=>{
     let author = ctx.state.user_id
     author = mongoose.mongo.ObjectId(author)
-    let myList = await Page.find({pageMode:ctx.query.pageMode,author:author}).ne('isTemplate',true)
-    let shareList = await Page.find({pageMode:ctx.query.pageMode,isTemplate:{$ne:true},members:{$elemMatch:{$in:author}}})
+    let myList = await Project.find({pageMode:ctx.query.pageMode,author:author}).ne('isTemplate',true)
+    let shareList = await Project.find({pageMode:ctx.query.pageMode,isTemplate:{$ne:true},members:{$elemMatch:{$in:author}}})
     ctx.body = {
         my:myList.length,
         share:shareList.length
@@ -39,13 +43,13 @@ router.get('/myPages/count',async ctx=>{
 router.get('/myPublishPages', async ctx=>{
     let author=ctx.state.user_id
     author=mongoose.mongo.ObjectId(author)
-    ctx.body=await Page.find({author:author,pageMode:ctx.query.pageMode}).where('isPublish').equals(true)
+    ctx.body=await Project.find({author:author,pageMode:ctx.query.pageMode}).where('isPublish').equals(true)
 })
 
 router.get('/myPublishPages/count',async ctx=>{
     let author = ctx.state.user_id
     author = mongoose.mongo.ObjectId(author)
-    let myList = await Page.find({pageMode:ctx.query.pageMode,author:author}).where('isPublish').equals(true)
+    let myList = await Project.find({pageMode:ctx.query.pageMode,author:author}).where('isPublish').equals(true)
     ctx.body = {
         my:myList.length
     }
@@ -53,15 +57,17 @@ router.get('/myPublishPages/count',async ctx=>{
 
 router.get('/detail/:_id',async ctx=>{
     let _id = mongoose.mongo.ObjectId(ctx.params._id)
-    ctx.body = await Page.findOne({_id})
+    ctx.body = await Project.findOne({_id})
 })
 
 router.post('/add', async ctx=>{
     let data = ctx.request.body
     let author = ctx.state.user._id
-    ctx.body = await Page.create({
+    author=mongoose.mongo.ObjectId(author)
+    ctx.body = await Project.create({
         ...data,
         author:author,
+        members:[author],
         _id:mongoose.mongo.ObjectId()
     })
 })
@@ -69,8 +75,8 @@ router.post('/add', async ctx=>{
 router.post('/copy/:_id', async ctx=>{
     let _id=mongoose.mongo.ObjectId(ctx.params._id)
     let author=ctx.state.user_id
-    let data=await Page.findOne({_id})
-    ctx.body=await Page.create({
+    let data=await Project.findOne({_id})
+    ctx.body=await Project.create({
         ...data.toObject(),
         isPublish:false,
         isTemplate:false,
@@ -83,7 +89,7 @@ router.post('/copy/:_id', async ctx=>{
 router.post('/update/:_id',async ctx=>{
     let _id=mongoose.mongo.ObjectId(ctx.params._id)
     let data=ctx.request.body
-    ctx.body=await Page.updateOne({_id},{$set:data},{
+    ctx.body=await Project.updateOne({_id},{$set:data},{
         runValidators:true
     })
 })
@@ -95,8 +101,8 @@ router.post('/delete/:_id', async ctx=>{
 
 router.post('/setTemplate/:_id',async ctx=>{
     let _id=mongoose.mongo.ObjectId(ctx.params._id)
-    let data=await Page.findOne({_id})
-    ctx.body=await Page.create({
+    let data=await Project.findOne({_id})
+    ctx.body=await Project.create({
         ...data.toObject(),
         isTemplate:true,
         isPublish:false,
@@ -108,12 +114,12 @@ router.post('/setTemplate/:_id',async ctx=>{
 router.get('/myTemplate', async ctx=>{
     let author = ctx.state.user._id
     author = mongoose.mongo.ObjectId(author)
-    ctx.body=await Page.find({pageMode:ctx.query.pageMode,author:author}).where('isTemplate').equals(true).where('isPublish').equals(false)
+    ctx.body=await Project.find({pageMode:ctx.query.pageMode,author:author}).where('isTemplate').equals(true).where('isPublish').equals(false)
 })
 
 router.post('/publish/:_id',async ctx=>{
     let _id = mongoose.mongo.ObjectId(ctx.params._id)
-    ctx.body=await Page.updateOne({_id},{$set:{isPublish:true}},{
+    ctx.body=await Project.updateOne({_id},{$set:{isPublish:true}},{
         runValidators:true
     })
 })
@@ -121,27 +127,25 @@ router.post('/publish/:_id',async ctx=>{
 router.post('/deleteShareToUser/:_id',async ctx=>{
     let _id=mongoose.mongo.ObjectID(ctx.params._id)
     let author=ctx.state.user._id
-    ctx.body=await Page.updateOne({_id},{$pull:{members:author}},{
+    ctx.body=await Project.updateOne({_id},{$pull:{members:author}},{
         runValidators:true
     })
 })
 
 router.post('/publishTemplate/:_id',async ctx=>{
-    // let _id=mongoose.mongo.ObjectId(ctx.params._id)
-    // let data=await Page.findOne({_id})
-    // ctx.body=await Page.create({
-    //     ...data.toObject(),
-    //     isTemplate:true,
-    //     isPublish:true,
-    //     members:[],
-    //     _id:mongoose.mongo.ObjectId()
-    // })
-    ctx.status=202
-    ctx.body='该功能暂不开放'
+    let _id=mongoose.mongo.ObjectId(ctx.params._id)
+    let data=await Project.findOne({_id})
+    ctx.body=await Project.create({
+        ...data.toObject(),
+        isTemplate:true,
+        isPublish:true,
+        members:[],
+        _id:mongoose.mongo.ObjectId()
+    })
 })
 
 router.get('/templateShop/list',async ctx=>{
-    ctx.body=await Page.find({pageMode:ctx.query.pageMode}).where('isTemplate').equals(true).where('isPublish').equals(true)
+    ctx.body=await Project.find({pageMode:ctx.query.pageMode}).where('isTemplate').equals(true).where('isPublish').equals(true)
 })
 
 module.exports=router

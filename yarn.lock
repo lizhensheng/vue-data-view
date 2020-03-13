@@ -2885,6 +2885,11 @@ dom-serializer@0:
     domelementtype "^2.0.1"
     entities "^2.0.0"
 
+dom-to-image@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.npm.taobao.org/dom-to-image/download/dom-to-image-2.6.0.tgz#8a503608088c87b1c22f9034ae032e1898955867"
+  integrity sha1-ilA2CAiMh7HCL5A0rgMuGJiVWGc=
+
 domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.npm.taobao.org/domain-browser/download/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
@@ -5168,11 +5173,7 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.npm.taobao.org/lodash.uniq/download/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@^4.0.0, lodash@^4.16.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.3.0, lodash@~4.17.10:
-  version "4.17.15"
-  resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.15.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash%2Fdownload%2Flodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-
-lodash@^4.17.15:
+lodash@^4.0.0, lodash@^4.16.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.3.0, lodash@~4.17.10:
   version "4.17.15"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha1-tEf2ZwoEVbv+7dETku/zMOoJdUg=
@@ -8644,6 +8645,11 @@ vue-cropper@0.4.9:
   version "0.4.9"
   resolved "https://registry.npm.taobao.org/vue-cropper/download/vue-cropper-0.4.9.tgz#fe650f32516ecf29014bbd4a9079191c8dc5a5ae"
   integrity sha1-/mUPMlFuzykBS71KkHkZHI3Fpa4=
+
+vue-draggable-resizable-gorkys@^2.3.6:
+  version "2.3.6"
+  resolved "https://registry.npm.taobao.org/vue-draggable-resizable-gorkys/download/vue-draggable-resizable-gorkys-2.3.6.tgz#f25c3ad13d9c13f287cfd2029b1e736451730465"
+  integrity sha1-8lw60T2cE/KHz9ICmx5zZFFzBGU=
 
 vue-draggable-resizable@^2.0.1:
   version "2.0.1"

@@ -16,9 +16,9 @@ import Textarea from './textarea'
 import bgMusic from './bg-music'
 
 // 业务组件
-import Baseform from './baseform'
-import Scrollform from './scrollform'
-import Simpletext from './simpletext'
+import BaseForm from './baseform'
+import ScrollForm from './scrollform'
+import SimpleText from './simpletext'
 
 const components = [
     // 基础组件
@@ -34,9 +34,9 @@ const components = [
 	// 功能组件
 	bgMusic,
 	// 业务组件
-    Baseform,
-    Scrollform,
-    Simpletext
+    BaseForm,
+    ScrollForm,
+    SimpleText
 ]
 const install = function (Vue){
     if(install.installed) return
@@ -47,25 +47,29 @@ if(typeof window !== 'undefined' && window.Vue){
     install(window.Vue)
 }
 
-let _qk_register_components_object = {};
+let _c_register_components_object = {};
 components.forEach(item => {
-	_qk_register_components_object[item.name] = item
+	_c_register_components_object[item.name] = item
 })
 
 export {
-    Text,
+     // 基础组件
+	Text,
 	Image,
 	ImageCarousel,
 	RectangleBorder,
 	Iframe,
 	Button,
-	bgMusic,
+	// 表单组件
 	Input,
 	Textarea,
-    Baseform,
-    Scrollform,
-    Simpletext,
-    _qk_register_components_object
+	// 功能组件
+	bgMusic,
+	// 业务组件
+    BaseForm,
+    ScrollForm,
+    SimpleText,
+    _c_register_components_object
 }
 
 export default {

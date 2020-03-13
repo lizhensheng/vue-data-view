@@ -15,7 +15,7 @@
                     <img src="" class="project_list_item_proimg"/>
                     <div class="project_list_item_operator_wrap">
                         <div class="project_list_item_operator_middle">
-                            <div class="project_list_item_edit">创建项目</div>   
+                            <div class="project_list_item_edit" @click="onTemplateCreate">创建项目</div>   
                             <div class="project_list_item_preview">预览</div>       
                         </div>
                     </div>
@@ -41,6 +41,15 @@ export default {
             onNewProject(){
                 this.$router.push({
                     name: 'PowerEditor'
+                })
+            },
+            onTemplateCreate(){
+                //先复制项目在跳转
+                this.$router.push({
+                    name: 'PowerEditor',
+                    params: {
+                        id: '5e05ce44922d5c0aa44b5bd2'
+                    }
                 })
             }
         }

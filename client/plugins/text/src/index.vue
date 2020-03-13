@@ -1,17 +1,17 @@
 <!--test.vue-->
 <template>
-  <div class="qk-text">
-    {{text}}
+  <div class="c-text">
+    {{name}}
   </div>
 </template>
 
 <script>
 	export default {
-		name: 'QkText', // 这个名字很重要，它就是未来的标签名<qk-text></qk-text>
+		name: 'CText', // 这个名字很重要，它就是未来的标签名<qk-text></qk-text>
 		props: {
-			text: {
+			name: {
 				type: String,
-				default: '这是一段文字'
+				default: ''
 			}
 		},
 		data() {

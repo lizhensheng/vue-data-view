@@ -18,6 +18,10 @@ export default new Router({
 			path: 'data-create',
 			name: 'dataCreate',
 			component: () => import('@/pages/home/data-create'),
+		}, {
+			path: '/pic-create',
+			name: 'picCreate',
+			component: () => import('@/pages/home/pic-create'),
 		},  {
 			path: 'my-template',
 			name: 'myTemplate',

@@ -1,5 +1,5 @@
 <template>
-  <div class="qk-bg-music" :class="{playing: playing}" @click="handleMusicPlay">
+  <div class="c-bg-music" :class="{playing: playing}" @click="handleMusicPlay">
     <div class="video-play-audio" v-if="musicSrc">
       <audio ref="audioPlayer" id="video-play-audio" :src="musicSrc"
              style="opacity: 0;" controls autoplay loop preload></audio>
@@ -10,7 +10,7 @@
 
 <script>
 	export default {
-		name: 'qkBgMusic',
+		name: 'CBgMusic',
 		props: {
 			musicSrc: {
 				type: String,

@@ -1,5 +1,5 @@
 <template>
-    <div class="lk-baseform" v-show="url">
+    <div class="c-base-form" v-show="url">
             <el-table
                     :data="tableData"
                     style="width: 100%"
@@ -28,7 +28,7 @@
 <script>
     import axios from 'axios'
     export default {
-        name:'LkBaseform',
+        name:'CBaseForm',
         data(){
             return {
                 tableData: [],

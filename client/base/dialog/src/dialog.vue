@@ -1,5 +1,5 @@
 <template>
-    <div class="ui-dialog" v-show="showDialog">
+    <div class="ui-dialog" v-show="showDialog" :class="theme">
         <div class="dialog-mask" @click="onMaskClick"></div>
         <div class="dialog-wrap">
             <div class="dialog-header_wrap">
@@ -24,7 +24,14 @@ export default {
     },
     props:{
         title: String,
-        isShow: Boolean
+        isShow: Boolean,
+        theme: {
+            type: String,
+            default: 'dark',
+            validator: function(val){
+                return val === 'dark' || val ==='white'
+            }
+        }
     },
     methods: {
         onClose(e){

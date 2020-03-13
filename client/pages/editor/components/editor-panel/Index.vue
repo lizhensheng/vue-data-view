@@ -3,18 +3,7 @@
     <div class="editor-pane-inner">
       <div class="editor-main" :style="{transform: 'scale('+scale+')', width: projectData.width + 'px', height: projectData.height + 'px'}">
         <div class="page-preview-wrapper" ref="canvas-panel" id="canvas-panel" :style="getCommonStyle(activePage.commonStyle)">
-          <!--页面组件列表展示-->
-          <edit-shape
-                  v-for="item in activePage.elements"
-                  :key="item.uuid"
-                  :uuid="item.uuid"
-                  :defaultStyle="item.commonStyle"
-                  :style="getCommonStyle(item.commonStyle)"
-                  @handleElementClick="handleElementClick(item.uuid)"
-                  @resize="handleElementResize"
-                  :active="item.uuid === activeElementUUID">
-            <component :is="item.elName" class="element-on-edit-pane" v-bind="{...item.propsValue, value: item.value}"/>
-          </edit-shape>
+       
         </div>
 
 
@@ -34,7 +23,6 @@
 
 <script>
 	import {_qk_register_components_object} from '@client/plugins/index'
-	import editShape from '@/components/edit-shape'
 	import editorProjectConfig from '@client/pages/editor/DataModel'
 	import {mapState, mapGetters} from 'vuex'
 	import html2canvas from 'html2canvas';

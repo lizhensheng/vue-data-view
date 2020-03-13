@@ -79,7 +79,7 @@
 	import controlBar from './components/control-bar'
 
 	import previewPage from './components/preview'
-	import imageLibs from '@client/components/image-libs'
+	import imageLibs from '@client/components/img-libs/img-libs'
 
 	import {mapState, mapGetters} from 'vuex'
 	import html2canvas from 'html2canvas'

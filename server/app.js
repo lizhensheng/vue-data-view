@@ -15,11 +15,11 @@ const $config = require('../config')
 const app = new Koa()
 const SECRET = 'lkui'
 
-app.use(koaStatic(__dirname+'/public'),{gzip:true,setHeaders:function(res){
-    res.header('Access-Control-Allow-Origin','*')
-}})
-
 app.use(cors())
+
+app.use(koaStatic(__dirname+'/public'))
+
+
 
 app.use(koaBody({
     multipart:true,

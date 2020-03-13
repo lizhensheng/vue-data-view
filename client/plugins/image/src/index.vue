@@ -1,13 +1,13 @@
 <!--test.vue-->
 <template>
-  <div class="qk-image">
+  <div class="c-image">
     <img :src="imageSrc" alt="">
   </div>
 </template>
 
 <script>
 	export default {
-		name: 'QkImage', // 这个名字很重要，它就是未来的标签名<qk-text></qk-text>
+		name: 'CImage', // 这个名字很重要，它就是未来的标签名<qk-text></qk-text>
 		props: {
 			imageSrc: {
 				type: String,

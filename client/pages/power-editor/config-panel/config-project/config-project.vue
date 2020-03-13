@@ -4,8 +4,8 @@
         <div class="config-project_setting">
             <y-form-item title="屏幕大小" :width="70" :height="30">
                 <div class="screen-pixel">
-                    <y-input-number v-model="screenWidth" :min="0" :max="10000"></y-input-number>
-                     <y-input-number v-model="screenHeight" :min="0" :max="10000"></y-input-number>
+                    <y-input-number v-model="projectInfo.screenWidth" :min="0" :max="10000"></y-input-number>
+                     <y-input-number v-model="projectInfo.screenHeight" :min="0" :max="10000"></y-input-number>
                 </div>
             </y-form-item>
             <div class="screen-pixel_title marginB10">
@@ -15,49 +15,123 @@
             </div>
              <y-form-item title="背景颜色" :width="70" :height="20" popper="marginB10">
                 <div class="screen-bg_color yinput">
-                   <y-input :height="20" v-model="backgroundColor"></y-input>
+                   <y-input :height="20" v-model="projectInfo.backgroundColor"></y-input>
                 </div>
             </y-form-item>
              <y-form-item title="背景图" :width="70" :height="20" popper="marginB10">
                 <div class="screen-bg_image yinput"> 
-                   <y-input :height="20" prevIcon="el-icon-link" v-model="backgroundImage"></y-input>
+                   <y-input :height="20" prevIcon="el-icon-link" v-model="projectInfo.backgroundImage"></y-input>
                 </div>
             </y-form-item>
             <y-form-item title="" :width="70" :height="120" popper="marginB10">
                 <div class="screen-bg_img_preview yinput"> 
-                   <img src="//datav.oss-cn-hangzhou.aliyuncs.com/uploads/templates/7.png" @click="onBgImageClick" width="140" height="90">
-                   <input ref="imageSrc" type="file" accept="image/*" style="display: none;">
+                   <img :src="projectDataInfo.backgroundImage" @click="onBgImageClick" width="140" height="90">
                 </div>
             </y-form-item>
              <y-form-item title="缩略图" :width="70" :height="20" popper="marginB25">
                     <div class="thumbnail">
-                        <y-button text="截取封面" :width="80" iconClass="el-icon-crop" class="crop"></y-button>
+                        <y-button text="截取封面" 
+                                  :width="80" 
+                                  iconClass="el-icon-crop" 
+                                  class="crop" 
+                                  @click="onScreenCapture"
+                                  :isLoading="isDoingScreenShot">
+                        </y-button>
                         <y-button text="上传封面" :width="80" iconClass="el-icon-upload2"></y-button>
                     </div>
                     <input ref="thumbnailSrc" type="file" accept="image/*" style="display: none;">
             </y-form-item>
             <y-form-item title="" :width="70" :height="108" popper="marginB10">
                 <div class="screen-bg_img_thumbnail yinput"> 
-                   <img src="//datav.oss-cn-hangzhou.aliyuncs.com/uploads/templates/7.png" height="108" width="100%">
+                   <img :src="projectDataInfo.thumbnailImage" height="90" width="140">
                 </div>
             </y-form-item>
         </div>
+         <y-dialog title="选择图片" :isShow="showChooseImgDialog" @close="onChooseImgClose" theme="white">
+           <img-libs></img-libs>
+        </y-dialog>
     </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import ImgLibs from '@/components/img-libs/img-libs'
+import editorProjectConfig from '@/pages/power-editor/data-model/data-model'
 export default {
     data() {
         return {
-            screenWidth: 1920,
-            screenHeight: 1080,
-            backgroundColor: 'rgb(100,100,100)',
-            backgroundImage: 'http://xxx.com'
+            projectInfo: {},
+            showChooseImgDialog: false,
+            isDoingScreenShot: false
+        }
+    },
+    components:{
+        ImgLibs
+    },
+    mounted(){
+        this.initProjectInfo()
+        this.$bus.$on('select-image', (selectId, url)=>{
+            this.projectInfo.backgroundImage = url
+            let temp = this.projectDataInfo
+            temp.backgroundImage = url
+            this.$store.dispatch('setProjectDataInfo', temp)
+            this.showChooseImgDialog = false
+        })
+    },
+    computed:{
+        ...mapState({
+            projectDataInfo: state => state.powereditor.projectDataInfo
+        })
+    },
+    watch:{
+        projectInfo(){
+
         }
     },
     methods:{
         onBgImageClick(){
-            this.$refs.imageSrc.click();
+             this.showChooseImgDialog = true
+        },
+        initProjectInfo(){
+            let id = this.$route.params.id
+            if(id){
+                this.$axios.get('/project/detail/' + id)
+                .then(res => {
+                    if(res.code === 200){
+                        let project = res.body
+                        this.initData(project)
+                    }
+                })
+                .catch((e) => {
+                    console.warn(e)
+                })
+            }   
+            else{
+                let project = editorProjectConfig.getProjectConfig()
+                this.initData(project)
+            }
+        },
+        initData(project){
+            this.projectInfo.screenWidth = project.screenWidth
+            this.projectInfo.screenHeight = project.screenHeight
+            this.projectInfo.backgroundColor = project.backgroundColor
+            this.projectInfo.backgroundImage = project.backgroundImage
+            this.$store.dispatch('setProjectDataInfo', project)
+        },
+        onChooseImgClose(){
+            this.showChooseImgDialog = false
+        },
+        /**
+         * 提供截屏作为项目缩略图
+         */
+        onScreenCapture() {
+            //this.projectInfo.thumbnailImage = res.body;
+            this.$bus.$emit('screenCapture')
+            this.isDoingScreenShot = true
+            this.$bus.$on('doneScreenCapture', ()=>{
+                this.isDoingScreenShot = false
+            })
+           
         }
     }
 }
@@ -123,6 +197,9 @@ export default {
                     background: rgba(38,129,255,0.8);
                 }
             }
+        }
+        .screen-bg_img_thumbnail{
+            text-align: center;
         }
     }
  }   

@@ -56,13 +56,13 @@ let pageConfig = {
 // 项目配置信息字段
 let projectConfig = {
 	name: '',
-	title: '未命名场景',
-	description: '我用夸克可视化编辑器做了一个超酷炫的H5，快来看看吧。',
+	title: '',
+	description: '',
 	coverImage: '',
 	auther: '',
 	script: '',
-	width: $config.canvasH5Width,
-	height: $config.canvasH5Height,
+	width: $config.screenPixelWidth,
+	height: $config.screenPixelHeight,
 	pages: []
 }
 

@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // 各个模块
-import editor from './modules/editor'
 import user from './modules/user'
 import scale from './modules/scale'
+import powereditor from './modules/powereditor'
+import image from './modules/image'
 
 
 import { Message } from 'element-ui'
@@ -39,8 +40,9 @@ export default new Vuex.Store({
 	actions,
 	mutations,
 	modules: {
-		editor,
 		user,
-		scale
+		scale,
+		powereditor,
+		image
 	}
 });

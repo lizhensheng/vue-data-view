@@ -38,16 +38,16 @@
                 <div class="project-list_item project-list_active">
                    <y-button text="新建可视化" :width="140" @click="onNewProject"></y-button>
                 </div>
-                <div class="project-list_item">
+                <div class="project-list_item" v-for="item in projectList" :key="item._id">
                     <div class="project_list_item_proimg_wrap">
-                        <img src="" class="project_list_item_proimg"/>
+                        <img :src="item.thumbnailImage" class="project_list_item_proimg"/>
                         <div class="project_list_item_operator_wrap">
                             <div class="project_list_item_operator_top">
                                 <i class="el-icon-data-board"></i>
                                 <i class="el-icon-s-promotion"></i>
                             </div>
                             <div class="project_list_item_operator_middle">
-                                <div class="project_list_item_edit">编辑</div>        
+                                <div class="project_list_item_edit" @click="onEditProject"  :data-id="item._id">编辑</div>        
                             </div>
                             <div class="project_list_item_operator_bottom">
                                 <i class="el-icon-document-copy"></i>
@@ -59,8 +59,8 @@
                     </div>
                     <div class="project_list_item_name_wrap">
                         <i class="el-icon-edit"></i>
-                        <input type="text" value="metadata" class="project_list_item_name"/>
-                        <span class="project_list_pstatus">未发布</span>
+                        <input type="text" v-model="item.title" class="project_list_item_name" @blur="onProjectNameBlur" :data-id="item._id"/>
+                        <span class="project_list_pstatus">{{item.isPublish?'已发布':'未发布'}}</span>
                     </div>
                 </div>
             </div>
@@ -72,12 +72,48 @@
     export default {
         data(){
             return {
-                keywords: ""
+                keywords: "",
+                projectList: []
             }
+        },
+        created(){
+            //加载projectlist
+            this.initProjectList()
         },
         methods:{
             onNewProject(){
                 this.$router.push({name: "templateCreate"})
+            },
+            initProjectList(){
+                this.$axios.get('/project/myProjects').then((res) => {
+                    if(res.code === 200){
+                        this.projectList = res.body
+                    }
+                })
+            },
+            onProjectNameBlur(e){
+                let _id = e.currentTarget.dataset.id
+                let arr = this.projectList.filter(t => t._id === _id)
+                if(arr.length > 0 && arr[0].title.length > 0){
+                    this.$axios.post('/project/modifyName/' + _id, {title: arr[0].title}).then((res) => {
+                        if(res.code === 200){
+                            this.$msgbox({
+                                title: '提示',
+                                message: '项目名已修改',
+                                iconClass: 'el-icon-success'
+                            })
+                        }
+                    })
+                }
+            },
+            onEditProject(e){
+                let _id = e.currentTarget.dataset.id
+                this.$router.push({
+                    name: 'PowerEditor',
+                    params: {
+                        id: _id
+                    }
+                })
             }
         }
     }

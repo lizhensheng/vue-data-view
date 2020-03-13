@@ -1,13 +1,13 @@
 <!--test.vue-->
 <template>
-  <div class="qk-input">
+  <div class="C-input">
     <input class="qk-input-item" v-model="value" :placeholder="placeholder" type="text">
   </div>
 </template>
 
 <script>
 	export default {
-		name: 'QkInput',
+		name: 'CInput',
 		props: {
 			placeholder: {
 				type: String,

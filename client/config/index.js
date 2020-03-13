@@ -17,8 +17,6 @@ const isTest=process.env.NODE_ENV==='development'
 const configObj={
     isDevelop: (isDev||isTest),
     ...configDict[currrentConfigKey],
-    canvasH5Width: 375,
-    canvasH5Height: 644,
     leftPanelWidth: 332,
     screenPixelWidth: 1920,
     screenPixelHeight: 1080,

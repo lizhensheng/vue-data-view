@@ -1,9 +1,4 @@
 <template>
-    <el-dialog
-        class="components-image-libs-wrapper"
-        titile="我的图片"
-        :visible.sync="dialogVisible"
-        width="600px">
         <div class="components-image-libs">
             <div class="image-lib-side-bar">
             </div>
@@ -19,23 +14,20 @@
                     </el-upload>
                 </div>
                 <ul class="image-list-wrapper" v-if="imageList.length">
-                    <li class="image-item" v-for="(item,index) in imageList" :key="index" @click="handleImageClick(item,url)">
+                    <li class="image-item" v-for="(item,index) in imageList" :key="index" @click="handleImageClick(item.url)">
                         <img :src="item.url" alt="">
                     </li>
                 </ul>
                 <div class="padding60 text-center gray" v-else>暂无数据</div>
             </div>
         </div>
-    </el-dialog>
 </template>
 
 <script>
-import $bus from '@client/eventBus'
 export default {
-    name:'image-libs',
+    name:'ImgLibs',
     data(){
         return {
-            dialogVisible:false,
             uploading:false,
             hasLoadData:false,
             imageList:[],
@@ -43,8 +35,7 @@ export default {
         }
     },
     created(){
-        $bus.$on('show-select-image',selectId=>{
-            this.dialogVisible = true
+        this.$bus.$on('show-select-image',selectId=>{
             this.selectId=selectId
         })
     },
@@ -54,6 +45,9 @@ export default {
                 this.getMyImages()
             }
         }
+    },
+    created(){
+       this.getMyImages() 
     },
     methods:{
         beforeUpload(file){
@@ -88,8 +82,7 @@ export default {
             })
         },
         handleImageClick(url){
-            $bus.$emit('select-image',this.selectId,url)
-            this.dialogVisible=false
+            this.$bus.$emit('select-image',this.selectId,url)
         }
     }
 
@@ -99,9 +92,10 @@ export default {
 <style lang="scss" scoped>
 .image-list-wrapper{
   display: flex;
+  flex-wrap: wrap;
   height: 400px;
   padding-top: 20px;
-  li{
+  .image-item{
     width: 120px;
     height: 120px;
     background: #eee 50%/contain no-repeat;
@@ -110,6 +104,8 @@ export default {
     align-items:center;
     display: flex;
     transition: all 0.28s;
+    margin-left: 10px;
+    margin-top: 10px;
     &:hover{
       box-shadow: 0 0 16px 0 rgba(0,0,0,.16);
       transform: translate3d(0,-2px,0);
@@ -123,10 +119,6 @@ export default {
   }
 }
 </style>
-<style lang="scss">
-  .components-image-libs-wrapper{
-    .el-dialog__body{
-      padding: 0 20px 20px;
-    }
-  }
+<style lang="stylus">
+ 
 </style>

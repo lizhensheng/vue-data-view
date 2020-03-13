@@ -7,181 +7,13 @@
             <y-select :options="dbTypeOtions" v-model="dbTypeDefaultVal"></y-select>
         </div>
         <y-tabs>
-            <y-tab-panel iconClass="el-icon-plus" name="me">
+            <y-tab-panel :iconClass="item.iconClass" :name="item.groupName" v-for="(item,index) in groupComponentList" :key="index">
                 <y-collapse>
-                    <y-collapse-item  iconClass="el-icon-plus" name="全部">
+                    <y-collapse-item  :iconClass="group.iconClass" :name="group.title" v-for="(group,gIndex) in item.children" :key="gIndex">
                         <div class="panel-controls_wrap">
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                        </div>
-                    </y-collapse-item>
-                    <y-collapse-item  iconClass="el-icon-plus" name="柱形">
-                        <div class="panel-controls_wrap">
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                        </div>
-                    </y-collapse-item>
-                </y-collapse>
-            </y-tab-panel>
-            <y-tab-panel iconClass="el-icon-edit" name="you">
-                 <y-collapse>
-                    <y-collapse-item  iconClass="el-icon-plus" name="全部">
-                        <div class="panel-controls_wrap">
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
-                            </div>
-                            <div class="panel-controls_item">
-                                <div class="panel-controls_title">水平</div>
-                                <img class="panel-controls_img" src=""/>
+                            <div class="panel-controls_item" v-for="(component,cIndex) in group.components" :key="cIndex"  draggable="true" @dragstart="onDrag" :data-title="component.title">
+                                <div class="panel-controls_title">{{component.title}}</div>
+                                <img class="panel-controls_img" :src="component.icon"/>
                             </div>
                         </div>
                     </y-collapse-item>
@@ -189,7 +21,7 @@
             </y-tab-panel>
         </y-tabs>
         <div>
-            <y-input v-model="defaultVal" placeholder="搜索" suffix-icon="el-icon-search"></y-input>
+            <y-input v-model="searchVal" placeholder="搜索" suffix-icon="el-icon-search"></y-input>
         </div>
     </div>
 </template>
@@ -200,24 +32,33 @@ export default {
     data(){
        return {
             dbTypeOtions: [{
-                value: '选项1',
-                label: '黄金糕'
-                }, {
-                value: '选项2',
-                label: '双皮奶'
-                }, {
-                value: '选项3',
-                label: '蚵仔煎'
-                }, {
-                value: '选项4',
-                label: '龙须面'
-                }, {
-                value: '选项5',
-                label: '北京烤鸭'
+                value: '全部',
+                label: '全部'
             }],
-            dbTypeDefaultVal: '选项1',
-            defaultVal:"dsfdsddfdgdfdsfds"
+            dbTypeDefaultVal: '全部',
+            searchVal:"",
+            groupComponentList: []
        } 
+    },
+    mounted(){
+        this.initData()
+    },
+    methods:{
+        initData(){
+            this.$axios.get('/groupcomponent/all')
+            .then((res) => {
+                if(res.code === 200){
+                    this.groupComponentList = res.body
+                }
+            })
+            .catch(e => {
+                console.warn(e)
+            })
+        },
+        onDrag(e){
+            let title = e.currentTarget.dataset.title
+            e.dataTransfer.setData("title", title)
+        }
     }
 }
 </script>

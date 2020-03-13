@@ -1,6 +1,6 @@
 <!--test.vue-->
 <template>
-  <div class="qk-image-carsousel">
+  <div class="c-image-carsousel">
     <!--异步加载轮播图的情况;-->
     <Swiper class="image-carsousel-swiper" v-if="imageSrcList.length > 0"  :autoPlay='true' :showIndicator='true' :interval="interval" duration="500">
       <Slide class="image-carsousel-slide" v-for="(item,index) in imageSrcList" :key="index">
@@ -13,7 +13,7 @@
 <script>
 	import { Swiper, Slide } from 'vue-swiper-component';
 	export default {
-		name: 'QkImageCarousel', // 这个名字很重要，它就是未来的标签名<qk-text></qk-text>
+		name: 'CImageCarousel', // 这个名字很重要，它就是未来的标签名<qk-text></qk-text>
 		components: {
 			Swiper,
 			Slide

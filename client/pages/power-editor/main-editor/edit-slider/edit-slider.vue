@@ -34,6 +34,11 @@ export default {
             _scalePercent: state => state.scale.scalePercent
         })
     },
+    watch:{
+        _scalePercent(value){
+            this.scalePercent = value
+        }
+    },
     mounted(){
         this.scalePercent = this._scalePercent
     },

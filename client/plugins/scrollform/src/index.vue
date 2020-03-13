@@ -1,5 +1,5 @@
 <template>
-    <div class="lk-scrollform">
+    <div class="c-scroll-form">
         <div class="header">
             <div class="header-item" v-for="(item,index) in tableFields" :key="index">
                 {{item.name}}
@@ -26,7 +26,7 @@
 import './index.styl'
 import axios from 'axios'
 export default {
-    name:'LkScrollform',
+    name:'CScrollForm',
     data(){
         return {
             tableData:[],

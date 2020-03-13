@@ -1,5 +1,5 @@
 <template>
-    <div class="lk-simpletext" :style="`color:${color};font-size:${size}px;width:${width}px;background-color:${backColor};`">
+    <div class="c-simpleText" :style="`color:${color};font-size:${size}px;width:${width}px;background-color:${backColor};`">
         <a v-if="link"><span class="sp-text" ref="textWrapper">{{value}}</span></a>
         <span v-else class="sp-text" ref="textWrapper">{{value}}</span>
     </div>
@@ -7,7 +7,7 @@
 <script>
 import './index.styl'
 export default {
-    name:'LkSimpletext',
+    name:'CSimpleText',
     data(){
         return {
             animationHandler:[]

@@ -40,9 +40,11 @@
                             :data-index="subitem.id"
                             @click="onSubMenuClick(subitem.id)"
                         >
-                            <div class="menu-list-subitem" :class="{'menu-list_item_subactive': subitem.id === activeSubIndex}">
-                                 <div class="menu-list_item_subtitle">{{subitem.name}}</div>
-                            </div>
+                            <router-link :to="{path: subitem.routerPath}" class="menu-list_link">
+                                <div class="menu-list-subitem" :class="{'menu-list_item_subactive': subitem.id === activeSubIndex}">
+                                    <div class="menu-list_item_subtitle">{{subitem.name}}</div>
+                                </div>
+                            </router-link>
                         </li>       
                     </ul>
                 </li>

@@ -20,6 +20,10 @@ import 'animate.css'
 import VueClipboard from 'vue-clipboard2'
 import EventBus from './eventBus/index'
 
+import vdr from 'vue-draggable-resizable-gorkys'
+import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
+Vue.component('vdr', vdr)
+
 Vue.use(Element)
 Vue.use(YouDu)
 Vue.use(VueClipboard)
