@@ -1,18 +1,24 @@
 <template>
     <div class="config-panel">
-        <config-project v-show="!switchConfig"></config-project>
-        <config-component v-show="switchConfig"></config-component>
+        <config-project v-show="!activeElementUUID"></config-project>
+        <config-component v-show="activeElementUUID"></config-component>
     </div>
 </template>
 
 <script>
 import ConfigProject from './config-project/config-project'
 import ConfigComponent from './config-component/config-component'
+import {mapState} from 'vuex'
 export default {
     data(){
         return {
             switchConfig: false
         }
+    },
+    computed:{
+        ...mapState({
+            activeElementUUID: state => state.powereditor.activeElementUUID
+        })
     },
     components: {
         ConfigProject,

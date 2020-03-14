@@ -2,7 +2,7 @@
     <div class="page loginfor" v-loading="loading">
         <div class="header-logo-wrap">
             <div class="header-logo"></div>
-            <div class="header-text">有度信息科技后台管理系统</div>
+            <div class="header-text">武汉XX信息科技后台管理系统</div>
         </div>
         <div class="body">
             <div class="login-wrap">
@@ -24,7 +24,7 @@
                     登陆
                 </div>
             </div>
-            <div class="footer">武汉有度信息科技有限公司 @2020 版权所有</div>
+            <div class="footer">武汉XX信息科技有限公司 @2020 版权所有</div>
         </div>
     </div>
 </template>

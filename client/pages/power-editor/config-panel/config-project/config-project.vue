@@ -4,8 +4,8 @@
         <div class="config-project_setting">
             <y-form-item title="屏幕大小" :width="70" :height="30">
                 <div class="screen-pixel">
-                    <y-input-number v-model="projectInfo.screenWidth" :min="0" :max="10000"></y-input-number>
-                     <y-input-number v-model="projectInfo.screenHeight" :min="0" :max="10000"></y-input-number>
+                    <y-input-number v-model="screenWidth" :min="0" :max="10000"></y-input-number>
+                     <y-input-number v-model="screenHeight" :min="0" :max="10000"></y-input-number>
                 </div>
             </y-form-item>
             <div class="screen-pixel_title marginB10">
@@ -15,12 +15,12 @@
             </div>
              <y-form-item title="背景颜色" :width="70" :height="20" popper="marginB10">
                 <div class="screen-bg_color yinput">
-                   <y-input :height="20" v-model="projectInfo.backgroundColor"></y-input>
+                   <y-input :height="20" v-model="backgroundColor"></y-input>
                 </div>
             </y-form-item>
              <y-form-item title="背景图" :width="70" :height="20" popper="marginB10">
                 <div class="screen-bg_image yinput"> 
-                   <y-input :height="20" prevIcon="el-icon-link" v-model="projectInfo.backgroundImage"></y-input>
+                   <y-input :height="20" prevIcon="el-icon-link" v-model="backgroundImage"></y-input>
                 </div>
             </y-form-item>
             <y-form-item title="" :width="70" :height="120" popper="marginB10">
@@ -60,7 +60,10 @@ import editorProjectConfig from '@/pages/power-editor/data-model/data-model'
 export default {
     data() {
         return {
-            projectInfo: {},
+            screenWidth: 0,
+            screenHeight: 0,
+            backgroundColor: '',
+            backgroundImage: '',
             showChooseImgDialog: false,
             isDoingScreenShot: false
         }
@@ -72,9 +75,8 @@ export default {
         this.initProjectInfo()
         this.$bus.$on('select-image', (selectId, url)=>{
             this.projectInfo.backgroundImage = url
-            let temp = this.projectDataInfo
-            temp.backgroundImage = url
-            this.$store.dispatch('setProjectDataInfo', temp)
+            this.projectDataInfo.backgroundImage = url
+            this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
             this.showChooseImgDialog = false
         })
     },
@@ -84,8 +86,21 @@ export default {
         })
     },
     watch:{
-        projectInfo(){
-
+        screenWidth(){
+            this.projectDataInfo.screenWidth = this.screenWidth
+            this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
+        },
+        screenHeight(){
+            this.projectDataInfo.screenHeight = this.screenHeight
+            this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
+        },
+        backgroundColor(){
+            this.projectDataInfo.backgroundColor = this.backgroundColor
+            this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
+        },
+        backgroundImage(){
+            this.projectDataInfo.backgroundImage = this.backgroundImage
+            this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
         }
     },
     methods:{
@@ -112,10 +127,10 @@ export default {
             }
         },
         initData(project){
-            this.projectInfo.screenWidth = project.screenWidth
-            this.projectInfo.screenHeight = project.screenHeight
-            this.projectInfo.backgroundColor = project.backgroundColor
-            this.projectInfo.backgroundImage = project.backgroundImage
+            this.screenWidth = project.screenWidth
+            this.screenHeight = project.screenHeight
+            this.backgroundColor = project.backgroundColor
+            this.backgroundImage = project.backgroundImage
             this.$store.dispatch('setProjectDataInfo', project)
         },
         onChooseImgClose(){

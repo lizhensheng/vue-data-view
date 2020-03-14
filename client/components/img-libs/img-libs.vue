@@ -38,6 +38,7 @@ export default {
         this.$bus.$on('show-select-image',selectId=>{
             this.selectId=selectId
         })
+         this.getMyImages()
     },
     watch:{
         dialogVisible(val){
@@ -45,9 +46,6 @@ export default {
                 this.getMyImages()
             }
         }
-    },
-    created(){
-       this.getMyImages() 
     },
     methods:{
         beforeUpload(file){

@@ -10,7 +10,11 @@
             }
         },
         props:{
-            activeName: String
+            activeName: String,
+            position: {
+                type: String,
+                default: 'left'
+            }
         },
         created(){
             
@@ -74,7 +78,7 @@
                 </div>
             )
             return (
-                <div class="ui-tabs">
+                <div  class={{'position-left': this.position === 'left', 'position-top': this.position ==='top', 'ui-tabs': true}}>
                     {headers}
                     {panels}
                 </div>

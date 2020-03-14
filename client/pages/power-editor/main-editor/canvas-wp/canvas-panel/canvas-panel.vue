@@ -5,23 +5,28 @@
         backgroundColor: projectDataInfo.backgroundColor,
         backgroundImage: `url('${projectDataInfo.backgroundImage}')`,
         transform: `scale(${scalePercent/100})  translate(0px, 0px)`
-    }"  @drop="onDrop" @dragover.prevent="onAllowDrop">
+    }"  @drop="onDrop" @dragover.prevent="onAllowDrop" @click="onCanvasPanelClick" data-id="canvasPanel">
           <!--页面组件列表展示-->
             <vdr v-for="item in activePage.elements"
                                      :key="item.uuid"
+                                     :ref="item.uuid"
                                      :data-uuid="item.uuid"
-                                     :w="item.commonStyle.chartPixel.width * ratio" 
-                                     :h="item.commonStyle.chartPixel.height * ratio"
-                                     :x="item.commonStyle.chartPosition.x * ratio"
-                                     :y="item.commonStyle.chartPosition.y * ratio"  
+                                     :w="(getCommonStyle(item)).chartWidth * ratio" 
+                                     :h="(getCommonStyle(item)).chartHeight * ratio"
+                                     :x="(getCommonStyle(item)).chartX * ratio"
+                                     :y="(getCommonStyle(item)).chartY * ratio"  
                                      @dragging="onComponentDrag" 
                                      @resizing="onComponentResize" 
-                                     :parent="true" 
-                                     :active="item.uuid === activeElementUUID"
+                                     :parent="false" 
+                                     :className="item.uuid === activeElementUUID? 'actived': 'noActived'"
                                      @activated="onComponentActivated(item.uuid)"
-                                     :scale-ratio="ratio" 
+                                     :scale-ratio="ratio"
+                                     @keyup.native.13="onPressEnter"
+                                     tabindex="1"
+                                     :style="{'transform': `rotate(${(getCommonStyle(item)).rotate}deg)`}"
+                                     :z="999"
                                      >
-                <component :is="item.elName" class="element-on-edit-pane" v-bind="{...item}"/>
+                    <component :is="item.elName" class="element-on-edit-pane" v-bind="{...item}"/>
             </vdr>
     </div>
 </template>
@@ -29,15 +34,13 @@
 <script>
 import {mapState, mapGetters} from 'vuex'
 import domtoimage from 'dom-to-image'
-// import EditShape from '@/components/edit-shape/edit-shape'
-import editorProjectConfig from '@/pages/power-editor/data-model/data-model'
-import { merge } from "lodash"
 import {_c_register_components_object} from '@client/plugins/index'
+import { createUUID } from '@/common/js/mUtils'
 
 export default {
     data(){
        return {
-           getCommonStyle: editorProjectConfig.getCommonStyle
+          
        }
     },
     mounted(){
@@ -46,6 +49,21 @@ export default {
         })
     },
     methods:{
+         getCommonStyle(item){
+             //读取基本配置
+             let chartWidth = item.props[0].fields[0].value[0].value.value
+             let chartHeight = item.props[0].fields[0].value[1].value.value
+             let chartX = item.props[0].fields[1].value[0].value.value
+             let chartY = item.props[0].fields[1].value[1].value.value
+             let rotate = item.props[0].fields[2].value.value
+             return {
+                 chartWidth,
+                 chartHeight,
+                 chartX,
+                 chartY,
+                 rotate
+             }
+         },
          screenCapture() {
              //截图前把缩放比例设置为100
             this.$store.dispatch('setScalePercent', 100)
@@ -75,14 +93,17 @@ export default {
             }, 1000)
          },
          onDrop(e){
+             let left = e.offsetX - 60
+             let top = e.offsetY - 60
              let title=e.dataTransfer.getData("title")
              this.$axios.post('/componentconfig/detail', {name: title})
              .then((res) => {
                  if(res.code === 200){
                      let dynamicConfig = res.body
-                     let commonConfig = editorProjectConfig.getElementConfig()
-                     let config = merge(commonConfig, dynamicConfig)
-                     this.$store.dispatch('addElement', config)
+                     dynamicConfig.uuid = createUUID()
+                     dynamicConfig.props[0].fields[1].value[0].value.value = parseInt(left / this.ratio) 
+                     dynamicConfig.props[0].fields[1].value[1].value.value = parseInt(top / this.ratio)
+                     this.$store.dispatch('addElement', dynamicConfig)
                  }
              })
              .catch(e =>{
@@ -95,11 +116,28 @@ export default {
          onComponentActivated(uuid){
              this.$store.dispatch('setActiveElementUUID', uuid);
          },
-         onComponentDrag(left,top){
-             
+         onComponentDrag(left, top){
+             let props = this.projectDataInfo.pages[0].elements[this.activeElementIndex].props[0]
+             props.fields[1].value[0].value.value = parseInt(left)
+             props.fields[1].value[1].value.value = parseInt(top)
+             this.$store.dispatch('setProjectDataInfo',  this.projectDataInfo);
          },
-         onComponentResize(){
-
+         onComponentResize(left, top, width, height){
+             let props = this.projectDataInfo.pages[0].elements[this.activeElementIndex].props[0]
+             props.fields[0].value[0].value.value = parseInt(width)
+             props.fields[0].value[1].value.value = parseInt(height)
+             props.fields[1].value[0].value.value = parseInt(left)
+             props.fields[1].value[1].value.value = parseInt(top)
+             this.$store.dispatch('setProjectDataInfo',  this.projectDataInfo);
+         },
+         onCanvasPanelClick(e){
+             if(e.target.dataset.id === "canvasPanel"){
+                 this.$store.dispatch('setActiveElementUUID', '');
+             }
+         },
+         onPressEnter(e){
+            let uuid = e.currentTarget.dataset.uuid
+            this.$store.dispatch('removeElement', uuid)
          }
     },
     computed:{
@@ -135,5 +173,8 @@ export default {
         background-repeat: no-repeat,no-repeat;
         box-shadow: rgba(0,0,0,.5) 0 0 30px 0;
         z-index: 90;
+        .draggable.actived{
+            border: 2px solid rgb(37,124,245);
+        }
     }
 </style>

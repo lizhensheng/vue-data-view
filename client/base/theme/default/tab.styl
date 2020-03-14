@@ -3,22 +3,50 @@
     height: 100%;
     width: 100%;
     color: #bcc9d4;
+    &.position-top{
+        flex-direction: column;
+        .ui-tabs_header{
+            flex-direction: row;
+            height: 50px;
+            width: 100%;
+            .ui-tabs_navitem{
+                 flex: 1;
+                 &.active{
+                     border-top: 2px solid  rgb(37,124,245);
+                 }
+            }
+        }
+        .ui-tabs_content{
+            .ui-tab-panel{
+                flex-direction: column;
+            }
+        }
+    }
+    &.position-left{
+        flex-direction: row;
+        .ui-tabs_header{
+            flex-direction: column;
+            height: 100%;
+            width: 50px;
+            .ui-tabs_navitem{
+                width: 48px;
+                height: 48px;
+                 &.active{
+                     border-left: 2px solid  rgb(37,124,245);
+                 }
+            }
+        }
+    }
     .ui-tabs_header{
         display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 50px;
         background: rgb(25,28,33);
         .ui-tabs_navitem{
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 48px;
-            height: 48px;
             cursor: pointer;
             &.active{
                color: rgb(37,124,245);
-               border-left: 2px solid  rgb(37,124,245);
                background: rgb(20,22,26);
             }
         }

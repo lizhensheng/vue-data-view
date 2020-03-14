@@ -39,7 +39,6 @@
 <script>
 import {mapState} from 'vuex'
 
-const TRANSLATE = 60
 export default {
     data(){
         return {
@@ -112,11 +111,12 @@ export default {
         },
         onDbClick(e){
             let index = e.currentTarget.dataset.index
+            this.solidLines.splice(index,1)
              e.currentTarget.removeEventListener('mousedown',function(e){
             })
              e.currentTarget.removeEventListener('mouseup',function(e){
             })
-            this.solidLines.splice(index,1)
+            
         }
     }
 }

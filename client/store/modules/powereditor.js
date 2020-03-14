@@ -14,6 +14,9 @@ const actions = {
     },
     addElement({commit}, data){
         commit('addElement', data)
+    },
+    removeElement({commit}, data){
+        commit('removeElement', data)
     }
 }
 
@@ -26,6 +29,13 @@ const mutations = {
     },
     addElement(state, data){
         state.projectDataInfo.pages[0].elements.push(data)
+    },
+    removeElement(state, data){
+        let activeElementIndex =state.projectDataInfo.pages[0].elements.findIndex(v => {return v.uuid === data})
+        if(activeElementIndex >= 0){
+            state.projectDataInfo.pages[0].elements.splice(activeElementIndex, 1)
+            state.activeElementUUID = ''
+        }
     }
 }
 

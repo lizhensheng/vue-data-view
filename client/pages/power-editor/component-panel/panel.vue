@@ -11,9 +11,9 @@
                 <y-collapse>
                     <y-collapse-item  :iconClass="group.iconClass" :name="group.title" v-for="(group,gIndex) in item.children" :key="gIndex">
                         <div class="panel-controls_wrap">
-                            <div class="panel-controls_item" v-for="(component,cIndex) in group.components" :key="cIndex"  draggable="true" @dragstart="onDrag" :data-title="component.title">
+                            <div class="panel-controls_item" v-for="(component,cIndex) in group.components" :key="cIndex">
                                 <div class="panel-controls_title">{{component.title}}</div>
-                                <img class="panel-controls_img" :src="component.icon"/>
+                                <img class="panel-controls_img" :src="component.icon"   draggable="true" @dragstart="onDrag" :data-title="component.title"/>
                             </div>
                         </div>
                     </y-collapse-item>

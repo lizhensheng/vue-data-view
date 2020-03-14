@@ -13,10 +13,14 @@
 <script>
 export default {
     name: 'YInputNumber',
+    data(){
+        return {
+            warn: false
+        }
+    },
     props:{
         value: {
-            type: Number,
-            default: 0
+            type: Number
         },
         min: {
             type: Number,
@@ -25,10 +29,6 @@ export default {
         max: {
             type: Number,
             default: 100
-        },
-        warn: {
-            type: Boolean,
-            default: false
         }
     },
     methods:{
@@ -42,12 +42,19 @@ export default {
         },
         onChange(e){
             let value = e.target.value
+            value = parseInt(value) || 0
             if(value>=this.min && value <= this.max){
                 this.$emit('input', value)
                 this.$emit('change', e)
                 this.warn = false
             } else {
                 this.warn = true
+
+                this.$msgbox({
+                    title: '数据校验',
+                    message: '数据检查结果: 输入的数值超出范围 !',
+                    iconClass: 'el-icon-success'
+                })
                 console.warn('输入的数值超出范围')
             }
         }

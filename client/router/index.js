@@ -22,39 +22,11 @@ export default new Router({
 			path: '/pic-create',
 			name: 'picCreate',
 			component: () => import('@/pages/home/pic-create'),
-		},  {
-			path: 'my-template',
-			name: 'myTemplate',
-			component: () => import('@/pages/home/my-template'),
-		}, {
-			path: 'page-data',
-			name: 'pageData',
-			component: () => import('@/pages/home/page-data'),
-		}, {
-			path: 'page-data-detail',
-			name: 'pageDataDetail',
-			component: () => import('@/pages/home/page-data-detail'),
-		}, {
-			path: 'template-list',
-			name: 'templateList',
-			component: () => import('@/pages/home/template-list'),
-		}, {
-			path: 'page-list-publish',
-			name: 'pageListPublish',
-			component: () => import('@/pages/home/page-list-publish'),
 		}]
-	},{
-		path: '/editor',
-		name: 'Editor',
-		component: () => import('@/pages/editor/index')
 	},{
 		path: '/power-editor',
 		name: 'PowerEditor',
 		component: () => import('@/pages/power-editor/power-editor')
-	},{
-		path: '/mine',
-		name: 'Mine',
-		component: () => import('@/pages/mine')
 	},
 	{
 		path: '/login',

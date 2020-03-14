@@ -13,7 +13,7 @@
 export default {
     name: 'YRange',
     props:{
-        value: Number|String,
+        value: Number,
         min:  {
             type: Number,
             default: 0
