@@ -74,8 +74,8 @@ export default {
     mounted(){
         this.initProjectInfo()
         this.$bus.$on('select-image', (selectId, url)=>{
-            this.projectInfo.backgroundImage = url
-            this.projectDataInfo.backgroundImage = url
+            this.backgroundImage = url
+            this.backgroundImage = url
             this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
             this.showChooseImgDialog = false
         })

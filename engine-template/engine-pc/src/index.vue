@@ -1,57 +1,60 @@
 <template>
     <div class="engine-template-wrapper">
-        <div class="relative" v-for="(page,i) in pageData.pages" :key="i"
-            :style="getCommonStyle(page.commonStyle)">
-            <div class="quark-page-wrapper"
-                :style="getCommonStyle({...page.commonStyle,top:pageTop,height:pageData.height,width:pageData.width,position:'relative'},scalingRatio)">
-                <componentsTemplate
-                    v-for="(item,index) in page.elements"
-                    :key="index"
-                    @handleElementClick="handleElementClick"
-                    :element="item"
-                    :style="getCommonStyle(item.commonStyle,scalingRatio)">
-                </componentsTemplate>
+        <div class="relative">
+            <!--页面组件列表展示-->
+            <div v-for="item in projectInfo.pages[0].elements"
+                                     :key="item.uuid"
+                                     :ref="item.uuid"
+                                     :data-uuid="item.uuid"
+                                     :style="{
+                                                'transform': `rotate(${(getCommonStyle(item)).rotate}deg)`,
+                                                'width': (getCommonStyle(item)).chartWidth +'px',
+                                                'height': (getCommonStyle(item)).chartHeight +'px',
+                                                'left': (getCommonStyle(item)).chartX +'px',
+                                                'top': (getCommonStyle(item)).chartY +'px'
+                                              }"
+                                     :z="999"
+                                     class="engine-element-item"
+                                     >
+                    <component :is="item.elName" class="element-on-edit-pane" v-bind="{...item}"/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import editorProjectConfig from '@client/pages/editor/DataModel'
-import componentsTemplate from '../../components/components-template'
-import $config from '@client/config'
-import elementEvents from '@client/mixins/elementEvents'
-import { SSL_OP_NO_TLSv1_2 } from 'constants'
+import {_c_register_components_object} from '@client/plugins/index'
 export default {
-    name:'engineH5Long',
-    components:{
-        componentsTemplate
-    },
-    mixins:[elementEvents],
+    name:'ShowData',
     data(){
         return {
-            getCommonStyle:editorProjectConfig.getCommonStyle,
-            scalingRatio:1,
-            pageData:{
+            projectInfo:{
                 pages:[]
-            },
-            pageTop:0
+            }
         }
     },
     created(){
-        this.pageData = window._pageData
-        this.scalingRatio=document.body.clientWidth/$config.canvasH5Width
-        this.pageTop = (document.documentElement.clientWidth - this.pageData.height*this.scalingRatio)/2
-        this.pageTop = Math.max(this.pageTop,0)
+        this.projectInfo = window._projectInfo
     },
     methods:{
-        async handleElementClick(eventsData,element){
-            for(let i = 0,len=eventsData.length;i<len;i++){
-                if(this['_event_'+eventsData[i].type]){
-                    await this['_event_'+eventsData[i].type](eventsData[i],element,this.pageData)
-                }
-            }
-        }
+        getCommonStyle(item){
+             //读取基本配置
+             let chartWidth = item.props[0].fields[0].value[0].value.value
+             let chartHeight = item.props[0].fields[0].value[1].value.value
+             let chartX = item.props[0].fields[1].value[0].value.value
+             let chartY = item.props[0].fields[1].value[1].value.value
+             let rotate = item.props[0].fields[2].value.value
+             return {
+                 chartWidth,
+                 chartHeight,
+                 chartX,
+                 chartY,
+                 rotate
+             }
+         }
+    },
+    components:{
+        ..._c_register_components_object
     }
 }
 </script>
@@ -67,7 +70,7 @@ export default {
     position:relative;
 }
 
-.hiddle{
-    overflow: hidden;
+.engine-element-item{
+    position: absolute;
 }
 </style>

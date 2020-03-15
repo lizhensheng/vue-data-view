@@ -6,8 +6,8 @@
         <div class="header_center dv"><i class="el-icon-data-line paddingR10"></i><span class="paddingR5">-</span>{{projectDataInfo.title}}</div>
         <div class="header_right dv">
             <el-tooltip content="保存"><div class="header-icon_wrap save" @click="onSaveProject"><i class="el-icon-check icon"></i></div></el-tooltip>
-            <el-tooltip content="预览"><div class="header-icon_wrap preview"><i class="el-icon-data-board icon"></i></div></el-tooltip>
-            <el-tooltip content="发布"><div class="header-icon_wrap publish"><i class="el-icon-s-promotion icon"></i></div></el-tooltip>
+            <el-tooltip content="预览"><div class="header-icon_wrap preview" @click="onPreview"><i class="el-icon-data-board icon"></i></div></el-tooltip>
+            <el-tooltip content="发布"><div class="header-icon_wrap publish" @click="onPublish"><i class="el-icon-s-promotion icon"></i></div></el-tooltip>
         </div>
     </div>
 </template>
@@ -43,6 +43,8 @@ export default {
             else{
                 this.$axios.post('/project/add', project).then((res) => {
                     if(res.code === 200){
+                        let projectInfo = res.body
+                        this.$store.dispatch('setProjectDataInfo', projectInfo)
                         this.$msgbox({
                             title: '提示',
                             message: '保存成功',
@@ -50,6 +52,20 @@ export default {
                         })
                     }
                 })
+            }
+        },
+        onPreview(){
+            let id = this.projectDataInfo._id
+            if(id)
+            {
+                window.open(`${this.$config.baseURL}/project/view/${id}`,'_blank')
+            }
+        },
+        onPublish(){
+            let id = this.projectDataInfo._id
+            if(id)
+            {
+                window.open(`${this.$config.baseURL}/project/view/${id}`,'_blank')
             }
         }
     },

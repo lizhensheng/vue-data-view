@@ -4,12 +4,9 @@ const router = require('koa-router')()
 
 router.get('/view/:_id', async ctx=>{
     let _id=mongoose.mongo.ObjectId(ctx.params._id)
-    let page=await Project.findOne({_id})
+    let project=await Project.findOne({_id})
     ctx.status=201
-    let pageMode={
-        'pc':'pc'
-    }
-    await ctx.render(pageMode[page.pageMode],{pageData:page})
+    await ctx.render('pc',{projectInfo:project})
 })
 
 router.get('/myProjects', async ctx=>{

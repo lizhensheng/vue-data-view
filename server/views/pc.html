@@ -11,11 +11,11 @@
   <meta name="renderer" content="webkit">
   <meta name="robots" content="index, follow">
   <meta name="format-detection" content="telephone=no">
+
   <script src="/third-libs/vue.js"></script>
-  <link rel="stylesheet" href="/third-libs/animate.min.css">
-  <!--引入模板-->
-  <script src="/engine_libs/pc/page-engine.umd.js"></script>
-  <link rel="stylesheet" href="/engine_libs/pc/page-engine.css">
+  <script src="/engin_libs/pc/page-engine.umd.js"></script>
+  <link  rel="stylesheet" type="text/css" href="/engin_libs/pc/page-engine.css">
+
   <style>
     * {
       padding: 0;
@@ -29,12 +29,12 @@
     }
   </style>
   <script>
-	  window._pageData = <%- JSON.stringify(pageData) %>
+	  window._projectInfo = <%- JSON.stringify(projectInfo) %>
   </script>
 </head>
 <body>
 <div id="app">
-  <engine-h5-long  />
+  <show-data></show-data>
 </div>
 <script>
   new Vue({
@@ -42,8 +42,5 @@
   })
 </script>
 
-<script>
-	eval(window._pageData.script);
-</script>
 </body>
 </html>
