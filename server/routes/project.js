@@ -93,7 +93,7 @@ router.post('/update/:_id',async ctx=>{
 
 router.post('/delete/:_id', async ctx=>{
     let _id=mongoose.mongo.ObjectId(ctx.params._id)
-    ctx.body=await Page.deleteOne({_id})
+    ctx.body=await Project.deleteOne({_id})
 })
 
 router.post('/setTemplate/:_id',async ctx=>{

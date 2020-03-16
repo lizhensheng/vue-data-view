@@ -6917,13 +6917,19 @@ function _defineProperty(obj, key, value) {
 
   return obj;
 }
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"046a5d9e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./client/plugins/text/src/index.vue?vue&type=template&id=f119a226&scoped=true&
-var srcvue_type_template_id_f119a226_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"c-text"},[_vm._v("\n  "+_vm._s(_vm.name)+"\n")])}
-var srcvue_type_template_id_f119a226_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"046a5d9e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./client/plugins/text/src/index.vue?vue&type=template&id=26e40f46&scoped=true&
+var srcvue_type_template_id_26e40f46_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"c-text",style:(Object.assign({}, _vm.getTextStyle(_vm.props[0].fields)))},[_vm._v("\n  "+_vm._s(_vm.getText(_vm.props[0].fields))+"\n")])}
+var srcvue_type_template_id_26e40f46_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./client/plugins/text/src/index.vue?vue&type=template&id=f119a226&scoped=true&
+// CONCATENATED MODULE: ./client/plugins/text/src/index.vue?vue&type=template&id=26e40f46&scoped=true&
 
+// CONCATENATED MODULE: ./client/common/js/vars.js
+var ALIGNMENT = {
+  '左对齐': 'left',
+  '居中对齐': 'center',
+  '右对齐': 'right'
+};
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./client/plugins/text/src/index.vue?vue&type=script&lang=js&
 //
 //
@@ -6932,10 +6938,18 @@ var srcvue_type_template_id_f119a226_scoped_true_staticRenderFns = []
 //
 //
 //
+
 /* harmony default export */ var srcvue_type_script_lang_js_ = ({
   name: 'CText',
-  // 这个名字很重要，它就是未来的标签名<qk-text></qk-text>
   props: {
+    props: {
+      type: Array,
+      default: function _default() {
+        return [{
+          fields: []
+        }];
+      }
+    },
     name: {
       type: String,
       default: ''
@@ -6947,6 +6961,19 @@ var srcvue_type_template_id_f119a226_scoped_true_staticRenderFns = []
         height: 40
       }
     };
+  },
+  methods: {
+    getTextStyle: function getTextStyle(item) {
+      var lineHeight = item[4].value[0].value.value;
+      var alignment = item[4].value[1].value.value;
+      return {
+        'line-height': lineHeight + 'px',
+        'text-align': ALIGNMENT[alignment]
+      };
+    },
+    getText: function getText(item) {
+      return item[3].value.value;
+    }
   }
 });
 // CONCATENATED MODULE: ./client/plugins/text/src/index.vue?vue&type=script&lang=js&
@@ -7056,11 +7083,11 @@ function normalizeComponent (
 
 var component = normalizeComponent(
   text_srcvue_type_script_lang_js_,
-  srcvue_type_template_id_f119a226_scoped_true_render,
-  srcvue_type_template_id_f119a226_scoped_true_staticRenderFns,
+  srcvue_type_template_id_26e40f46_scoped_true_render,
+  srcvue_type_template_id_26e40f46_scoped_true_staticRenderFns,
   false,
   null,
-  "f119a226",
+  "26e40f46",
   null
   
 )

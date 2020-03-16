@@ -25,12 +25,17 @@ let dbMysql = function dbMysql() {
             })
         })
     }
-    this.excuteSql = async (sql,callback)=>{
-        await this.conn.query(sql, (error, result, fields) => {
-            if (error) {
-                console.log(error)
+    this.excuteSql =  (sql,limit)=>{
+        return new Promise((req,rej)=>{
+            if(!sql.toLowerCase().includes('limit')){
+                sql = `${sql} limit ${limit}`
             }
-            callback(result)
+            this.conn.query(sql, (error, result, fields) => {
+                if (error) {
+                    rej(error)
+                }
+                req(result)
+            })
         })
     }
     this.getTableNames = async (callback)=> {

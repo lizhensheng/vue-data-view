@@ -59,9 +59,13 @@
         }
         .messagebox-footer{
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            height: 50px;
+            padding: 0 20px;
+            height: 60px;
+            &.onlyOneButton{
+                justify-content: center;
+            }
             .messagebox-cancel{
                 margin-left: 10px;
                 border: 1px solid #2681ff;

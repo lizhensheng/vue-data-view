@@ -10,7 +10,15 @@ module.exports = async (ctx,next) => {
             }
         } else if(ctx.status===201){
 
-        }else{
+        } else if(ctx.status===503){
+            ctx.body={
+                message: ctx.body,
+                code:ctx.status,
+                body:'请求执行异常',
+                status:true
+            }
+        }
+        else{
             ctx.body={
                 message:ctx.body||'接口异常,请重试',
                 code:ctx.status,

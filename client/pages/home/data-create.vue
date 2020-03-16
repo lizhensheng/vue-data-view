@@ -120,15 +120,6 @@
         this.initData()
     },
     methods:{
-        getIndex(_id){
-            let dIndex = -1;
-            this.datasourceList.map((item,index) => {
-                if(item._id === _id){
-                    dIndex = index
-                }
-            })
-            return dIndex
-        },
         initData(){
             this.$axios.post('/connection/all')
             .then((res) => {
@@ -189,7 +180,7 @@
                         this.$axios.post('/connection/delete/' + e.target.dataset.id)
                         .then((res) => {
                             if(res.code === 200){
-                                let dIndex = this.getIndex(_id)
+                                let dIndex = this.datasourceList.findIndex(t => t._id === _id)
                                 this.datasourceList.splice(dIndex,1)
                                 this.$msgbox({
                                     title: '提示',

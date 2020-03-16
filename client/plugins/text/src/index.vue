@@ -1,14 +1,23 @@
 <!--test.vue-->
 <template>
-  <div class="c-text">
-    {{name}}
+  <div class="c-text" :style="{...getTextStyle(props[0].fields)}">
+    {{getText(props[0].fields)}}
   </div>
 </template>
 
 <script>
+	import {ALIGNMENT} from '../../../common/js/vars'
 	export default {
-		name: 'CText', // 这个名字很重要，它就是未来的标签名<qk-text></qk-text>
+		name: 'CText', 
 		props: {
+			props:{
+				type: Array,
+				default: function(){
+					return [{
+						fields:[]
+					}]
+				}
+			},
 			name: {
 				type: String,
 				default: ''
@@ -19,6 +28,19 @@
 				defaultStyle: {
 					height: 40
 				}
+			}
+		},
+		methods:{
+			getTextStyle(item){
+				let lineHeight = item[4].value[0].value.value
+				let alignment = item[4].value[1].value.value
+				return {
+					'line-height': lineHeight + 'px',
+					'text-align': ALIGNMENT[alignment]
+				}
+			},
+			getText(item){
+				return item[3].value.value
 			}
 		}
 	}

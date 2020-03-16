@@ -81,7 +81,7 @@ const MessageBox = function(options, callback){
     }
 
     msgQueue.push({
-        options: Object.assign({}, defaults,options),
+        options: Object.assign({}, defaults, options),
         callback: callback
     })
     

@@ -2,6 +2,26 @@
     display: flex;
     flex-direction: row;
     font-size: 12px;
+    &.topToBottom{
+        flex-direction: column;
+        >.ui-formitem_title{
+            height: 40px;
+            border-bottom: 1px solid rgb(28,32,38);
+            >span{
+                flex: 1;
+            }
+        }
+        .ui-formitem_content{
+            .config-value_item{
+                flex-direction: column;
+            }
+        }
+        .leftToRight{
+            .ui-formitem_content{
+                display: flex;
+            }
+        }
+    }
     .ui-formitem_title{
         display: flex;
         align-items: center;

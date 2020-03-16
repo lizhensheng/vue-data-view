@@ -2,6 +2,11 @@
     <div class="config-project">
         <div class="config-project_header">页面设置</div>
         <div class="config-project_setting">
+            <y-form-item title="项目名称" :width="70" :height="20" popper="marginB10">
+                <div class="screen-bg_color yinput">
+                   <y-input :height="20" v-model="projectName"></y-input>
+                </div>
+            </y-form-item>
             <y-form-item title="屏幕大小" :width="70" :height="30">
                 <div class="screen-pixel">
                     <y-input-number v-model="screenWidth" :min="0" :max="10000"></y-input-number>
@@ -65,7 +70,8 @@ export default {
             backgroundColor: '',
             backgroundImage: '',
             showChooseImgDialog: false,
-            isDoingScreenShot: false
+            isDoingScreenShot: false,
+            projectName: ''
         }
     },
     components:{
@@ -101,6 +107,10 @@ export default {
         backgroundImage(){
             this.projectDataInfo.backgroundImage = this.backgroundImage
             this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
+        },
+        projectName(){
+            this.projectDataInfo.title = this.projectName
+            this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
         }
     },
     methods:{
@@ -127,6 +137,7 @@ export default {
             }
         },
         initData(project){
+            this.projectName = project.title
             this.screenWidth = project.screenWidth
             this.screenHeight = project.screenHeight
             this.backgroundColor = project.backgroundColor

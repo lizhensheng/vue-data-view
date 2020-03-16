@@ -1,7 +1,10 @@
 <template>
-    <div class="ui-formitem" :style="{height: height + 'px'}" :class="popper">
-        <div class="ui-formitem_title" :style="{width: width + 'px'}">{{title}}</div>
-        <div class="ui-formitem_content">
+    <div class="ui-formitem" :class="[align,popper]" :style="{height: height === 0 ? 'auto': height + 'px'}">
+        <div class="ui-formitem_title" :style="{width: width + 'px'}" v-if="align === 'leftToRight'">{{title}}</div>
+        <div class="ui-formitem_title" :style="{width: '100%', cursor: 'pointer'}" v-else @click="onClickHeader">
+            <span>{{title}}</span><i :class="showContent ? 'el-icon-arrow-up': 'el-icon-arrow-down'" v-show="!this.staticTitle"></i>
+        </div>
+        <div class="ui-formitem_content" v-show="align === 'leftToRight'? true : showContent">
             <slot></slot>
         </div>
     </div>
@@ -10,6 +13,11 @@
 <script>
 export default {
     name:'YFormItem',
+    data(){
+        return {
+            showContent: false
+        }
+    },
     props:{
         title: String,
         width: {
@@ -17,12 +25,31 @@ export default {
             default: 300
         },
         height: {
-            type: Number,
-            default: 30
+            type: Number|String,
+            default: function(){
+                return 30
+            }
         },
         popper:{
             type: String,
             default: ''
+        },
+        align:{
+            type: String,
+            default: 'leftToRight'
+        },
+        staticTitle:{
+            type: Boolean,
+            default: false
+        }
+    },
+    mounted(){
+        this.showContent = this.staticTitle
+    },
+    methods:{
+        onClickHeader(){
+            if(this.staticTitle) return
+            this.showContent = ! this.showContent 
         }
     }
 }

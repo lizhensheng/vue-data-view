@@ -3,56 +3,24 @@ const Conn = require('../models/connection')
 const router = require('koa-router')()
 const dbFactory = require('../db/dbfactory')
 
-router.post('/getTableNames',ctx=>{
+router.post('/excuteSql',async ctx => {
     let data = ctx.request.body
-    dbFactory.getConnection(data.id)
-        .then(async r=>{
-            if(!r){
-                ctx.status=202
-                ctx.body='获取数据失败'
-                return
-            }
-            let handle = dbFactory.createOperate(r.dbtype)
-            await handle.createConnection(r.dbhost,r.dbservername,r.dbusername,r.dbpassword)
-            await handle.getTableNames((result)=>{
-                handle.closeConnection()
-                if(result){
-                    ctx.body= result
-                }else{
-                    ctx.status=202
-                    ctx.body='获取数据失败'
-                }
-            })
+    let sql = data.sql
+    let name = data.name
+    let limit = data.limit
+    let conn = await Conn.findOne({dbconnectionname: name})
+    if(conn){
+        let handle = dbFactory.createOperate(conn.dbtype)
+        await handle.createConnection(conn.dbhost,conn.dbservername,conn.dbusername,conn.dbpassword)
+        await handle.excuteSql(sql, limit)
+        .then((res)=>{
+            ctx.body = res
         })
-        .catch(err=>{
-            ctx.status=202
-            ctx.body='获取数据失败'
+        .catch(e => {
+            ctx.status = 503
+            ctx.body = e.message
         })
-})
-
-router.post('/getDataset',ctx=>{
-    let data = ctx.request.body
-    let tablefields = data.tablefields
-    let tablename = data.tablename
-    let id = data.id
-    dbFactory.getConnection(id)
-        .then(async r=>{
-            let handle = dbFactory.createOperate(r.dbtype)
-            await handle.createConnection(r.dbhost,r.dbservername,r.dbusername,r.dbpassword)
-            await handle.getDataset(tablefields,tablename,(result)=>{
-                handle.closeConnection()
-                if(result){
-                    ctx.body= result
-                }else{
-                    ctx.status=202
-                    ctx.body='获取数据失败'
-                }
-            })
-        })
-        .catch(e=>{
-            ctx.status=202
-            ctx.body='获取数据失败'
-        })
+    }
 })
 
 router.post('/testConnection',async ctx=>{

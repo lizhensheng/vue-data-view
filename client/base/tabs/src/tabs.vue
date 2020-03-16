@@ -55,6 +55,7 @@
             },
             onTableClick(e,name){
                 this.currentName = name
+                this.$emit('switchTab', name)
             }
         },
         render(){

@@ -51,7 +51,7 @@
                             </div>
                             <div class="project_list_item_operator_bottom">
                                 <i class="el-icon-document-copy"></i>
-                                <i class="el-icon-delete"></i>
+                                <i class="el-icon-delete" @click="onDeleteProject"  :data-id="item._id" :data-title="item.title"></i>
                                 <i class="el-icon-share"></i>
                                 <i class="el-icon-question"></i>
                             </div>
@@ -114,6 +114,32 @@
                         id: _id
                     }
                 })
+            },
+            onDeleteProject(e){
+                 let _id = e.currentTarget.dataset.id
+                 let title = e.currentTarget.dataset.title || ''
+                 this.$confirm(`确定要删除 "${title}" 吗`,'提示', {
+                    iconClass: 'el-icon-warning',
+                    callback: (res)=>{
+                        if(res.action === 'confirm'){
+                             this.$axios.post('/project/delete/' + _id)
+                             .then((res) => {
+                                if(res.code === 200){
+                                        let index = this.projectList.findIndex(t => t._id === _id)
+                                        this.projectList.splice(index, 1)
+                                        this.$msgbox({
+                                            title: '提示',
+                                            message: '删除成功',
+                                            iconClass: 'el-icon-success'
+                                        })
+                                }
+                            })
+                            .catch((e) => {
+                                console.warn(e)
+                            })
+                        }
+                    }
+                 })
             }
         }
     }

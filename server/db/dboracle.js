@@ -29,14 +29,24 @@ let dbOracle = function dbOracle() {
                 req()
             }
             catch(e){
-                console.log(e)
                 rej(e)
             }
         })
     }
-    this.excuteSql = async (sql,callback)=>{
-        const result = await this.conn.execute(sql)
-        callback(result)
+    this.excuteSql =  (sql,limit)=>{
+        return new Promise(async (req,rej)=>{
+            try {
+                if(!sql.toLowerCase().includes('rownum')){
+                    limit = parseInt(limit)
+                    sql = `select t.* from (${sql}) t where rownum < ${limit + 1}`
+                }
+                let res = await this.conn.execute(sql)
+                req(res.rows)
+            }
+            catch(e){
+                rej(e)
+            }
+        })
     }
     this.getTableNames = async (callback)=>{
         const result = await this.conn.execute(`select table_name from user_tables where TABLESPACE_NAME is not null and  user='${this.username}'`)

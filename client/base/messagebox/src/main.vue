@@ -12,7 +12,7 @@
             <div class="messagebox-body_wrap">
                 {{message}}
             </div>
-            <div class="messagebox-footer">
+            <div class="messagebox-footer" :class="{'onlyOneButton': onlyOneButton}">
                 <y-button :showIcon="false" 
                           :width="120" 
                           :text="confirmButtonText" 
@@ -61,6 +61,11 @@ export default {
                 this.uid++
             }
         }
+    },
+    computed:{
+        onlyOneButton(){
+            return this.showConfirmButton && !this.showCancelButton
+        }  
     },
     methods:{
         onMaskClick(){

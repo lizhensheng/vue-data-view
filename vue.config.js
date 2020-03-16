@@ -1,6 +1,7 @@
 let fs =require('fs')
 let path =require('path')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const MonacoEditorPlugin = require('monaco-editor-webpack-plugin')
 const productionGzipExtensions = ['js', 'css']
 function resolve(name){
     return __dirname + '/' + name
@@ -47,6 +48,15 @@ module.exports = {
         else{
 
         }
+        config.plugins.push(new MonacoEditorPlugin({
+            // https://github.com/Microsoft/monaco-editor-webpack-plugin#options
+            // Include a subset of languages support
+            // Some language extensions like typescript are so huge that may impact build performance
+            // e.g. Build full languages support with webpack 4.0 takes over 80 seconds
+            // Languages are loaded on demand at runtime 
+            //'javascript', 'css', 'html', 'typescript',
+            languages: [ 'json', 'sql']
+          }))
     },
     chainWebpack: config=>{
         config.resolve.alias
