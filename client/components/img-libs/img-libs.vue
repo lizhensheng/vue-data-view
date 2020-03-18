@@ -34,6 +34,9 @@ export default {
             selectId:''
         }
     },
+    props:{
+        unique: String
+    },
     created(){
         this.$bus.$on('show-select-image',selectId=>{
             this.selectId=selectId
@@ -80,7 +83,7 @@ export default {
             })
         },
         handleImageClick(url){
-            this.$bus.$emit('select-image',this.selectId,url)
+            this.$bus.$emit('select-image',this.selectId,url, this.unique)
         }
     }
 

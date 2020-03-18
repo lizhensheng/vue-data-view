@@ -15,7 +15,7 @@ export default {
         }
     },
     props:{
-        value: String,
+        value: [String, Number],
         placeholder: String,
         suffixIcon: String,
         prevIcon: String,

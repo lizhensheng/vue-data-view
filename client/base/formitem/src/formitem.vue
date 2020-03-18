@@ -1,5 +1,5 @@
 <template>
-    <div class="ui-formitem" :class="[align,popper]" :style="{height: height === 0 ? 'auto': height + 'px'}">
+    <div class="ui-formitem" :class="[align,popper]" :style="{height: height === 'auto' ? 'auto': height + 'px'}">
         <div class="ui-formitem_title" :style="{width: width + 'px'}" v-if="align === 'leftToRight'">{{title}}</div>
         <div class="ui-formitem_title" :style="{width: '100%', cursor: 'pointer'}" v-else @click="onClickHeader">
             <span>{{title}}</span><i :class="showContent ? 'el-icon-arrow-up': 'el-icon-arrow-down'" v-show="!this.staticTitle"></i>

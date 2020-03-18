@@ -1,5 +1,9 @@
 <template>
     <div class="config-source">
+        <div class="config-source_refresh">
+            <div><y-checkbox v-model="value.isRefresh">自动更新请求</y-checkbox></div>
+            <div class="config-refresh_interval"><y-input v-model="value.refreshInterval" :height="20"></y-input></div>秒一次
+        </div>
         <div class="config-source_data">
             <div class="data-source_title">数据源<span>{{dataSourceType === '数据库' ? '数据库>' + dataSourceListDefault : dataSourceType}}</span></div>
             <y-button text="配置数据源" :hollow="true" :showIcon="false" :width="100" :height="30" popper="data-source_button"  @click="onSettingData"></y-button>
@@ -11,14 +15,14 @@
             </div>
              <y-form-item   title="数据源类型" 
                             :width="332" 
-                            :height="0" 
+                            height="auto" 
                             align="topToBottom"
                             :staticTitle = "true">
                 <y-select :options="dataSourceOptions" v-model="dataSourceType"></y-select>
              </y-form-item>
              <y-form-item   title="选择已有数据源" 
                             :width="332" 
-                            :height="0" 
+                            height="auto" 
                             align="topToBottom"
                             :staticTitle = "true"
                             v-show="dataSourceType === '数据库'">
@@ -26,7 +30,7 @@
              </y-form-item>
               <y-form-item  :title="dataSourceType === '数据库' ? 'SQL': '文本'" 
                             :width="332" 
-                            :height="0" 
+                            height="auto" 
                             align="topToBottom"
                             :staticTitle="true"
                             >
@@ -40,9 +44,23 @@
                                 </monaco>
                            </div>            
              </y-form-item>
+              <y-form-item  title="数据响应结果为列表,列表元素包含如下字段" 
+                            :width="332" 
+                            height="auto" 
+                            align="topToBottom"
+                            :staticTitle="true"
+                            >
+                           <div class="config-description">
+                               <y-table :data="value.model">
+                                   <y-table-column label="字段" prop="field" :width="60"></y-table-column>
+                                   <y-table-column label="映射" prop="mapping" :width="60"></y-table-column>
+                                   <y-table-column label="说明" prop="description" width="auto"></y-table-column>
+                               </y-table>
+                           </div>            
+             </y-form-item>
               <y-form-item  title="数据响应结果(只读)" 
                             :width="332" 
-                            :height="0" 
+                            height="auto" 
                             align="topToBottom"
                             :staticTitle="true"
                             >
@@ -58,7 +76,6 @@
 </template>
 
 <script>
-import MonacoEditor from 'vue-monaco'
 import Monaco from '../monaco/monaco'
 export default  {
    name:'ConfigSource',
@@ -143,15 +160,17 @@ export default  {
                         this.$emit('input', this.value)
                     }
                 })
+				.catch(e => {
+					console.warn(e)
+				})
             }
             else {
-                console.warn('请选择数据源')
+                console.warn('请选择数据源,或者修改数据返回结果')
             }
         }
     },
     components:{
-        Monaco,
-        MonacoEditor
+        Monaco
     },
     watch:{
         dataSourceType(val){
@@ -172,6 +191,15 @@ export default  {
   height: 800px;
 }
 .config-source{
+    .config-source_refresh{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .config-refresh_interval{
+            width: 40px;
+            margin-left: 10px;
+        }
+    }
     .config-source_data{
         display: flex;
         flex-direction: row;

@@ -62,7 +62,7 @@ Object.keys(filters).forEach(key => {
 })
 
 // 全局注册mixins
-Vue.mixin(userModel); // 公共mixins
+Vue.mixin(userModel)
 
 
 // 登录后跳转方法

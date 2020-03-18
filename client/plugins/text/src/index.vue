@@ -1,12 +1,13 @@
 <!--test.vue-->
 <template>
   <div class="c-text" :style="{...getTextStyle(props[0].fields)}">
-    {{getText(props[0].fields)}}
+    {{dataTrigger}}
   </div>
 </template>
 
 <script>
-	import {ALIGNMENT} from '../../../common/js/vars'
+	import componentRefresh from '@/mixins/componentRefresh'
+	import {ALIGNMENT} from '@/common/js/vars'
 	export default {
 		name: 'CText', 
 		props: {
@@ -17,35 +18,61 @@
 						fields:[]
 					}]
 				}
-			},
-			name: {
-				type: String,
-				default: ''
 			}
 		},
-		data() {
-			return {
-				defaultStyle: {
-					height: 40
+		mixins: [componentRefresh],
+		mounted(){
+		},
+		computed:{
+			dataTrigger(){
+				if(this.props[1].fields[0].value.dataJson.json){
+					return this.getResult(this.props[1].fields[0].value.dataJson.json)
+				}
+				else{
+					return this.props[0].fields[3].value.value
 				}
 			}
 		},
 		methods:{
 			getTextStyle(item){
+				let width = item[0].value[0].value.value
+				let height = item[0].value[1].value.value
 				let lineHeight = item[4].value[0].value.value
 				let alignment = item[4].value[1].value.value
+				let fontSize = item[4].value[2].value.value
+				let fontColor = item[4].value[3].value.value
 				return {
+					'width': width+ 'px',
+					'height': height+ 'px',
 					'line-height': lineHeight + 'px',
-					'text-align': ALIGNMENT[alignment]
+					'text-align': ALIGNMENT[alignment],
+					'font-size': fontSize + 'px',
+					'color': fontColor
 				}
 			},
-			getText(item){
-				return item[3].value.value
+			getResult(json){
+				let jsonArray = []
+				try
+				{
+					jsonArray = JSON.parse(json)
+				}
+				catch(e){
+					console.warn(e)
+				}
+				let model = this.props[1].fields[0].value.dataJson.model
+				let field = model[0].field
+				let mapping =model[0].mapping
+				let key = mapping || field
+				return jsonArray.length > 0 ? jsonArray[0][key] : ''
 			}
 		}
 	}
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="stylus" scoped>
+.c-text{
+	overflow: hidden;
+	text-overflow: clip;
+	white-space: nowrap;
+}
 </style>

@@ -1,47 +1,85 @@
 <!--test.vue-->
 <template>
-  <div class="c-textarea">
-    <textarea class="qk-textarea-item" :placeholder="placeholder" v-model="tempValue"/>
+  <div class="c-textarea" :style="{...getTextStyle(props[0].fields)}">
+    <span :style="{...getTextRetract(props[0].fields)}"></span>{{dataTrigger}}
   </div>
 </template>
 
 <script>
+	import componentRefresh from '@/mixins/componentRefresh'
+	import {ALIGNMENT} from '../../../common/js/vars'
 	export default {
-		name: 'CTextarea',
+		name: 'CTextarea', 
 		props: {
-			placeholder: {
-				type: String,
-				default: '请输入'
-			},
-			value: {
-				require: false
+			props:{
+				type: Array,
+				default: function(){
+					return [{
+						fields:[]
+					}]
+				}
 			}
 		},
-		data() {
-			return {
-				tempValue: ''
+		mixins: [componentRefresh],
+		mounted(){
+		},
+		computed:{
+			dataTrigger(){
+				if(this.props[1].fields[0].value.dataJson.json){
+					return this.getResult(this.props[1].fields[0].value.dataJson.json)
+				}
+				else{
+					return this.props[0].fields[3].value.value
+				}
 			}
 		},
-		created() {
-			this.tempValue = this.value;
-		},
-		watch: {
-			value(val) {
-				this.tempValue = val;
+		methods:{
+			getTextStyle(item){
+				let width = item[0].value[0].value.value
+				let height = item[0].value[1].value.value
+				let lineHeight = item[4].value[0].value.value
+				let alignment = item[4].value[1].value.value
+				let fontSize = item[4].value[2].value.value
+				let fontColor = item[4].value[3].value.value
+				return {
+					'width': width+ 'px',
+					'height': height+ 'px',
+					'line-height': lineHeight + 'px',
+					'text-align': ALIGNMENT[alignment],
+					'font-size': fontSize + 'px',
+					'color': fontColor
+				}
 			},
-			tempValue() {
-				this.$emit('input', this.temp)
+			getTextRetract(item){
+				let retract = item[4].value[4].value.value
+				return {
+					'width': retract + 'px',
+					'display': 'inline-block'
+				}
+			},
+			getResult(json){
+				let jsonArray = []
+				try
+				{
+					jsonArray = JSON.parse(json)
+				}
+				catch(e){
+					console.warn(e)
+				}
+				let model = this.props[1].fields[0].value.dataJson.model
+				let field = model[0].field
+				let mapping =model[0].mapping
+				let key = mapping || field
+				return jsonArray.length > 0 ? jsonArray[0][key] : ''
 			}
 		}
 	}
 </script>
 
-<style lang="scss" scoped>
-  .qk-textarea-item {
-    display: block;
-    width: 100%;
-    height: 100%;
-    outline: none;
-    border: none;
-  }
+<style lang="stylus" scoped>
+.c-textarea{
+	display: inline-block;
+	overflow: hidden;
+	white-space: pre-wrap;
+}
 </style>

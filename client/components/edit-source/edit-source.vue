@@ -11,11 +11,12 @@
                 状态
             </div>
         </div>
-        <div v-for="(item,index) in localList" :key="index" class="edit-source_item">
+        <div v-for="(item,index) in ejson" :key="index" class="edit-source_item">
             <div class="edit-source_field">{{item.field}}</div>
             <y-input v-model="item.mapping"  class="edit-source_mapping" @input="onInput"></y-input>
             <div class="edit-source_status">{{item.status ? '匹配成功': '未匹配'}}</div>
         </div>
+        <div style="display: none;">{{ejson}}</div>
     </div>
 </template>
 
@@ -33,8 +34,7 @@ export default {
     },
     computed:{
         ejson(){
-             this.mapping()
-             return this.value.json
+             return this.mapping()
         }
     },
     mounted(){
@@ -42,9 +42,8 @@ export default {
     },
     methods:{
         onInput(){
-            this.value.model = this.localList
+            this.value.model = this.ejson
             this.$emit('input', this.value)
-            this.mapping()
         },
         mapping(){
             let mappingList = this.value.model
@@ -53,12 +52,15 @@ export default {
                 arr = JSON.parse(this.value.json)
             }
             catch(e){
+                mappingList = mappingList.map(element => {
+                    element.status = false
+                    return element
+                });
                 console.warn(e)
             }
             if(Array.isArray(arr) && arr.length > 0)
             {
                 let keys = Object.keys(arr[0])
-                let fields = []
                 mappingList = mappingList.map(element => {
                     let searchKey = ''
                     searchKey = element.mapping ? element.mapping : element.field
@@ -68,6 +70,7 @@ export default {
                     return element
                 });
             }
+            return mappingList
         }
     }
 }

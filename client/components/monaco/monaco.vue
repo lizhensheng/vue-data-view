@@ -16,8 +16,10 @@ export default {
         })
         this.$bus.$on('setLanguage', (language) => {
                 if(this.$monacoInstance){
-                    let model =  this.$monacoInstance._modelData.model
-                    this.$monacoInstance && monaco.editor.setModelLanguage(model, language)
+                    let model =  this.$monacoInstance.getModel()
+                    if(model && model.uri){
+                        monaco.editor.setModelLanguage(model, language)
+                    }
                 }
         })
     },

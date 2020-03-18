@@ -9,6 +9,9 @@ import YCollapseItem from './collapseitem'
 import YRange from './range'
 import YFormItem from './formitem'
 import YInputNumber from './inputnumber'
+import YTable from './table'
+import YTableColumn from './tablecolumn'
+import YCheckbox from './checkbox'
 import MessageBox from './messagebox'
 const components = [
     YDialog,
@@ -21,7 +24,10 @@ const components = [
     YCollapseItem,
     YRange,
     YFormItem,
-    YInputNumber
+    YInputNumber,
+    YTable,
+    YTableColumn,
+    YCheckbox
 ]
 const install = function (Vue){
     if(install.installed) return
@@ -47,5 +53,8 @@ export default {
     YCollapseItem,
     YRange,
     YFormItem,
-    YInputNumber
+    YInputNumber,
+    YTable,
+    YTableColumn,
+    YCheckbox
 }

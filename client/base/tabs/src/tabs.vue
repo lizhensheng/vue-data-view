@@ -17,7 +17,6 @@
             }
         },
         created(){
-            
             this.$on('tab-nav-update',this.calcPaneInstances.bind(null,true))
         },
         mounted(){

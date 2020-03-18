@@ -53,7 +53,7 @@
             </y-form-item>
         </div>
          <y-dialog title="选择图片" :isShow="showChooseImgDialog" @close="onChooseImgClose" theme="white">
-           <img-libs></img-libs>
+           <img-libs unique="config-project"></img-libs>
         </y-dialog>
     </div>
 </template>
@@ -79,11 +79,13 @@ export default {
     },
     mounted(){
         this.initProjectInfo()
-        this.$bus.$on('select-image', (selectId, url)=>{
-            this.backgroundImage = url
-            this.backgroundImage = url
-            this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
-            this.showChooseImgDialog = false
+        this.$bus.$on('select-image', (selectId, url, unique)=>{
+            if(unique === 'config-project')
+            {
+                this.backgroundImage = url
+                this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
+                this.showChooseImgDialog = false
+            }
         })
     },
     computed:{

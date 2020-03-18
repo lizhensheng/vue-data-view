@@ -13,7 +13,7 @@
                         <div class="panel-controls_wrap">
                             <div class="panel-controls_item" v-for="(component,cIndex) in group.components" :key="cIndex">
                                 <div class="panel-controls_title">{{component.title}}</div>
-                                <img class="panel-controls_img" :src="component.icon"   draggable="true" @dragstart="onDrag" :data-title="component.title"/>
+                                <img class="panel-controls_img" :src="component.icon"   draggable="true" @dragstart="onDrag" :data-title="component.title" @click="onAddComponent"/>
                             </div>
                         </div>
                     </y-collapse-item>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { createUUID } from '@/common/js/mUtils'
 export default {
     name: 'ComponentPanel',
     data(){
@@ -58,6 +59,22 @@ export default {
         onDrag(e){
             let title = e.currentTarget.dataset.title
             e.dataTransfer.setData("title", title)
+        },
+        onAddComponent(e){
+            let title = e.currentTarget.dataset.title
+            this.$axios.post('/componentconfig/detail', {name: title})
+             .then((res) => {
+                 if(res.code === 200){
+                     let dynamicConfig = res.body
+                     dynamicConfig.uuid = createUUID()
+                     dynamicConfig.props[0].fields[1].value[0].value.value = 0
+                     dynamicConfig.props[0].fields[1].value[1].value.value = 0
+                     this.$store.dispatch('addElement', dynamicConfig)
+                 }
+             })
+             .catch(e =>{
+                 console.warn(e)
+             })
         }
     }
 }

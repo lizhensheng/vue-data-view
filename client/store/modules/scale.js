@@ -1,5 +1,5 @@
 const state = {
-    scalePercent: 50,
+    scalePercent: 70,
     screenShot: {   //画布的宽高
         width: 0,
         height: 0

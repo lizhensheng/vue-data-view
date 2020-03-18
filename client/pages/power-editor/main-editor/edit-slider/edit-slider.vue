@@ -14,7 +14,7 @@
         <div class="edit-scale">
             <input type="number" min="18" max="175" step="15"  v-model="scalePercent" class="edit-scale-value"/>%<i class="el-icon-arrow-down"/>
         </div>
-        <y-range v-model="scalePercent" :min="18" :max="175"  :step="15" @change="onChange"></y-range>
+        <div><y-range v-model="scalePercent" :min="18" :max="175"  :step="15" @change="onChange"></y-range></div>
         <i class="el-icon-magic-stick" @click="onMagic"></i>
     </div>
 </template>

@@ -1,0 +1,19 @@
+.ui-checkbox{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    .ui-checkbox_status{
+        border: 1px solid rgb(38,129,255);
+        margin-right: 5px;
+        i{
+            opacity : 0;
+            color: rgb(38,129,255);
+        }
+        &.checked{
+            i{
+                opacity : 1;
+            }
+        }
+    }
+}

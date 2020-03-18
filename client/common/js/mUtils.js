@@ -139,3 +139,7 @@ export const createUUID = function () {
 	});
 	return uuid;
 }
+
+export const isNumber = function (obj){
+    return Object.prototype.toString.call(obj) === '[object Number]'
+}

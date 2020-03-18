@@ -31,7 +31,6 @@
     "vue-cropper": "0.4.9",
     "vue-draggable-resizable-gorkys": "^2.3.6",
     "vue-json-viewer": "^2.2.8",
-    "vue-monaco": "^1.1.0",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.1.3",
     "vuex": "^3.1.1"

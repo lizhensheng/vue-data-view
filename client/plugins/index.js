@@ -18,7 +18,7 @@ import bgMusic from './bg-music'
 // 业务组件
 import BaseForm from './baseform'
 import ScrollForm from './scrollform'
-import SimpleText from './simpletext'
+import ScrollText from './scrolltext'
 
 const components = [
     // 基础组件
@@ -36,7 +36,7 @@ const components = [
 	// 业务组件
     BaseForm,
     ScrollForm,
-    SimpleText
+    ScrollText
 ]
 const install = function (Vue){
     if(install.installed) return
@@ -68,7 +68,7 @@ export {
 	// 业务组件
     BaseForm,
     ScrollForm,
-    SimpleText,
+    ScrollText,
     _c_register_components_object
 }
 
