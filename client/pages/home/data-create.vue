@@ -128,7 +128,7 @@
                 }
             })
             .catch((e) => {
-                console.warn(e)
+                console.warn(e.message)
             })
         },
         onTest(){
@@ -150,7 +150,7 @@
                 }
             })
             .catch((e) => {
-                console.warn(e)
+                console.warn(e.message)
             })
         },
         onEditData(e){
@@ -190,7 +190,7 @@
                             }
                         })
                         .catch((e) => {
-                            console.warn(e)
+                            console.warn(e.message)
                         })
                     }
                 }
@@ -226,7 +226,7 @@
                     }
                 })
                 .catch((e)=>{
-                    console.warn(e)
+                    console.warn(e.message)
                 })
             }
             else {
@@ -245,7 +245,7 @@
                     }
                 })
                 .catch((e)=>{
-                    console.warn(e)
+                    console.warn(e.message)
                 })
             }
         }

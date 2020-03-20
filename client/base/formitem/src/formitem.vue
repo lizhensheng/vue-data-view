@@ -25,7 +25,7 @@ export default {
             default: 300
         },
         height: {
-            type: Number|String,
+            type: [Number,String],
             default: function(){
                 return 30
             }

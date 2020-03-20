@@ -115,7 +115,7 @@ export default  {
             }
         })
         .catch((e) => {
-            console.warn(e)
+            console.warn(e.message)
         })
    },
    mounted(){
@@ -149,7 +149,7 @@ export default  {
                 this.$emit('input', this.value)
             }
             else if(this.dataSourceListDefault != '选择已有数据源' && this.value.data.sql != val){
-                this.$axios.post('/connection/excuteSql', {name: this.dataSourceListDefault, sql: val, limit: this.value.data.limit })
+                this.$axios.post('/connection/excuteSql', {id: this.dataSourceListDefault, sql: val, limit: this.value.data.limit })
                 .then((res) =>{
                     if(res.code === 200){
                         let json = JSON.stringify(res.body)
@@ -161,7 +161,7 @@ export default  {
                     }
                 })
 				.catch(e => {
-					console.warn(e)
+					console.warn(e.message)
 				})
             }
             else {

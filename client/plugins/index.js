@@ -19,6 +19,9 @@ import bgMusic from './bg-music'
 import BaseForm from './baseform'
 import ScrollForm from './scrollform'
 import ScrollText from './scrolltext'
+import Chartline from './chartline'
+import Chartcolumnar from './chartcolumnar'
+import Chartmap from './chartmap'
 
 const components = [
     // 基础组件
@@ -36,7 +39,10 @@ const components = [
 	// 业务组件
     BaseForm,
     ScrollForm,
-    ScrollText
+	ScrollText,
+	Chartline,
+	Chartcolumnar,
+	Chartmap
 ]
 const install = function (Vue){
     if(install.installed) return
@@ -68,7 +74,10 @@ export {
 	// 业务组件
     BaseForm,
     ScrollForm,
-    ScrollText,
+	ScrollText,
+	Chartline,
+	Chartcolumnar,
+	Chartmap,
     _c_register_components_object
 }
 

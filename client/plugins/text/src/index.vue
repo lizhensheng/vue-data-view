@@ -35,15 +35,11 @@
 		},
 		methods:{
 			getTextStyle(item){
-				let width = item[0].value[0].value.value
-				let height = item[0].value[1].value.value
 				let lineHeight = item[4].value[0].value.value
 				let alignment = item[4].value[1].value.value
 				let fontSize = item[4].value[2].value.value
 				let fontColor = item[4].value[3].value.value
 				return {
-					'width': width+ 'px',
-					'height': height+ 'px',
 					'line-height': lineHeight + 'px',
 					'text-align': ALIGNMENT[alignment],
 					'font-size': fontSize + 'px',
@@ -57,7 +53,7 @@
 					jsonArray = JSON.parse(json)
 				}
 				catch(e){
-					console.warn(e)
+					console.warn(e.message)
 				}
 				let model = this.props[1].fields[0].value.dataJson.model
 				let field = model[0].field

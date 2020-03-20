@@ -33,7 +33,7 @@ export default {
                 let value = e.relatedTarget.dataset.val
                 let item = this.options.filter(t=>t.value === value)
                 if(item.length>0){
-                    this.$emit('input',item[0].label)
+                    this.$emit('input',item[0].value)
                 }
             }
         },

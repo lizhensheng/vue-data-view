@@ -1,6 +1,6 @@
 <template>
     <div class="engine-template-wrapper">
-        <div class="relative">
+        <div class="relative" :style="{...getProjectStyle()}">
             <!--页面组件列表展示-->
             <div v-for="item in projectInfo.pages[0].elements"
                                      :key="item.uuid"
@@ -16,7 +16,11 @@
                                      :z="999"
                                      class="engine-element-item"
                                      >
-                    <component :is="item.elName" class="element-on-edit-pane" v-bind="{...item}"/>
+                    <component :is="item.elName" 
+                                class="element-on-edit-pane" 
+                                v-bind="{...item}"
+                                :width="(getCommonStyle(item)).chartWidth" 
+                                :height="(getCommonStyle(item)).chartHeight"/>
             </div>
         </div>
     </div>
@@ -51,6 +55,14 @@ export default {
                  chartY,
                  rotate
              }
+         },
+         getProjectStyle(){
+            return {
+                width: this.projectInfo.screenWidth +'px' ,
+                height: this.projectInfo.screenHeight +'px',
+                backgroundColor: this.projectInfo.backgroundColor,
+                backgroundImage: `url('${this.projectInfo.backgroundImage}')`
+            }
          }
     },
     components:{
@@ -68,9 +80,21 @@ export default {
 
 .relative{
     position:relative;
+    background-size: 100% 100%;
 }
 
 .engine-element-item{
     position: absolute;
+}
+
+  /**
+ *  滚动条的样式
+ **/
+ html::-webkit-scrollbar,body::-webkit-scrollbar,div::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+html::-webkit-scrollbar-thumb,body::-webkit-scrollbar-thumb,div::-webkit-scrollbar-thumb {
+    background-color: #434b55;
 }
 </style>

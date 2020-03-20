@@ -53,7 +53,7 @@ export default {
                 }
             })
             .catch(e => {
-                console.warn(e)
+                console.warn(e.message)
             })
         },
         onDrag(e){
@@ -73,7 +73,7 @@ export default {
                  }
              })
              .catch(e =>{
-                 console.warn(e)
+                 console.warn(e.message)
              })
         }
     }

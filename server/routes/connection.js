@@ -6,9 +6,9 @@ const dbFactory = require('../db/dbfactory')
 router.post('/excuteSql',async ctx => {
     let data = ctx.request.body
     let sql = data.sql
-    let name = data.name
+    let id = data.id
     let limit = data.limit
-    let conn = await Conn.findOne({dbconnectionname: name})
+    let conn = await Conn.findOne({_id: id})
     if(conn){
         let handle = dbFactory.createOperate(conn.dbtype)
         await handle.createConnection(conn.dbhost,conn.dbservername,conn.dbusername,conn.dbpassword)

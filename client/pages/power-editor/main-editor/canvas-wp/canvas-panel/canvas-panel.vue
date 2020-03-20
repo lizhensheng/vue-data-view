@@ -26,7 +26,13 @@
                                      :style="{'transform': `rotate(${(getCommonStyle(item)).rotate}deg)`}"
                                      :z="999"
                                      >
-                    <component :is="item.elName" class="element-on-edit-pane" v-bind="{...item}"/>
+                    <component :is="item.elName"
+                                class="element-on-edit-pane" 
+                                v-bind="{...item}" 
+                                :width="(getCommonStyle(item)).chartWidth * ratio" 
+                                :height="(getCommonStyle(item)).chartHeight * ratio"
+                                :ratio="ratio"
+                                />
             </vdr>
     </div>
 </template>
@@ -82,7 +88,7 @@ export default {
                         }
                         this.$bus.$emit('doneScreenCapture')
                     }).catch(err => {
-                        console.warn(err)
+                        console.warn(err.message)
                          this.$bus.$emit('doneScreenCapture')
                     })
                 })
@@ -107,11 +113,8 @@ export default {
                  }
              })
              .catch(e =>{
-                 console.warn(e)
+                 console.warn(e.message)
              })
-         },
-         onAllowDrop(e){
-             
          },
          onComponentActivated(uuid){
              this.$store.dispatch('setActiveElementUUID', uuid);

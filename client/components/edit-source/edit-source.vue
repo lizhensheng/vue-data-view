@@ -56,7 +56,7 @@ export default {
                     element.status = false
                     return element
                 });
-                console.warn(e)
+                console.warn(e.message)
             }
             if(Array.isArray(arr) && arr.length > 0)
             {

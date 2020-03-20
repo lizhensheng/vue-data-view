@@ -2,9 +2,9 @@
 <template>
   <div class="c-image">
     <a v-if="dataTrigger.link" :href="dataTrigger.link" :target="targetField?'_blank':'_self'">
-      <img :src="dataTrigger.imageSrc" :style="{...getImageStyle(props[0].fields)}"/>
+      <img :src="dataTrigger.imageSrc"/>
     </a>
-    <img :src="dataTrigger.imageSrc" :style="{...getImageStyle(props[0].fields)}"/>
+    <img :src="dataTrigger.imageSrc"/>
   </div>
 </template>
 
@@ -40,14 +40,6 @@ export default {
         }
     },
     methods:{
-        getImageStyle(item){
-            let width = item[0].value[0].value.value
-            let height = item[0].value[1].value.value
-            return {
-                'width': width+ 'px',
-                'height': height+ 'px'
-            }
-        },
         getResult(json){
             let jsonArray = []
             try
@@ -55,7 +47,7 @@ export default {
                 jsonArray = JSON.parse(json)
             }
             catch(e){
-                console.warn(e)
+                console.warn(e.message)
             }
             let model = this.props[1].fields[0].value.dataJson.model
             let fieldSrc = model[0].field
@@ -76,5 +68,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style  lang="stylus" scoped>
+.c-image{
+    width: 100%;
+    height: 100%;
+    img{
+        width: 100%;
+        height: 100%;
+    }
+}
 </style>

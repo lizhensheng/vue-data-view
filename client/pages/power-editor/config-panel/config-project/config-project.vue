@@ -29,8 +29,8 @@
                 </div>
             </y-form-item>
             <y-form-item title="" :width="70" :height="120" popper="marginB10">
-                <div class="screen-bg_img_preview yinput"> 
-                   <img :src="projectDataInfo.backgroundImage" @click="onBgImageClick" width="140" height="90">
+                <div class="screen-bg_img_preview yinput" @click="onBgImageClick"> 
+                   <img v-show="projectDataInfo.backgroundImage" :src="projectDataInfo.backgroundImage" width="140" height="90">
                 </div>
             </y-form-item>
              <y-form-item title="缩略图" :width="70" :height="20" popper="marginB25">
@@ -130,7 +130,7 @@ export default {
                     }
                 })
                 .catch((e) => {
-                    console.warn(e)
+                    console.warn(e.message)
                 })
             }   
             else{

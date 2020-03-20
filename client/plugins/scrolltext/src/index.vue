@@ -87,13 +87,9 @@ export default {
             }
         },
         getTextStyle(item){
-            let width = item[0].value[0].value.value
-            let height = item[0].value[1].value.value
             let fontSize = item[4].value[0].value.value
             let fontColor = item[4].value[1].value.value
             return {
-                'width': width+ 'px',
-                'height': height+ 'px',
                 'font-size': fontSize + 'px',
                 'color': fontColor
             }
@@ -105,7 +101,7 @@ export default {
                 jsonArray = JSON.parse(json)
             }
             catch(e){
-                console.warn(e)
+                console.warn(e.message)
             }
             let model = this.props[1].fields[0].value.dataJson.model
             let fieldText = model[0].field

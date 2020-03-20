@@ -33,7 +33,7 @@ export default {
         },
         getRealTimeData(){
             let data = this.props[1].fields[0].value.dataJson.data
-            this.$axios.post('/connection/excuteSql', {name: data.connectionSourceId, sql: data.sql, limit: data.limit })
+            this.$axios.post('/connection/excuteSql', {id: data.connectionSourceId, sql: data.sql, limit: data.limit })
             .then((res) =>{
                 if(res.code === 200){
                     let json = JSON.stringify(res.body)
@@ -41,7 +41,7 @@ export default {
                 }
             })
             .catch(e => {
-                console.warn(e)
+                console.warn(e.message)
             })
         }
     },
