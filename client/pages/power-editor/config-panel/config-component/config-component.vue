@@ -76,7 +76,7 @@ export default {
     },
     watch:{
         localProps(){
-            
+            console.log('watch')
         }
     },
     methods:{

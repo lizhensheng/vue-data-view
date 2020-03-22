@@ -22,7 +22,8 @@
                                      :className="item.uuid === activeElementUUID? 'actived': 'noActived'"
                                      @activated="onComponentActivated(item.uuid)"
                                      :scale-ratio="ratio"
-                                     @keyup.native.13="onPressEnter"
+                                     @keyup.native.13="onDelete"
+                                     @keyup.native.ctrl.67="onCopy"
                                      tabindex="1"
                                      :style ="{...getCommonStyle(item)}"
                                      >
@@ -159,9 +160,14 @@ export default {
                  this.$store.dispatch('setActiveElementUUID', '');
              }
          },
-         onPressEnter(e){
+         onDelete(e){
             let uuid = e.currentTarget.dataset.uuid
             this.$store.dispatch('removeElement', uuid)
+         },
+         onCopy(){
+             if(this.activeElement){
+                this.$store.dispatch('addElement', this.activeElement)
+             }
          }
     },
     computed:{

@@ -1,6 +1,7 @@
 
 import { cloneDeep } from "lodash"
 //假设一个项目对应一个页面
+//待完成,项目配置信息放在数据库
 let projectConfig = {
     screenWidth: 1920,
     screenHeight: 1080,

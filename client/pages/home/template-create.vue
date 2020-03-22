@@ -44,12 +44,10 @@ export default {
                 })
             },
             onTemplateCreate(){
-                //先复制项目在跳转
+                //先复制项目再跳转
+                //待完成
                 this.$router.push({
-                    name: 'PowerEditor',
-                    params: {
-                        id: '5e05ce44922d5c0aa44b5bd2'
-                    }
+                    name: 'PowerEditor'
                 })
             }
         }

@@ -145,7 +145,6 @@ export default {
                 .transform({
                     type: 'map',
                     callback: obj => {
-                        //let word = this.getLevels(obj.value)
                         obj.trend = obj[this.mappings[1].field]
                         return obj;
                     }
