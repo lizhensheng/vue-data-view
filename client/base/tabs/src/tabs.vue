@@ -52,9 +52,9 @@
                     this.panels = []
                 }
             },
-            onTableClick(e,name){
+            onTableClick(e, name, index){
                 this.currentName = name
-                this.$emit('switchTab', name)
+                this.$emit('switchTab', name, index)
             }
         },
         render(){
@@ -65,11 +65,11 @@
             ) 
             const headers = (
                   <div class="ui-tabs_header">
-                    {this.headers.map(header => {
+                    {this.headers.map((header,index) => {
                         return (
                             <div class="ui-tabs_navitem" 
                                  class={{'ui-tabs_navitem': true,'active': this.currentName === header.name}}
-                                 on-click={(e)=>{ this.onTableClick(e,header.name)}}
+                                 on-click={(e)=>{ this.onTableClick(e, header.name, index)}}
                                  >
                                     <i class={header.iconClass}></i>
                             </div>

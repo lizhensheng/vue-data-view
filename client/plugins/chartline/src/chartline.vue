@@ -251,8 +251,8 @@ export default {
             }
         },
         resizeChart(){
-            let width = parseInt(this.width / this.ratio) 
-            let height = parseInt(this.height / this.ratio)
+            let width = parseInt(this.width) 
+            let height = parseInt(this.height)
             this.chartInstance.changeSize(width,height)
         },
         legend(){

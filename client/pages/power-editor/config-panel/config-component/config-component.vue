@@ -1,7 +1,7 @@
 <template>
     <div class="config-component" v-show="activeElement">
          <y-tabs position='top' @switchTab="onSwitchTab">
-            <y-tab-panel :iconClass="item.info.iconClass" :name="item.info.title" v-for="(item,index) in activeElement && activeElement.props" :key="index">
+            <y-tab-panel :iconClass="item.info.iconClass" :name="item.info.title" v-for="(item,index) in localProps" :key="index">
                 <y-form-item :title="fItem.title" 
                              :width="fItem.width?fItem.width:70" 
                              :height="fItem.align ==='topToBottom'? 'auto' : fItem.height?fItem.height:40" 
@@ -10,7 +10,7 @@
                              :align="fItem.align"
                              :staticTitle = "fItem.staticTitle"
                 >
-                    <div v-if="fItem.type !== 'group'">
+                    <div v-if="fItem.type !== 'group'" class="config-content_wrap">
                         <component :is="fItem.type" 
                                     v-bind="{...fItem.value}" 
                                     v-model="item.fields[0].value[fItem.value.value]" 
@@ -63,28 +63,32 @@ export default {
     name: 'ConfigComponent',
     data(){
         return {
-           
+           tabIndex: 0
         }
     },
     computed:{
+        localProps(){
+            return this.activeElement ? this.activeElement.props : []
+        },
         ...mapGetters([
             'activeElement'
         ])
     },
+    watch:{
+        localProps(){
+            
+        }
+    },
     methods:{
-        onSwitchTab(name){
-            if(name === '第二页'){
-                this.$bus.$emit('createMonacoInstance')
-            }
+        onSwitchTab(name, index){
+            this.tabIndex = index
         }
     },
     mounted(){
     },
-    watch:{
-        activeElement(val){
-            if(val){
-                 this.$bus.$emit('createMonacoInstance')
-            }
+    updated(index){
+        if(this.tabIndex == 1 && this.localProps.length >= 2){
+            this.$bus.$emit('createMonacoInstance')
         }
     },
     components: {
@@ -101,6 +105,10 @@ export default {
     position: relative;
     display: flex;
     width: 332px;
+    .config-content_wrap{
+        width: 100%;
+        height: 100%;
+    }
     .config-value_item{
         display: flex;
         flex-direction: row;
@@ -108,11 +116,13 @@ export default {
          &.topToBottom{
             display:flex;
             flex-direction: column;
+            margin-bottom: 10px;
         }
         .config-refer_item{
             display: flex;
             align-items: center;
             width: 100%;
+            height: 100%;
         }
     }
 }

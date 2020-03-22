@@ -8,13 +8,14 @@
     }"  @drop="onDrop" @dragover.prevent="onAllowDrop" @click="onCanvasPanelClick" data-id="canvasPanel">
           <!--页面组件列表展示-->
             <vdr v-for="item in activePage.elements"
+                                     :id="item.uuid"
                                      :key="item.uuid"
                                      :ref="item.uuid"
-                                     :data-uuid="item.uuid"
-                                     :w="(getCommonStyle(item)).chartWidth * ratio" 
-                                     :h="(getCommonStyle(item)).chartHeight * ratio"
-                                     :x="(getCommonStyle(item)).chartX * ratio"
-                                     :y="(getCommonStyle(item)).chartY * ratio"  
+                                     :data-uuid="item.uuid" 
+                                     :w="getWidth(item)"
+                                     :h="getHeight(item)"
+                                     :x="getChartX(item)"
+                                     :y="getChartY(item)"
                                      @dragging="onComponentDrag" 
                                      @resizing="onComponentResize" 
                                      :parent="false" 
@@ -23,14 +24,13 @@
                                      :scale-ratio="ratio"
                                      @keyup.native.13="onPressEnter"
                                      tabindex="1"
-                                     :style="{'transform': `rotate(${(getCommonStyle(item)).rotate}deg)`}"
-                                     :z="999"
+                                     :style ="{...getCommonStyle(item)}"
                                      >
                     <component :is="item.elName"
                                 class="element-on-edit-pane" 
                                 v-bind="{...item}" 
-                                :width="(getCommonStyle(item)).chartWidth * ratio" 
-                                :height="(getCommonStyle(item)).chartHeight * ratio"
+                                :width="getWidth(item)"
+                                :height="getHeight(item)"
                                 :ratio="ratio"
                                 />
             </vdr>
@@ -54,20 +54,36 @@ export default {
             this.screenCapture()
         })
     },
+    watch: {
+    },
     methods:{
+         getChartX(item){
+             return  item.props[0].fields[1].value[0].value.value 
+         },
+         getChartY(item){
+             return  item.props[0].fields[1].value[1].value.value  
+         },
+         getWidth(item){
+             return  item.props[0].fields[0].value[0].value.value 
+         },
+         getHeight(item){
+             return  item.props[0].fields[0].value[1].value.value 
+         },
          getCommonStyle(item){
              //读取基本配置
-             let chartWidth = item.props[0].fields[0].value[0].value.value
-             let chartHeight = item.props[0].fields[0].value[1].value.value
-             let chartX = item.props[0].fields[1].value[0].value.value
-             let chartY = item.props[0].fields[1].value[1].value.value
+             let chartWidth = item.props[0].fields[0].value[0].value.value 
+             let chartHeight = item.props[0].fields[0].value[1].value.value 
+             let chartX = item.props[0].fields[1].value[0].value.value 
+             let chartY = item.props[0].fields[1].value[1].value.value 
+             let zindex = item.props[0].fields[1].value[2].value.value
              let rotate = item.props[0].fields[2].value.value
              return {
-                 chartWidth,
-                 chartHeight,
-                 chartX,
-                 chartY,
-                 rotate
+                 'width': chartWidth + 'px',
+                 'height': chartHeight + 'px',
+                 'top':  chartY + 'px',
+                 'left': chartX  + 'px',
+                 'zIndex': zindex,
+                 'transform': `rotate(${rotate}deg)`
              }
          },
          screenCapture() {
@@ -107,8 +123,8 @@ export default {
                  if(res.code === 200){
                      let dynamicConfig = res.body
                      dynamicConfig.uuid = createUUID()
-                     dynamicConfig.props[0].fields[1].value[0].value.value = parseInt(left / this.ratio) 
-                     dynamicConfig.props[0].fields[1].value[1].value.value = parseInt(top / this.ratio)
+                     dynamicConfig.props[0].fields[1].value[0].value.value = parseInt(left) 
+                     dynamicConfig.props[0].fields[1].value[1].value.value = parseInt(top)
                      this.$store.dispatch('addElement', dynamicConfig)
                  }
              })
@@ -120,18 +136,23 @@ export default {
              this.$store.dispatch('setActiveElementUUID', uuid);
          },
          onComponentDrag(left, top){
-             let props = this.projectDataInfo.pages[0].elements[this.activeElementIndex].props[0]
-             props.fields[1].value[0].value.value = parseInt(left)
-             props.fields[1].value[1].value.value = parseInt(top)
-             this.$store.dispatch('setProjectDataInfo',  this.projectDataInfo);
+             if(this.activeElementIndex > -1){
+                let props = this.projectDataInfo.pages[0].elements[this.activeElementIndex].props[0]
+                props.fields[1].value[0].value.value = parseInt(left)
+                props.fields[1].value[1].value.value = parseInt(top)
+                this.$store.dispatch('setProjectDataInfo',  this.projectDataInfo);
+             }
+            
          },
          onComponentResize(left, top, width, height){
-             let props = this.projectDataInfo.pages[0].elements[this.activeElementIndex].props[0]
-             props.fields[0].value[0].value.value = parseInt(width)
-             props.fields[0].value[1].value.value = parseInt(height)
-             props.fields[1].value[0].value.value = parseInt(left)
-             props.fields[1].value[1].value.value = parseInt(top)
-             this.$store.dispatch('setProjectDataInfo',  this.projectDataInfo);
+             if(this.activeElementIndex > -1){
+                let props = this.projectDataInfo.pages[0].elements[this.activeElementIndex].props[0]
+                props.fields[0].value[0].value.value = parseInt(width)
+                props.fields[0].value[1].value.value = parseInt(height)
+                props.fields[1].value[0].value.value = parseInt(left)
+                props.fields[1].value[1].value.value = parseInt(top)
+                this.$store.dispatch('setProjectDataInfo',  this.projectDataInfo);
+             }
          },
          onCanvasPanelClick(e){
              if(e.target.dataset.id === "canvasPanel"){

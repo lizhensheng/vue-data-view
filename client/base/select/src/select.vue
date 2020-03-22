@@ -1,7 +1,7 @@
 <template>
     <div class="ui-select">
         <div class="select-choose_wrap" @blur="onBlur"  @focus="onFocus" tabindex="1">
-            <div  class="ibox select-choose_value marginL10">{{value}}</div>
+            <div  class="ibox select-choose_value marginL10">{{getLabel(value)}}</div>
             <i class="el-icon-arrow-down marginR10"></i>
         </div>
 
@@ -35,6 +35,14 @@ export default {
                 if(item.length>0){
                     this.$emit('input',item[0].value)
                 }
+            }
+        },
+        getLabel(value){
+            let index = this.options.findIndex(t=>t.value === value)
+            if(index > -1){
+                return  this.options[index].label
+            } else{
+                value
             }
         },
         onFocus(){

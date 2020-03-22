@@ -63,7 +63,7 @@ export default {
         }
     },
     watch:{
-         dataTrigger(json){
+         dataTrigger(){
             this.initMapping()
             this.chartInstance.destroy()
             this.initData()
@@ -99,8 +99,8 @@ export default {
                 });
                 this.chartInstance.tooltip({
                     showTitle: false,
-                    showMarkers: true,
-                    shared: true,
+                    showMarkers: false,
+                    shared: false,
                 });
                 // 同步度量
                 this.chartInstance.scale({
@@ -119,29 +119,7 @@ export default {
            })
        },
        renderMap(){
-           this.chartInstance.legend(this.mappings[0].field, false)
-                let items = this.getItems()
-                this.chartInstance.legend('trend', {
-                    position: 'left',
-                    label:{
-                        align: 'right',
-                        spacing: 2,
-                        style: {
-                            fill: 'red'
-                        }
-                    },
-                    layout: 'vertical',
-                    max: this.levelNums[this.levelNums.length - 1],
-                    min: 0,
-                    rail: {
-                        type: 'color',
-                        size: 15
-                    },
-                    slidable: false,
-                    custom: true,
-                    items: items
-                });
-
+         
                 // 绘制地图背景
                 const ds = new DataSet();
                 const worldMap = ds.createView('back')
@@ -202,7 +180,17 @@ export default {
                     leave: {
                     animation: 'fade-out'
                     }
+                })
+                 this.chartInstance.legend(this.mappings[0].field, false)
+                let items = this.getItems()
+                this.chartInstance.legend('trend', {
+                    position: 'left',
+                    layout: 'vertical',
+                    custom: true,
+                    items: items,
+                    offsetY: 50
                 });
+
                 userView.interaction('element-active')
                 this.chartInstance.render();
        },
@@ -267,8 +255,8 @@ export default {
             }
         },
         resizeChart(){
-            let width = parseInt(this.width / this.ratio) 
-            let height = parseInt(this.height / this.ratio)
+            let width = parseInt(this.width) 
+            let height = parseInt(this.height)
             this.chartInstance.changeSize(width,height)
         }
     }

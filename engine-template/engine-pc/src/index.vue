@@ -11,9 +11,9 @@
                                                 'width': (getCommonStyle(item)).chartWidth +'px',
                                                 'height': (getCommonStyle(item)).chartHeight +'px',
                                                 'left': (getCommonStyle(item)).chartX +'px',
-                                                'top': (getCommonStyle(item)).chartY +'px'
+                                                'top': (getCommonStyle(item)).chartY +'px',
+                                                'zIndex': (getCommonStyle(item)).zindex
                                               }"
-                                     :z="999"
                                      class="engine-element-item"
                                      >
                     <component :is="item.elName" 
@@ -47,12 +47,14 @@ export default {
              let chartHeight = item.props[0].fields[0].value[1].value.value
              let chartX = item.props[0].fields[1].value[0].value.value
              let chartY = item.props[0].fields[1].value[1].value.value
+             let zindex = item.props[0].fields[1].value[2].value.value
              let rotate = item.props[0].fields[2].value.value
              return {
                  chartWidth,
                  chartHeight,
                  chartX,
                  chartY,
+                 zindex,
                  rotate
              }
          },
