@@ -64,9 +64,11 @@ export default {
     },
     watch:{
          dataTrigger(){
-            this.initMapping()
-            this.chartInstance.destroy()
-            this.initData()
+            if(this.chartInstance){
+                this.initMapping()
+                this.chartInstance.destroy()
+                this.initData()
+            }
         },
         width(val){
             this.resizeChart()

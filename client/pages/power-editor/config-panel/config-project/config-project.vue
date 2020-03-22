@@ -42,7 +42,7 @@
                                   @click="onScreenCapture"
                                   :isLoading="isDoingScreenShot">
                         </y-button>
-                        <y-button text="上传封面" :width="80" iconClass="el-icon-upload2"></y-button>
+                        <y-button text="上传封面" :width="80" iconClass="el-icon-upload2" @click="onUploadImg"></y-button>
                     </div>
                     <input ref="thumbnailSrc" type="file" accept="image/*" style="display: none;">
             </y-form-item>
@@ -54,6 +54,9 @@
         </div>
          <y-dialog title="选择图片" :isShow="showChooseImgDialog" @close="onChooseImgClose" theme="white">
            <img-libs unique="config-project"></img-libs>
+        </y-dialog>
+         <y-dialog title="选择图片" :isShow="showChooseUploadImgDialog" @close="onChooseUploadImgClose" theme="white">
+           <img-libs unique="config-project_upload"></img-libs>
         </y-dialog>
     </div>
 </template>
@@ -70,6 +73,7 @@ export default {
             backgroundColor: '',
             backgroundImage: '',
             showChooseImgDialog: false,
+            showChooseUploadImgDialog: false,
             isDoingScreenShot: false,
             projectName: ''
         }
@@ -85,6 +89,10 @@ export default {
                 this.backgroundImage = url
                 this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
                 this.showChooseImgDialog = false
+            } else if(unique === 'config-project_upload'){
+                this.projectDataInfo.thumbnailImage = url
+                this.$store.dispatch('setProjectDataInfo', this.projectDataInfo)
+                this.showChooseUploadImgDialog = false
             }
         })
     },
@@ -148,6 +156,12 @@ export default {
         },
         onChooseImgClose(){
             this.showChooseImgDialog = false
+        },
+        onChooseUploadImgClose(){
+            this.showChooseUploadImgDialog = false
+        },
+        onUploadImg(){
+            this.showChooseUploadImgDialog = true
         },
         /**
          * 提供截屏作为项目缩略图
