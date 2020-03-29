@@ -7,4 +7,4 @@
 * 表格,图片,文字组件
 * 一键生成数据大屏
 
-https://github.com/lizhensheng/vue-data-view/blob/master/docs/%E7%96%AB%E6%83%85%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA.png
+![image](http://chuantu.xyz/t6/726/1585469614x1700338641.png)
