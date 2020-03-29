@@ -41,9 +41,10 @@ if(process.argv.slice(2).length > 0 && process.argv.slice(2)[0] === '--productio
     app.use(koajwt({secret:SECRET}).unless({
         path:[
             /^\/common\/html2canvas\/corsproxy/,
-            /^\/page\/view/,
+            /^\/project\/view/,
             /^\/auth\/login/,
-            /^\/auth\/register/
+            /^\/auth\/register/,
+            /^\/connection\/excuteSql/
         ]
     }))
 }

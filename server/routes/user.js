@@ -8,7 +8,7 @@ router.get('/list',async ctx=>{
 
 router.get('/info',async ctx=>{
     let _id=ctx.state.user._id
-    ctx.body=await Users.findOne({_id}).select('username name email avatar type roles').exec()
+    ctx.body=await Users.findOne({_id}).select('username name email avatar type roles token').exec()
 })
 
 router.get('/list/search',async ctx=>{
@@ -23,7 +23,7 @@ router.post('/',async ctx=>{
         ...data,
         _id:mongoose.mongo.ObjectId()
     })
-    ctx.body=result.select('username name email avatar type roles').exec()
+    ctx.body=result.select('username name email avatar type roles token').exec()
 })
 
 router.post('/login',async ctx=>{

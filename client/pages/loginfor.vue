@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { setLocalStorage } from '@/common/js/mUtils'
 export default {
     data(){
         return {
@@ -56,6 +57,7 @@ export default {
                 this.loading = false
                 this.getUserInfo();
                 this.$store.dispatch('updateUserToken', res.body.token)
+                setLocalStorage('auth', { 'token': 'Bearer ' + res.body.token })
                 this.$router.push('/');
             })
             .catch(()=>{

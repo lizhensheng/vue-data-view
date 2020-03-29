@@ -24,6 +24,7 @@
                                      :scale-ratio="ratio"
                                      @keyup.native.13="onDelete"
                                      @keyup.native.ctrl.67="onCopy"
+                                     @keyup.native.alt.67="onCopyUUID"
                                      tabindex="1"
                                      :style ="{...getCommonStyle(item)}"
                                      >
@@ -89,7 +90,13 @@ export default {
          },
          screenCapture() {
              //截图前把缩放比例设置为100
-            this.$store.dispatch('setScalePercent', 100)
+            //this.$store.dispatch('setScalePercent', 100)
+            if(this.scalePercent != 100){
+                this.$msgbox({
+                    title: '请先将缩放比例调整为100%'
+                })
+                return
+            }
             setTimeout(()=>{
                 const node = document.querySelector("#canvasPanel") //this.$refs.canvasPanel
                 domtoimage.toPng(node).then( dataUrl => {
@@ -168,6 +175,10 @@ export default {
              if(this.activeElement){
                 this.$store.dispatch('addElement', this.activeElement)
              }
+         },
+         onCopyUUID(e){
+            let uuid = e.currentTarget.dataset.uuid
+            window.alert(`请复制uuid: ${uuid}`)
          }
     },
     computed:{

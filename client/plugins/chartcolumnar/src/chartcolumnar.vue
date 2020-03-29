@@ -1,5 +1,5 @@
 <template>
-    <div class="c-chartcolumnar" :id="uuid">
+    <div class="c-chartcolumnar" :id="localUUID">
         
     </div>
 </template>
@@ -40,7 +40,7 @@ export default {
     name: 'CChartcolumnar',
     data(){
         return {
-           uuid: createUUID()
+           localUUID: createUUID()
         }
     },
     mixins: [componentRefresh],
@@ -64,13 +64,14 @@ export default {
         ratio:{
             type: Number,
             default: 1
-        }
+        },
+        uuid:String
     },
     computed:{
          dataTrigger(){
             if(this.props[1].fields[0].value.dataJson.json){
                 let result = this.props[1].fields[0].value.dataJson.json
-                return result
+                return JSON.parse(result)
             }
             else{
                 return DATA
@@ -127,16 +128,10 @@ export default {
     },
     watch:{
         dataTrigger(val){
-            let json = JSON.parse(val)
-            this.initMapping()
-            let pos = `${this.mappings[0].field}*${this.mappings[1].field}`
-            let col = this.mappings[2].field
-            this.chartInstance.interval().position(pos).color(col)
-            this.chartInstance.changeData(json)
-            this.axisX()
-            this.axisY()
-            this.legend()
-            this.chartInstance.render()
+             if(this.chartInstance){
+                this.chartInstance.destroy()
+                this.initData()
+            }
         },
         LegendTextColor(val){
             this.legend()
@@ -219,7 +214,7 @@ export default {
             this.initMapping()
          
             this.chartInstance = new Chart({
-                container: this.uuid,
+                container: this.localUUID,
                 autoFit: false,
                 width: width,
                 height: height
@@ -227,10 +222,26 @@ export default {
             this.chartInstance.data(this.dataTrigger)
             let pos = `${this.mappings[0].field}*${this.mappings[1].field}`
             let col = this.mappings[2].field
-            this.chartInstance.interval().position(pos).color(col)
+            this.chartInstance.interval().position(pos).color(col, ['#face1d', '#37c461', '#2194ff', '#cccccc', '#bbbbbb', '#aaaaaa', '#dddddd']) 
+            .adjust([
+                {
+                type: 'dodge',
+                dodgeBy: col, // 按照 type 字段进行分组
+                marginRatio: 0, // 分组中各个柱子之间不留空隙
+                },
+                {
+                type: 'stack',
+                },
+            ])
+            this.chartInstance.tooltip({
+                showCrosshairs: true,
+                shared: true,
+                showTitle: false
+            })
             this.axisX()
             this.axisY()
             this.legend()
+            this.chartInstance.interaction('element-active')
             this.chartInstance.render()
         },
         initMapping(){

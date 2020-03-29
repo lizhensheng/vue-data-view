@@ -34,10 +34,12 @@ export default {
     methods:{
         onAdd(){
             this.$emit('input',Math.min(this.value + 1,this.max))
+            this.$emit('change')
             this.warn = false
         },
         onDec(){
             this.$emit('input', Math.max(this.value - 1,this.min))
+            this.$emit('change')
             this.warn = false
         },
         onChange(e){

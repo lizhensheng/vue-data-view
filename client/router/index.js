@@ -22,6 +22,10 @@ export default new Router({
 			path: '/pic-create',
 			name: 'picCreate',
 			component: () => import('@/pages/home/pic-create'),
+		}, {
+			path: '/threejs-create',
+			name: 'threejsCreate',
+			component: () => import('@/pages/home/threejs-create'),
 		}]
 	},{
 		path: '/power-editor',

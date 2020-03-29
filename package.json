@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev-client": "vue-cli-service serve",
-    "dev-server": "node server/app.js",
+    "dev-server": "node server/app.js --production",
     "dev": "npm run dev-client & npm run dev-server",
     "build-client": "vue-cli-service build",
     "prd": "p2 start server/bin/www",
@@ -28,6 +28,7 @@
     "qrcode.vue": "1.7.0",
     "socket.io-client": "^2.3.0",
     "sql-formatter": "^2.3.3",
+    "three": "^0.114.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-cropper": "0.4.9",

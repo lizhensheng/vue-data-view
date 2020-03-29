@@ -34,8 +34,7 @@
                     const panesChanged = !(panels.length === this.panels.length && panels.every((panel,index) => panel === this.panels[index]))
                     if(panesChanged){
                         this.panels = panels
-                    }
-                    if(this.headers.length === 0 && this.panels.length > 0){
+                        this.headers = []
                         this.panels.forEach(panel=>{
                             let iconClass = panel.$options.propsData.iconClass
                             let name = panel.$options.propsData.name
@@ -44,8 +43,14 @@
                                 name
                             })
                         })
+                        
                         if(!this.currentName){
                             this.currentName = this.headers[0].name
+                        }else {
+                            let index = this.headers.findIndex(h => h.name === this.currentName)
+                            if(index === -1){
+                                this.currentName = this.headers[0].name
+                            }
                         }
                     }
                 }else{

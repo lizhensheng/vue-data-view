@@ -1,36 +1,26 @@
 <!--test.vue-->
 <template>
-  <div class="C-input">
-    <input class="qk-input-item" v-model="value" :placeholder="placeholder" type="text">
+  <div class="c-input">
+    <el-input v-model="props[0].fields[3].value.value" placeholder="请输入内容"></el-input>
   </div>
 </template>
 
 <script>
-	export default {
-		name: 'CInput',
-		props: {
-			placeholder: {
-				type: String,
-        default: '请输入'
-      },
-			value: {
-				require: false
-      }
-		},
-    data(){
-			return {
-
-      }
+export default {
+  name: 'CInput',
+  data(){
+    return {
     }
+  },
+   props: {
+		props:{
+			type: Array,
+			default: function(){
+				return [{
+					fields:[]
+				}]
+			}
+		}
 	}
-</script>
-
-<style lang="scss" scoped>
-.qk-input-item{
-  display: block;
-  width: 100%;
-  height: 100%;
-  outline: none;
-  border: none;
 }
-</style>
+</script>

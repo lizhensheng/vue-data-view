@@ -5,7 +5,7 @@
             <div class="config-refresh_interval"><y-input v-model="value.refreshInterval" :height="20"></y-input></div>秒一次
         </div>
         <div class="config-source_data">
-            <div class="data-source_title">数据源<span>{{dataSourceType === '数据库' ? '数据库>' + dataSourceListDefault : dataSourceType}}</span></div>
+            <div class="data-source_title">数据源<span>{{dataSourceType === '数据库' ? '数据库>' + findDataSourceName(dataSourceListDefault) : dataSourceType}}</span></div>
             <y-button text="配置数据源" :hollow="true" :showIcon="false" :width="100" :height="30" popper="data-source_button"  @click="onSettingData"></y-button>
         </div>
         <div class="config-source_setting" v-show="showConfig">
@@ -132,6 +132,14 @@ export default  {
        }
    },
     methods:{
+        findDataSourceName(id){
+            let index = this.dataSourceList.findIndex(d => d.value === id)
+            if(index > -1 ){
+                return this.dataSourceList[index].label
+            }else{
+                return ''
+            }
+        },
         onClosePopup(){
             this.showConfig = false
         },
@@ -149,7 +157,8 @@ export default  {
                 this.$emit('input', this.value)
             }
             else if(this.dataSourceListDefault != '选择已有数据源' && this.value.data.sql != val){
-                this.$axios.post('/connection/excuteSql', {id: this.dataSourceListDefault, sql: val, limit: this.value.data.limit })
+                let paging = this.value.data.paging ? this.value.data.paging : ''
+                this.$axios.post('/connection/excuteSql', {id: this.dataSourceListDefault, sql: val, limit: this.value.data.limit, paging: paging })
                 .then((res) =>{
                     if(res.code === 200){
                         let json = JSON.stringify(res.body)

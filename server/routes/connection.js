@@ -8,11 +8,13 @@ router.post('/excuteSql',async ctx => {
     let sql = data.sql
     let id = data.id
     let limit = data.limit
+    let paging = data.paging
+    let where = data.where
     let conn = await Conn.findOne({_id: id})
     if(conn){
         let handle = dbFactory.createOperate(conn.dbtype)
         await handle.createConnection(conn.dbhost,conn.dbservername,conn.dbusername,conn.dbpassword)
-        await handle.excuteSql(sql, limit)
+        await handle.excuteSql(sql, limit, paging, where)
         .then((res)=>{
             ctx.body = res
         })
@@ -42,22 +44,29 @@ router.post('/testConnection',async ctx=>{
 })
 
 router.post('/all',async ctx=>{
-    ctx.body = await Conn.find({})
+    let author = ctx.state.user._id
+    ctx.body = await Conn.find({
+        author: author
+    })
 })
 
 router.post('/detail/:_id',async ctx=>{
     let _id = mongoose.mongo.ObjectId(ctx.params._id)
-    ctx.body = await Conn.findOne({_id})
+    let author = ctx.state.user._id
+    ctx.body = await Conn.findOne({_id: _id, author: author})
 })
 /**
  *  数据未加密
  */
 router.post('/add',async ctx=>{
     let data = ctx.request.body
+    let author = ctx.state.user._id
+    author=mongoose.mongo.ObjectId(author)
     try{
         ctx.body = await Conn.create({
             ...data,
             dbcreatetime: new Date().getTime(),
+            author: author,
             _id: mongoose.mongo.ObjectId()
         })
     }

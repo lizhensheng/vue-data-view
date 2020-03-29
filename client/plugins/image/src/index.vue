@@ -60,7 +60,7 @@ export default {
             return jsonArray.length > 0 ? 
                     {
                         imageSrc: jsonArray[0][keySrc],
-                        link: jsonArray[1][keyLink] 
+                        link: jsonArray[0][keyLink] 
                     }
                     : {}
         }

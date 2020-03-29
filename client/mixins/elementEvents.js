@@ -1,7 +1,7 @@
 export default {
     methods:{
         _event_link(eventData){
-            return new Promis((resolve)=>{
+            return new Promise((resolve)=>{
                 if(eventData.url){
                     window.location.href = eventData.url
                 }

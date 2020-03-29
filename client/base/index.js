@@ -12,6 +12,7 @@ import YInputNumber from './inputnumber'
 import YTable from './table'
 import YTableColumn from './tablecolumn'
 import YCheckbox from './checkbox'
+import YDate from './date'
 import MessageBox from './messagebox'
 const components = [
     YDialog,
@@ -27,7 +28,8 @@ const components = [
     YInputNumber,
     YTable,
     YTableColumn,
-    YCheckbox
+    YCheckbox,
+    YDate
 ]
 const install = function (Vue){
     if(install.installed) return
@@ -56,5 +58,6 @@ export default {
     YInputNumber,
     YTable,
     YTableColumn,
-    YCheckbox
+    YCheckbox,
+    YDate
 }

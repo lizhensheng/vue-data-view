@@ -33,15 +33,47 @@ let dbOracle = function dbOracle() {
             }
         })
     }
-    this.excuteSql =  (sql,limit)=>{
+    this.excuteSql =  (sql, limit, paging, where)=>{
         return new Promise(async (req,rej)=>{
             try {
-                if(!sql.toLowerCase().includes('rownum')){
-                    limit = parseInt(limit)
-                    sql = `select t.* from (${sql}) t where rownum < ${limit + 1}`
+                let countSql = ""
+                if(where){
+                    let filterSql = where.map(w => {
+                        switch(w.type){
+                            case 'y-date':
+                                return `${w.params} = to_date('${w.value}', 'yyyy-MM-dd')`
+                            case 'y-select':
+                                return `${w.params} = '${w.value}'`
+                            case 'y-input':
+                                return `${w.params} like '%${w.value}%'`
+                        }
+                        return `${w.params} = '${w.value}'`
+                    })
+                    filterSql = filterSql.join(' and ')
+                    sql =  `select * from (${sql}) a where ${filterSql}`
+                }
+                if(paging){
+                    countSql = `select count(1) count from (${sql}) c`
+                    sql = `select * from (select rownum as 序号,b.* from (${sql}) b where  rownum <= ${paging.pageIndex * paging.pageSize}) c where c.序号 > ${(paging.pageIndex-1) * paging.pageSize}`
+                    
+                }
+                else{
+                    if(!sql.toLowerCase().includes('rownum')){
+                        limit = parseInt(limit)
+                        sql = `select t.* from (${sql}) t where rownum < ${limit + 1}`
+                    }
                 }
                 let res = await this.conn.execute(sql)
-                req(res.rows)
+                if(paging){
+                    let countResult = await this.conn.execute(countSql)
+                    let total = countResult.rows[0].COUNT
+                    req({
+                        total: total,
+                        data: res.rows
+                    })
+                }else{
+                    req(res.rows)
+                }
             }
             catch(e){
                 rej(e)

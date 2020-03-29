@@ -25,10 +25,25 @@ let dbMysql = function dbMysql() {
             })
         })
     }
-    this.excuteSql =  (sql,limit)=>{
+    this.excuteSql =  (sql, limit, paging, where)=>{
         return new Promise((req,rej)=>{
-            if(!sql.toLowerCase().includes('limit')){
-                sql = `${sql} limit ${limit}`
+            if(where){
+                let filterSql = where.map(w => {
+                    switch(w.type){
+                        case 'y-date':
+                            return `datediff(w.params, '${w.value}') = 0`
+                    }
+                    return `${w.params} = '${w.value}'`
+                })
+                filterSql.join(' and ')
+                sql =  `select * from (${sql}) a where ${filterSql}`
+            }
+            if(paging){
+                sql = `select *from (${sql}) t  limit ${(paging.pageIndex-1)*paging.pageSize},${paging.pageSize}`
+            }else{
+                if(!sql.toLowerCase().includes('limit')){
+                    sql = `${sql} limit ${limit}`
+                }
             }
             this.conn.query(sql, (error, result, fields) => {
                 if (error) {

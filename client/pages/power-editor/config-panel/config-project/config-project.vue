@@ -31,6 +31,7 @@
             <y-form-item title="" :width="70" :height="120" popper="marginB10">
                 <div class="screen-bg_img_preview yinput" @click="onBgImageClick"> 
                    <img v-show="projectDataInfo.backgroundImage" :src="projectDataInfo.backgroundImage" width="140" height="90">
+                   <div v-show="!projectDataInfo.backgroundImage" class="screen-bg_block"></div>
                 </div>
             </y-form-item>
              <y-form-item title="缩略图" :width="70" :height="20" popper="marginB25">
@@ -48,7 +49,8 @@
             </y-form-item>
             <y-form-item title="" :width="70" :height="108" popper="marginB10">
                 <div class="screen-bg_img_thumbnail yinput"> 
-                   <img :src="projectDataInfo.thumbnailImage" height="90" width="140">
+                   <img v-show="projectDataInfo.thumbnailImage" :src="projectDataInfo.thumbnailImage" height="90" width="140">
+                   <div v-show="!projectDataInfo.thumbnailImage" class="screen-bg_block"></div>
                 </div>
             </y-form-item>
         </div>
@@ -242,6 +244,13 @@ export default {
         }
         .screen-bg_img_thumbnail{
             text-align: center;
+        }
+        .screen-bg_block{
+            display: inline-block;
+            width: 100%;
+            height: 105px;
+            background: rgb(14,42,67);
+
         }
     }
  }   

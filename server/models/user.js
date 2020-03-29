@@ -12,7 +12,8 @@ const usersSchema = new Schema({
     email:{ type:String, default:''},
     avatar:{ type:String, default:''},
     roles:{ type:String, default:''},
-    type:{ type:String, enum: ['site','third'], default:'site'}
+    type:{ type:String, enum: ['site','third'], default:'site'},
+    token: {type:String, default: ''}
 })
 
 const users = mongoose.model('user',usersSchema,'user')

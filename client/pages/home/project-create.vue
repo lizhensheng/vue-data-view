@@ -43,17 +43,17 @@
                         <img :src="item.thumbnailImage" class="project_list_item_proimg"/>
                         <div class="project_list_item_operator_wrap">
                             <div class="project_list_item_operator_top">
-                                <i class="el-icon-data-board"></i>
-                                <i class="el-icon-s-promotion"></i>
+                                <i class="el-icon-data-board" @click="onPreview" :data-id="item._id"></i>
+                                <i class="el-icon-s-promotion" @click="onPublish" :data-id="item._id" v-show="!item.isPublish"></i>
                             </div>
                             <div class="project_list_item_operator_middle">
-                                <div class="project_list_item_edit" @click="onEditProject"  :data-id="item._id">编辑</div>        
+                                <div v-show="!item.isPublish" class="project_list_item_edit" @click="onEditProject"  :data-id="item._id">编辑</div>        
                             </div>
                             <div class="project_list_item_operator_bottom">
-                                <i class="el-icon-document-copy"></i>
+                                <i class="el-icon-document-copy" @click="onCopyProject" :data-id="item._id"  v-show="!item.isPublish"></i>
                                 <i class="el-icon-delete" @click="onDeleteProject"  :data-id="item._id" :data-title="item.title"></i>
-                                <i class="el-icon-share"></i>
-                                <i class="el-icon-question"></i>
+                                <i class="el-icon-share" @click="onTemplateCreate"  :data-id="item._id"  v-show="!item.isPublish"></i>
+                                <i class="el-icon-link" v-show="item.isPublish" @click="onPublishLink"  :data-id="item._id"></i>
                             </div>
                         </div>
                     </div>
@@ -69,80 +69,134 @@
 </template>
 
 <script>
-    export default {
-        data(){
-            return {
-                keywords: "",
-                projectList: []
-            }
+import {mapState} from 'vuex'
+export default {
+    data(){
+        return {
+            keywords: "",
+            projectList: []
+        }
+    },
+    created(){
+        //加载projectlist
+        this.initProjectList()
+    },
+    computed:{
+        ...mapState({
+            userData: state => state.user.userData
+        })
+    },
+    methods:{
+        onNewProject(){
+            this.$router.push({name: "templateCreate"})
         },
-        created(){
-            //加载projectlist
-            this.initProjectList()
+        initProjectList(){
+            this.$axios.get('/project/myProjects').then((res) => {
+                if(res.code === 200){
+                    this.projectList = res.body
+                }
+            })
         },
-        methods:{
-            onNewProject(){
-                this.$router.push({name: "templateCreate"})
-            },
-            initProjectList(){
-                this.$axios.get('/project/myProjects').then((res) => {
+        onProjectNameBlur(e){
+            let _id = e.currentTarget.dataset.id
+            let arr = this.projectList.filter(t => t._id === _id)
+            if(arr.length > 0 && arr[0].title.length > 0){
+                this.$axios.post('/project/modifyName/' + _id, {title: arr[0].title}).then((res) => {
                     if(res.code === 200){
-                        this.projectList = res.body
+                        this.$msgbox({
+                            title: '提示',
+                            message: '项目名已修改',
+                            iconClass: 'el-icon-success'
+                        })
                     }
                 })
-            },
-            onProjectNameBlur(e){
+            }
+        },
+        onEditProject(e){
+            let _id = e.currentTarget.dataset.id
+            this.$router.push({
+                name: 'PowerEditor',
+                params: {
+                    id: _id
+                }
+            })
+        },
+        onDeleteProject(e){
                 let _id = e.currentTarget.dataset.id
-                let arr = this.projectList.filter(t => t._id === _id)
-                if(arr.length > 0 && arr[0].title.length > 0){
-                    this.$axios.post('/project/modifyName/' + _id, {title: arr[0].title}).then((res) => {
-                        if(res.code === 200){
-                            this.$msgbox({
-                                title: '提示',
-                                message: '项目名已修改',
-                                iconClass: 'el-icon-success'
-                            })
-                        }
+                let title = e.currentTarget.dataset.title || ''
+                this.$confirm(`确定要删除 "${title}" 吗`,'提示', {
+                iconClass: 'el-icon-warning',
+                callback: (res)=>{
+                    if(res.action === 'confirm'){
+                            this.$axios.post('/project/delete/' + _id)
+                            .then((res) => {
+                            if(res.code === 200){
+                                    let index = this.projectList.findIndex(t => t._id === _id)
+                                    this.projectList.splice(index, 1)
+                                    this.$msgbox({
+                                        title: '提示',
+                                        message: '删除成功',
+                                        iconClass: 'el-icon-success'
+                                    })
+                            }
+                        })
+                        .catch((e) => {
+                            console.warn(e.message)
+                        })
+                    }
+                }
+                })
+        },
+        onTemplateCreate(e){
+                let _id = e.currentTarget.dataset.id
+                this.$axios.post('/project/setTemplate/'+ _id)
+                .then((res)=>{
+                    if(res.code ===200){
+                        this.$msgbox({
+                        title: '提示',
+                        message: '已设置为模板',
+                        iconClass: 'el-icon-success'
+                    })
+                    }
+                })
+        },
+        onCopyProject(e){
+            let _id = e.currentTarget.dataset.id
+            this.$axios.post('/project/copy/' + _id).then((res) => {
+                if(res.code === 200){
+                    let project = res.body
+                    this.projectList.splice(this.projectList.length -1 ,0, project)
+                }
+            })
+        },
+        onPreview(e){
+                let _id = e.currentTarget.dataset.id
+            window.open(`${this.$config.baseURL}/project/view/${_id}`, '_blank')
+        },
+        onPublish(e){
+            let _id = e.currentTarget.dataset.id
+            this.$axios.post('/project/publish/' + _id).then((res) => {
+                if(res.code === 200){
+                    let index = this.projectList.findIndex(t => t._id === _id)
+                    let project = this.projectList[index]
+                    project.isPublish = true
+                    this.projectList.splice(index ,1, project)
+                    this.$msgbox({
+                        title: '提示',
+                        message: '已发布',
+                        iconClass: 'el-icon-success'
                     })
                 }
-            },
-            onEditProject(e){
-                let _id = e.currentTarget.dataset.id
-                this.$router.push({
-                    name: 'PowerEditor',
-                    params: {
-                        id: _id
-                    }
-                })
-            },
-            onDeleteProject(e){
-                 let _id = e.currentTarget.dataset.id
-                 let title = e.currentTarget.dataset.title || ''
-                 this.$confirm(`确定要删除 "${title}" 吗`,'提示', {
-                    iconClass: 'el-icon-warning',
-                    callback: (res)=>{
-                        if(res.action === 'confirm'){
-                             this.$axios.post('/project/delete/' + _id)
-                             .then((res) => {
-                                if(res.code === 200){
-                                        let index = this.projectList.findIndex(t => t._id === _id)
-                                        this.projectList.splice(index, 1)
-                                        this.$msgbox({
-                                            title: '提示',
-                                            message: '删除成功',
-                                            iconClass: 'el-icon-success'
-                                        })
-                                }
-                            })
-                            .catch((e) => {
-                                console.warn(e.message)
-                            })
-                        }
-                    }
-                 })
-            }
+            })
+        },
+        onPublishLink(e){
+            console.log(this.userData)
+            let _id = e.currentTarget.dataset.id
+            let token = this.userData.token
+            window.open(`${this.$config.baseURL}/project/verify/${_id}/${token}`, '_blank')
         }
     }
+}
 </script>
 
 <style lang="stylus" scoped>

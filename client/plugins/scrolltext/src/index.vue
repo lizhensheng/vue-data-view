@@ -114,7 +114,7 @@ export default {
             return jsonArray.length > 0 ? 
                     {
                         text: jsonArray[0][keyText],
-                        link: jsonArray[1][keyLink] 
+                        link: jsonArray[0][keyLink] 
                     }
                     : {}
         }

@@ -1,25 +1,6 @@
 <template>
     <div class="c-scroll-form">
-        <div class="header">
-            <div class="header-item" v-for="(item,index) in tableFields" :key="index">
-                {{item.name}}
-            </div>
-        </div>
-        <div class="row" :style="{'height': rowHeight*rowNum + 'px'}">
-            <div 
-                class="row-item"
-                v-for="(item,index) in rowData" 
-                :key="index" 
-                :style="{
-                        'height': heights[index] + 'px',
-                        'line-height': heights[index]+ 'px',
-                        'background-color': item['序号'] % 2 === 0 ? evenRowBGC : oddRowBGC
-                        }">
-                <div class="col-item" v-for="(key,index2) in tableFields" :key="index2"  :style="{ 'fontSize': heights[index] === 0 ? 0 : fontSize + 'px'}">
-                    {{item[key.name]}}
-                </div>
-            </div>
-        </div>
+        <dv-scroll-board :config="config" :style="{...getCommonStyle(props[0].fields)}" />
     </div>
 </template>
 <script>
@@ -29,13 +10,7 @@ export default {
     name:'CScrollForm',
     data(){
         return {
-            tableData:[],
-            tableFields:[],
-            heights:[],
-            animationIndex:0,
-            animationHandler:[],
-            rowData:[],
-            count:0
+            config: {}
         }
     },
     mixins: [componentRefresh],
@@ -72,85 +47,97 @@ export default {
             return this.props[0].fields[6].value.value
         },
         waitTime(){
-            return this.props[0].fields[7].value.value * 1000
+            return this.props[0].fields[7].value.value
         },
         carousel(){
             return this.props[0].fields[8].value.value
         },
-        fontSize(){
+        headerBGC(){
             return this.props[0].fields[9].value.value
+        },
+        headerHeight(){
+            return this.props[0].fields[10].value.value
+        },
+        index(){
+            return this.props[0].fields[11].value.value
         }
     },
     watch:{
-         dataTrigger(){
-            this.stopAnimation()
-            this.startAnimation()
-        },
-        waitTime(){
-            this.stopAnimation()
-            this.startAnimation()
+        dataTrigger(){
+            this.initData()
         },
         rowNum(){
-             this.stopAnimation()
-            this.startAnimation()
+            this.initData()
+        },
+        rowHeight(){
+            this.initData()
+        },
+        oddRowBGC(){
+            this.initData()
+        },
+        evenRowBGC(){
+            this.initData()
+        },
+        waitTime(){
+            this.initData()
+        },
+        carousel(){
+            this.initData()
+        },
+        headerBGC(){
+            this.initData()
+        },
+        headerHeight(){
+            this.initData()
+        },
+        index(){
+            this.initData()
         }
     },
-    mounted(){
-        this.startAnimation()
+    created(){
+        this.initData()
     },
     methods:{
-        startAnimation(){
-            this.tableData = this.dataTrigger
-            this.tableData = this.tableData.map((item,index)=>{
-                return {
-                    '序号': index + 1,
-                    ...item
-                }
+        getCommonStyle(item){
+            let width = item[0].value[0].value.value
+            let height = item[0].value[1].value.value
+            return {
+                'width': width + 'px',
+                'height': height + 'px'
+            }
+        },
+        initData(){
+            let header = this.getHeader(this.dataTrigger)
+            let data = this.getData(this.dataTrigger)
+            this.config = {
+                header: header,
+                data: data,
+                rowNum: this.rowNum,
+                oddRowBGC: this.oddRowBGC,
+                evenRowBGC: this.evenRowBGC,
+                waitTime: this.waitTime,
+                carousel: this.carousel,
+                headerBGC: this.headerBGC,
+                headerHeight: this.headerHeight,
+                index: this.index
+            }
+        },
+        getHeader(data){
+             if(Array.isArray(data) && data.length>0){
+                 return Object.keys(data[0])
+             }else{
+                 return []
+             }
+        },
+        getData(data){
+            let arr = []
+            data.forEach(element => {
+                arr.push(Object.values(element))
             })
-            if(this.tableData.length > 0){
-                let keys = Object.keys(this.tableData[0])
-                this.tableFields = []
-                keys.forEach((key, index) => {
-                    this.tableFields.push({
-                        index: index,
-                        name: key
-                    })
-                })
-            }
-            this.animation(true)
-        },
-        async animation(start = false){
-            const rowLength = this.tableData.length
-            if(this.rowNum > rowLength) return
-            if(start){
-                await new Promise(resolve=>setTimeout(resolve,this.waitTime))
-                this.heights = new Array(rowLength).fill(this.rowHeight)
-            }
-            const animationNum = this.carousel === 'single' ? 1 : this.rowNum
-            let rows = this.tableData.slice(this.animationIndex)
-            rows.push(...this.tableData.slice(0,this.animationIndex))
-            this.rowData = rows
-            this.heights = new Array(rowLength).fill(this.rowHeight)
-            await new Promise(resolve => setTimeout(resolve, 600))
-            this.heights.splice(0, 1, ...new Array(animationNum).fill(0))
-            await new Promise(resolve => setTimeout(resolve, 600))
-            
-            this.animationIndex += animationNum
-            const back = this.animationIndex - rowLength
-            if(back>=0) this.animationIndex = back
-            this.count++
-            this.animationHandler.push(setTimeout(this.animation, this.waitTime - 600))
-        },
-        stopAnimation(){
-            if(this.animationHandler.length>0){
-                this.animationHandler.forEach(item=>{
-                    clearTimeout(item)
-                })
-            }
+            return arr
         }
     },
     destroyed(){
-        this.stopAnimation()
     }
 }
 </script>

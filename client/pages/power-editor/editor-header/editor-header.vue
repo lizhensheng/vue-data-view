@@ -29,8 +29,9 @@ export default {
         onSaveProject(){
             let id = this.$route.params.id
             let project = this.projectDataInfo
-            if(id){
-                this.$axios.post('/project/update/' + id, project).then((res) => {
+            let newId = this.projectDataInfo._id ? this.projectDataInfo._id : id
+            if(newId){
+                this.$axios.post('/project/update/' + newId, project).then((res) => {
                     if(res.code === 200){
                         this.$msgbox({
                             title: '提示',
@@ -65,8 +66,19 @@ export default {
             let id = this.projectDataInfo._id
             if(id)
             {
-                window.open(`${this.$config.baseURL}/project/view/${id}`,'_blank')
-            }
+                this.$axios.post('/project/publish/' + id).then((res) => {
+                    if(res.code === 200){
+                         this.$msgbox({
+                            title: '提示',
+                            message: '发布成功',
+                            iconClass: 'el-icon-success'
+                        })
+                        this.$router.push({
+                            name: 'projectCreate'
+                        })                        
+                    }
+                })
+           }
         }
     },
     computed:{

@@ -53,11 +53,12 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import EditSource from '@/components/edit-source/edit-source'
 import ResponseData from '@/components/response-data/response-data'
 import ConfigSource from '@/components/config-source/config-source'
 import SelectImage from '@/components/select-image/select-image'
+import EventEdit from '@/components/event-edit/event-edit'
 
 export default {
     name: 'ConfigComponent',
@@ -73,11 +74,6 @@ export default {
         ...mapGetters([
             'activeElement'
         ])
-    },
-    watch:{
-        localProps(){
-            console.log('watch')
-        }
     },
     methods:{
         onSwitchTab(name, index){
@@ -95,7 +91,8 @@ export default {
         EditSource,
         ResponseData,
         ConfigSource,
-        SelectImage
+        SelectImage,
+        EventEdit
     }
 }
 </script>

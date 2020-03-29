@@ -1,45 +1,40 @@
 
 
-// 基础组件
 import Text from './text'
 import Image from './image'
-import ImageCarousel from './image-carousel'
+import Carousel from './carousel'
 import RectangleBorder from './rectangle-border'
 import Iframe from './iframe'
 import Button from './button'
-
-// 表单组件
 import Input from './input'
 import Textarea from './textarea'
-
-// 功能组件
 import bgMusic from './bg-music'
-
-// 业务组件
 import BaseForm from './baseform'
 import ScrollForm from './scrollform'
 import ScrollText from './scrolltext'
+import DatePicker from './datepicker'
+import Select from './select'
 import Chartline from './chartline'
 import Chartcolumnar from './chartcolumnar'
 import Chartmap from './chartmap'
+import Breadcrumb from './breadcrumb'
 
 const components = [
-    // 基础组件
 	Text,
 	Image,
-	ImageCarousel,
+	Carousel,
 	RectangleBorder,
 	Iframe,
 	Button,
-	// 表单组件
 	Input,
 	Textarea,
-	// 功能组件
 	bgMusic,
-	// 业务组件
-    BaseForm,
+	BaseForm,
+	Breadcrumb,
     ScrollForm,
 	ScrollText,
+	DatePicker,
+	Select,
 	Chartline,
 	Chartcolumnar,
 	Chartmap
@@ -59,20 +54,17 @@ components.forEach(item => {
 })
 
 export {
-     // 基础组件
 	Text,
 	Image,
-	ImageCarousel,
+	Carousel,
 	RectangleBorder,
 	Iframe,
 	Button,
-	// 表单组件
 	Input,
 	Textarea,
-	// 功能组件
 	bgMusic,
-	// 业务组件
-    BaseForm,
+	BaseForm,
+	Breadcrumb,
     ScrollForm,
 	ScrollText,
 	Chartline,

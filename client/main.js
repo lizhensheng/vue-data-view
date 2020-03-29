@@ -9,6 +9,10 @@ import config from '@/config'
 import filters from './filter/index'
 import AES from '@/common/js/secret'
 import userModel from '@client/mixins/userModel'
+// 将自动注册所有组件为全局组件
+import dataV from '@jiaminghi/data-view'
+
+Vue.use(dataV)
 
 import Element from 'element-ui'
 import '@/common/styles/element-variable.scss'

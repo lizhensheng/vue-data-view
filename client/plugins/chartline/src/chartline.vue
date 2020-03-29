@@ -1,5 +1,5 @@
 <template>
-    <div class="c-chartline" :id="uuid">
+    <div class="c-chartline" :id="localUUID">
         
     </div>
 </template>
@@ -40,7 +40,7 @@ export default {
     name: 'CChartline',
     data(){
         return {
-           uuid: createUUID()
+           localUUID: createUUID()
         }
     },
     mixins: [componentRefresh],
@@ -64,7 +64,8 @@ export default {
         ratio:{
             type: Number,
             default: 1
-        }
+        },
+        uuid:String
     },
     computed:{
          dataTrigger(){
@@ -127,15 +128,10 @@ export default {
     },
     watch:{
         dataTrigger(json){
-            this.initMapping()
-            let pos = `${this.mappings[0].field}*${this.mappings[1].field}`
-            let col = this.mappings[2].field
-            this.chartInstance.line().position(pos).color(col)
-            this.chartInstance.changeData(json)
-            this.axisX()
-            this.axisY()
-            this.legend()
-            this.chartInstance.render()
+            if(this.chartInstance){
+                this.chartInstance.destroy()
+                this.initData()
+            }     
         },
         LegendTextColor(val){
             this.legend()
@@ -218,7 +214,7 @@ export default {
             this.initMapping()
          
             this.chartInstance = new Chart({
-                container: this.uuid,
+                container: this.localUUID,
                 autoFit: false,
                 width: width,
                 height: height
@@ -226,7 +222,13 @@ export default {
             this.chartInstance.data(this.dataTrigger)
             let pos = `${this.mappings[0].field}*${this.mappings[1].field}`
             let col = this.mappings[2].field
-            this.chartInstance.line().position(pos).color(col)
+            this.chartInstance.tooltip({
+                showCrosshairs: true,
+                shared: true,
+                showTitle: false
+            })
+            this.chartInstance.area().position(pos).color(col, ['#face1d', '#37c461', '#2194ff', '#cccccc', '#bbbbbb', '#aaaaaa', '#dddddd'])
+            this.chartInstance.line().position(pos).color(col, ['#face1d', '#37c461', '#2194ff', '#cccccc', '#bbbbbb', '#aaaaaa', '#dddddd'])
             this.axisX()
             this.axisY()
             this.legend()
@@ -234,7 +236,7 @@ export default {
         },
         initMapping(){
             let model = this.props[1].fields[0].value.dataJson.model
-            this.mappings =model.map(m => {
+            this.mappings = model.map(m => {
                 let field = m.field
                 let mapping = m.mapping
                 let key =  mapping || field

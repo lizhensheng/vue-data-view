@@ -10,21 +10,21 @@
             <div class="project-list_item project-list_active">
                <y-button text="创建项目" :width="130" @click="onNewProject"></y-button>
             </div>
-            <div class="project-list_item">
+            <div class="project-list_item" v-for="(template, index) in templateList" :key="index">
                 <div class="project_list_item_proimg_wrap">
-                    <img src="" class="project_list_item_proimg"/>
+                    <img :src="template.thumbnailImage" class="project_list_item_proimg"/>
                     <div class="project_list_item_operator_wrap">
                         <div class="project_list_item_operator_middle">
-                            <div class="project_list_item_edit" @click="onTemplateCreate">创建项目</div>   
-                            <div class="project_list_item_preview">预览</div>       
+                            <div class="project_list_item_edit" @click="onTemplateCreate" :data-id="template._id">创建项目</div>   
+                            <div class="project_list_item_preview" @click="onPreview"  :data-id="template._id">预览</div>       
                         </div>
                     </div>
                 </div>
                 <div class="project_list_item_name_wrap">
-                    <div class="project_list_item_left">省市确诊病例分析</div>
+                    <div class="project_list_item_left">{{template.title}}</div>
                     <div class="project_list_item_right">
                         <div>比例 16：9</div>
-                        <div>1920x1080px</div>
+                        <div>{{`${template.screenWidth}x${template.screenHeight}px`}}</div>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,22 @@
 
 <script>
 export default {
+        data(){
+            return {
+                templateList: []
+            }
+        },
+        mounted(){
+            this.getTemplateList()
+        },
         methods:{
+            getTemplateList(){
+                this.$axios.get('/project/myTemplate').then((res) => {
+                    if(res.code === 200){
+                        this.templateList = res.body
+                    }
+                })
+            },
             onGoback(){
                 this.$router.history.go(-1)
             },
@@ -43,12 +58,24 @@ export default {
                     name: 'PowerEditor'
                 })
             },
-            onTemplateCreate(){
+            onTemplateCreate(e){
+                 let _id = e.currentTarget.dataset.id
                 //先复制项目再跳转
-                //待完成
-                this.$router.push({
-                    name: 'PowerEditor'
+                 this.$axios.post('/project/copy/' + _id).then((res) => {
+                    if(res.code === 200){
+                        let project = res.body
+                        this.$router.push({
+                            name: 'PowerEditor',
+                            params: {
+                                id: project._id
+                            }
+                        })
+                    }
                 })
+            },
+            onPreview(e){
+                let _id = e.currentTarget.dataset.id
+                window.open(`${this.$config.baseURL}/project/view/${_id}`,'_blank')
             }
         }
 }

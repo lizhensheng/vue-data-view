@@ -27,7 +27,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import '../../../client/common/styles/element-variable.scss'
 import {_c_register_components_object} from '@client/plugins/index'
+// 将自动注册所有组件为全局组件
+import dataV from '@jiaminghi/data-view'
+import Element from 'element-ui'
+Vue.use(dataV)
+Vue.use(Element)
 export default {
     name:'ShowData',
     data(){
@@ -63,7 +70,8 @@ export default {
                 width: this.projectInfo.screenWidth +'px' ,
                 height: this.projectInfo.screenHeight +'px',
                 backgroundColor: this.projectInfo.backgroundColor,
-                backgroundImage: `url('${this.projectInfo.backgroundImage}')`
+                backgroundImage: `url('${this.projectInfo.backgroundImage}')`,
+                margin: '0 auto'
             }
          }
     },

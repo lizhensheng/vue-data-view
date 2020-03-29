@@ -12,7 +12,8 @@
             <i class="el-icon-monitor">
         </i></el-tooltip>
         <div class="edit-scale">
-            <input type="number" min="18" max="175" step="15"  v-model="scalePercent" class="edit-scale-value"/>%<i class="el-icon-arrow-down"/>
+            <y-input-number  v-model="scalePercent" :min="18" :max="175" class="edit-scale-value" @change="onChange"></y-input-number>
+            <!-- <input type="number"   v-model="scalePercent"  @change="onChange"/>%<i class="el-icon-arrow-down"/> -->
         </div>
         <div><y-range v-model="scalePercent" :min="18" :max="175"  :step="15" @change="onChange"></y-range></div>
         <i class="el-icon-magic-stick" @click="onMagic"></i>

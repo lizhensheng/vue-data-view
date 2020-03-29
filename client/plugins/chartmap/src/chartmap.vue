@@ -1,5 +1,5 @@
 <template>
-    <div class="c-chartmap" :id="uuid"></div>
+    <div class="c-chartmap" :id="localUUID"></div>
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {
     name: 'CChartmap',
     data(){
         return {
-           uuid: createUUID()
+           localUUID: createUUID()
         }
     },
     mounted(){
@@ -38,7 +38,8 @@ export default {
         ratio:{
             type: Number,
             default: 1
-        }
+        },
+        uuid:String
     },
     computed:{
         dataTrigger(){
@@ -93,7 +94,7 @@ export default {
                     features: res
                 }
                 this.chartInstance = new Chart({
-                    container: this.uuid,
+                    container: this.localUUID,
                     autoFit: false,
                     width: this.width,
                     height: this.height,

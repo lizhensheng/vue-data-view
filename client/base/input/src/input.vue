@@ -43,7 +43,8 @@ export default {
             this.isFocus = false
         },
         onChange(e){
-            this.$emit('input',e.target.value)
+            this.$emit('input', e.target.value)
+            this.$emit('change', e.target.value)
         }
     }
 }

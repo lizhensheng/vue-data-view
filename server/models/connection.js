@@ -12,7 +12,11 @@ const schema = new Schema({
     dbservername: { type: String },
     dbusername: { type: String },
     dbpassword: { type: String },
-    dbcreatetime: { type: Number }
+    dbcreatetime: { type: Number },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
 })
 
 const model = mongoose.model('connection', schema, 'connection')
