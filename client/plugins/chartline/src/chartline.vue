@@ -77,6 +77,9 @@ export default {
                 return DATA
             }
         },
+        modelTrigger(){
+            return this.props[1].fields[0].value.dataJson.model
+        },
         LegendTextColor(){
             return this.props[0].fields[3].value[0].value.value
         },
@@ -88,6 +91,9 @@ export default {
         },
         LegendPosition(){
             return this.props[0].fields[3].value[3].value.value
+        },
+        ChageColor(){
+            return this.props[0].fields[3].value[4].value.value
         },
         xGrid(){
             return this.props[0].fields[4].value[0].value.value
@@ -110,6 +116,12 @@ export default {
         xFormart(){
             return this.props[0].fields[4].value[6].value.value
         },
+        xArea(){
+            return this.props[0].fields[4].value[7].value.value
+        },
+        xPoint(){
+            return this.props[0].fields[4].value[8].value.value
+        },
         yGrid(){
             return this.props[0].fields[5].value[0].value.value
         },
@@ -127,11 +139,17 @@ export default {
         }
     },
     watch:{
-        dataTrigger(json){
-            if(this.chartInstance){
+        dataTrigger(val){
+            if(val&&this.chartInstance){
                 this.chartInstance.destroy()
                 this.initData()
             }     
+        },
+        modelTrigger(){
+            if(this.chartInstance){
+                this.chartInstance.destroy()
+                this.initData()
+            }
         },
         LegendTextColor(val){
             this.legend()
@@ -148,6 +166,12 @@ export default {
         LegendPosition(val){
             this.legend()
             this.chartInstance.render()
+        },
+        ChageColor(){
+             if(this.chartInstance){
+                this.chartInstance.destroy()
+                this.initData()
+            }
         },
         xGrid(){
             this.axisX()
@@ -176,6 +200,18 @@ export default {
         xFormart(){
             this.axisX()
             this.chartInstance.render()
+        },
+        xArea(){
+           if(this.chartInstance){
+                this.chartInstance.destroy()
+                this.initData()
+            }   
+        },
+        xPoint(){
+           if(this.chartInstance){
+                this.chartInstance.destroy()
+                this.initData()
+            }   
         },
         yGrid(){
             this.axisY()
@@ -227,8 +263,13 @@ export default {
                 shared: true,
                 showTitle: false
             })
-            this.chartInstance.area().position(pos).color(col, ['#face1d', '#37c461', '#2194ff', '#cccccc', '#bbbbbb', '#aaaaaa', '#dddddd'])
-            this.chartInstance.line().position(pos).color(col, ['#face1d', '#37c461', '#2194ff', '#cccccc', '#bbbbbb', '#aaaaaa', '#dddddd'])
+            if(this.xArea){
+                this.chartInstance.area().adjust('stack').position(pos).color(col, this.ChageColor)
+            } 
+            if(this.xPoint){
+                this.chartInstance.point().adjust('stack').position(pos).color(col, this.ChageColor)
+            }
+            this.chartInstance.line().adjust('stack').position(pos).color(col, this.ChageColor)
             this.axisX()
             this.axisY()
             this.legend()

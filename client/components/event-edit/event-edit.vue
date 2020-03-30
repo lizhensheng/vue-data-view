@@ -35,7 +35,7 @@ const EVENT_TYPE = {
     'HIDDLE': '隐藏'
 }
 let model =  {
-    id: createUUID(),
+    id: '',
     eventType: EVENT_TYPE.REFLESH,
     eventAction: {
         source: '',

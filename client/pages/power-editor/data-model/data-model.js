@@ -6,7 +6,7 @@ let projectConfig = {
     screenWidth: 1920,
     screenHeight: 1080,
     title: "",
-    backgroundColor: "rgb(255,255,255)",
+    backgroundColor: "rgb(14,42,67)",
     backgroundImage: "",
     thumbnailImage: "",
     pages: []

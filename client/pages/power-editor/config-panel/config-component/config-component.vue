@@ -59,6 +59,7 @@ import ResponseData from '@/components/response-data/response-data'
 import ConfigSource from '@/components/config-source/config-source'
 import SelectImage from '@/components/select-image/select-image'
 import EventEdit from '@/components/event-edit/event-edit'
+import ColorEdit from '@/components/color-edit/color-edit'
 
 export default {
     name: 'ConfigComponent',
@@ -92,7 +93,8 @@ export default {
         ResponseData,
         ConfigSource,
         SelectImage,
-        EventEdit
+        EventEdit,
+        ColorEdit
     }
 }
 </script>

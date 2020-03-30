@@ -51,6 +51,9 @@ export default {
                 return DATA
             }
         },
+        modelTrigger(){
+            return this.props[1].fields[0].value.dataJson.model
+        },
         levelNums(){
              let nums = this.props[0].fields[3].value[0].value.value
              let arr = nums.split(',')
@@ -64,9 +67,15 @@ export default {
         }
     },
     watch:{
-         dataTrigger(){
-            if(this.chartInstance){
+         dataTrigger(val){
+            if(val&&this.chartInstance){
                 this.initMapping()
+                this.chartInstance.destroy()
+                this.initData()
+            }
+        },
+        modelTrigger(){
+            if(this.chartInstance){
                 this.chartInstance.destroy()
                 this.initData()
             }
@@ -204,7 +213,7 @@ export default {
                }
                else if(index == this.levelNums.length - 2){
                    arr.push({
-                       name: `${this.levelNums[index]}人及以上`,
+                       name: `${this.levelNums[index]}及以上`,
                        value: index,
                        marker: {
                            style: {
@@ -214,7 +223,7 @@ export default {
                    })
                }else {
                     arr.push({
-                       name: `${this.levelNums[index]}~${this.levelNums[index+1]}人`,
+                       name: `${this.levelNums[index]}~${this.levelNums[index+1]}`,
                        value: index,
                        marker: {
                            style: {

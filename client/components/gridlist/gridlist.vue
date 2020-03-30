@@ -80,8 +80,8 @@ export default {
         height: 110px;
         background: rgba(150,150,150,0.2);
         .gridlist-img{
-            width: auto;  
-            height: auto;  
+            width: 100%;  
+            height: 100%;  
             max-width: 100%;  
             max-height: 100%; 
         }

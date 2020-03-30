@@ -17,6 +17,7 @@ import Select from './select'
 import Chartline from './chartline'
 import Chartcolumnar from './chartcolumnar'
 import Chartmap from './chartmap'
+import Chartpie from './chartpie'
 import Breadcrumb from './breadcrumb'
 
 const components = [
@@ -37,7 +38,8 @@ const components = [
 	Select,
 	Chartline,
 	Chartcolumnar,
-	Chartmap
+	Chartmap,
+	Chartpie
 ]
 const install = function (Vue){
     if(install.installed) return
@@ -70,6 +72,7 @@ export {
 	Chartline,
 	Chartcolumnar,
 	Chartmap,
+	Chartpie,
     _c_register_components_object
 }
 

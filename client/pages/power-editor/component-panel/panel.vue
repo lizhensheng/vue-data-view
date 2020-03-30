@@ -13,7 +13,7 @@
                         <div class="panel-controls_wrap">
                             <div class="panel-controls_item" v-for="(component,cIndex) in group.components" :key="cIndex">
                                 <div class="panel-controls_title">{{component.title}}</div>
-                                <img class="panel-controls_img" :src="component.icon"   draggable="true" @dragstart="onDrag" :data-title="component.title" @click="onAddComponent"/>
+                                <img class="panel-controls_img" src="./control.jpg" draggable="true" @dragstart="onDrag" :data-title="component.title" @click="onAddComponent"/>
                             </div>
                         </div>
                     </y-collapse-item>

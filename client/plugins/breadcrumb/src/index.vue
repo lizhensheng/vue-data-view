@@ -1,7 +1,7 @@
 <template>
     <el-breadcrumb separator="/">
         <el-breadcrumb-item v-for="(item, index) in  dataTrigger" :key="index">
-            <a v-if="item.href" :href="item.href">{{item.title}}</a>
+            <a v-if="item.href" :href="item.href" target="_blank">{{item.title}}</a>
             <span v-else>{{item.title}}</span>
         </el-breadcrumb-item>
     </el-breadcrumb>

@@ -1,8 +1,10 @@
 <template>
     <div class="pic-create">
         <div class="pic-tool">
-            <tool-list :toolList="tList" v-if="edit"></tool-list>
-            <y-button text="最近上传" :width="100"  :showIcon="false" v-else></y-button>
+            <tool-list :toolList="tList" v-if="edit" @toolListClick="onToollistClick"></tool-list>
+            <div v-else>
+                <y-button text="上传" :width="100"  :showIcon="false" @click="onUploadClick"></y-button>
+            </div>
         </div>
        
         <context-menu   ref="contextMenu"  
@@ -48,24 +50,20 @@ export default {
             showUploadDialog: false,
             tList:[
                 {
-                    title: '分享',
-                    iconClass: 'el-icon-share'
-                },
-                {
-                    title: '下载',
-                    iconClass: 'el-icon-download'
-                },
-                {
                     title: '删除',
                     iconClass: 'el-icon-delete'
                 },
                 {
                     title: '全选',
-                    iconClass: 'el-icon-delete'
+                    iconClass: 'el-icon-check'
+                },
+                {
+                    title: '反选',
+                    iconClass: 'el-icon-d-caret'
                 },
                 {
                     title: '全部取消',
-                    iconClass: 'el-icon-delete'
+                    iconClass: 'el-icon-close'
                 }
             ],
             cList:[
@@ -95,6 +93,49 @@ export default {
         })
     },
     methods:{
+        onToollistClick(res){
+            if(res.title === '全部取消'){
+                this.imgList.map(i => {
+                    i.active = false
+                })
+            }else if(res.title === '全选'){
+                 this.imgList.map(i => {
+                    i.active = true
+                })
+            }else if(res.title === '反选'){
+                 this.imgList.map(i => {
+                    i.active = ! i.active
+                })
+            }else if(res.title === '删除'){
+                let data = this.imgList.filter(i => {
+                    return i.active
+                }).map(k => {
+                    return k._id
+                })
+                this.$axios.post('/person/delImages', data).then(res=>{
+                    if(res.code === 200){
+                        data.forEach(f => {
+                            let index = this.imgList.findIndex(i => {
+                                return i._id === f
+                            })
+                            this.imgList.splice(index, 1)
+                        })
+                        this.$store.dispatch('setImgList', this.imgList)
+                        this.$msgbox({
+                            title: '提示',
+                            message: '删除成功',
+                            iconClass: 'el-icon-success'
+                        })
+                    }
+                })
+                .catch((e)=>{
+                    console.log(e.message)
+                })
+            }
+        },
+        onUploadClick(){
+            this.showUploadDialog = true
+        },
         onPicItemClick(id){
             this.showPreviewIndex = id - 1
             this.isShowPreview = true
@@ -143,18 +184,16 @@ export default {
         uploadPsd(file){
             let params=new FormData()
             params.append('file',file)
-            // this.uploading=true
-            this.$axios.post('/person/uploadImage',params).then(res=>{
+            this.$axios.post('/person/uploadImage', params).then(res=>{
                 if(res.code === 200){
-                    // this.uploading=false
                     let ar = res.body
-                    let temp = this.imgList
-                    temp.push({
+                    console.log(this.imgList)
+                    this.imgList.splice(this.imgList.length, 0, {
+                        _id: ar._id,
                         id: this.imgList.length+1,
                         pic: ar.url,
                         active: false
                     })
-                    this.$store.dispatch('setImgList', temp)
                     this.showUploadDialog = false
                     this.$msgbox({
                         title: '提示',
@@ -163,7 +202,6 @@ export default {
                     })
                 }
             }).catch(()=>{
-                // this.uploading=true
             })
         }
     },
@@ -173,6 +211,7 @@ export default {
                     let arr = res.body
                     let temp = []
                     arr.map((item, index)=>{
+                        _id: item._id,
                         item.id = index + 1
                         item.pic = item.url
                         item.active = false

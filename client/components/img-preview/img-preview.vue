@@ -10,7 +10,7 @@
             <div class="img-body_right" @click="onNextClick">
                  <div class="ibox box"><i class="el-icon-arrow-right"></i></div>
             </div>
-            <div class="img-body_wrap">
+            <div class="img-body_wrap" id="imgWrapper">
                 <img v-if="imgList.length>0" :src="imgList[currentIndex].pic" alt="" > 
                 <!-- :style="{'width': 500+'px','height': 500+'px'}" -->
             </div>
@@ -43,6 +43,13 @@ export default {
   },
   mounted(){
       this.currentIndex = this.previewIndex
+      document.getElementById("imgWrapper").addEventListener("wheel", (e) => {
+          if(e.wheelDeltaY > 0){
+              this.onPreClick()
+          }else {
+              this.onNextClick()
+          }
+      })
   },
   methods:{
       onPreClick(){
@@ -224,8 +231,8 @@ export default {
                     border-radius: 5px;
                 }
                 .img-file{
-                    width: auto;  
-                    height: auto;  
+                    width: 100%;  
+                    height: 100%;  
                     max-width: 100%;  
                     max-height: 100%; 
                     background: rgb(25,25,52);

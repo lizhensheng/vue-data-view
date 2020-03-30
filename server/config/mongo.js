@@ -1,5 +1,5 @@
 const config = require('../../config.json')
-const mongoose = require('mongoose').set('debug',true)
+const mongoose = require('mongoose').set('debug',false)
 const options = {
     autoReconnect: true,
     useNewUrlParser: true,

@@ -42,9 +42,11 @@ if(process.argv.slice(2).length > 0 && process.argv.slice(2)[0] === '--productio
         path:[
             /^\/common\/html2canvas\/corsproxy/,
             /^\/project\/view/,
+            /^\/project\/verify/,
             /^\/auth\/login/,
             /^\/auth\/register/,
-            /^\/connection\/excuteSql/
+            /^\/connection\/excuteSql/,
+            /^\/upload_static\/images/
         ]
     }))
 }

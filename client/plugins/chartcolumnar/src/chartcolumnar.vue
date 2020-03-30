@@ -71,11 +71,15 @@ export default {
          dataTrigger(){
             if(this.props[1].fields[0].value.dataJson.json){
                 let result = this.props[1].fields[0].value.dataJson.json
+                console.log(result)
                 return JSON.parse(result)
             }
             else{
                 return DATA
             }
+        },
+        modelTrigger(){
+            return this.props[1].fields[0].value.dataJson.model
         },
         LegendTextColor(){
             return this.props[0].fields[3].value[0].value.value
@@ -88,6 +92,9 @@ export default {
         },
         LegendPosition(){
             return this.props[0].fields[3].value[3].value.value
+        },
+        ChageColor(){
+            return this.props[0].fields[3].value[4].value.value
         },
         xGrid(){
             return this.props[0].fields[4].value[0].value.value
@@ -128,7 +135,13 @@ export default {
     },
     watch:{
         dataTrigger(val){
-             if(this.chartInstance){
+             if(val&&this.chartInstance){
+                this.chartInstance.destroy()
+                this.initData()
+            }
+        },
+        modelTrigger(){
+            if(this.chartInstance){
                 this.chartInstance.destroy()
                 this.initData()
             }
@@ -148,6 +161,12 @@ export default {
         LegendPosition(val){
             this.legend()
             this.chartInstance.render()
+        },
+        ChageColor(){
+             if(this.chartInstance){
+                this.chartInstance.destroy()
+                this.initData()
+            }
         },
         xGrid(){
             this.axisX()
@@ -222,7 +241,7 @@ export default {
             this.chartInstance.data(this.dataTrigger)
             let pos = `${this.mappings[0].field}*${this.mappings[1].field}`
             let col = this.mappings[2].field
-            this.chartInstance.interval().position(pos).color(col, ['#face1d', '#37c461', '#2194ff', '#cccccc', '#bbbbbb', '#aaaaaa', '#dddddd']) 
+            this.chartInstance.interval().position(pos).color(col, this.ChageColor) 
             .adjust([
                 {
                 type: 'dodge',
