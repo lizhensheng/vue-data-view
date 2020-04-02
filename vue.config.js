@@ -55,7 +55,7 @@ module.exports = {
             // e.g. Build full languages support with webpack 4.0 takes over 80 seconds
             // Languages are loaded on demand at runtime 
             //'javascript', 'css', 'html', 'typescript',
-            languages: [ 'json', 'sql']
+            languages: [ 'json', 'sql', 'javascript']
           }))
     },
     chainWebpack: config=>{

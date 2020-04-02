@@ -11,11 +11,11 @@ export default new Router({
 		component: () => import('@/pages/home/index'),
 		redirect: { name: 'projectCreate' },
 		children: [{
-			path: 'project-create',
+			path: '/project-create',
 			name: 'projectCreate',
 			component: () => import('@/pages/home/project-create'),
 		}, {
-			path: 'data-create',
+			path: '/data-create',
 			name: 'dataCreate',
 			component: () => import('@/pages/home/data-create'),
 		}, {
@@ -42,8 +42,24 @@ export default new Router({
 			noNeedLogin: true
 		}
 	},{
-		path: 'template-create',
+		path: '/template-create',
 		name: 'templateCreate',
 		component: () => import('@/pages/home/template-create'),
+	},{
+		path: '/css-create',
+		name: 'cssCreate',
+		component: () => import('@/pages/css/interview'),
+		meta: {
+			trust: true,
+			noNeedLogin: true
+		}
+	},{
+		path: '/js-create',
+		name: 'jsCreate',
+		component: () => import('@/pages/js/interview'),
+		meta: {
+			trust: true,
+			noNeedLogin: true
+		}
 	}]
 })

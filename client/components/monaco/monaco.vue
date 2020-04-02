@@ -10,7 +10,7 @@ import * as monaco from 'monaco-editor'
 export default {
     name: 'Monaco',
     mounted(){
-        this.initMonaco()
+        this.initMonaco()        
         this.$bus.$on('createMonacoInstance', () => {
             this.initMonaco()
         })

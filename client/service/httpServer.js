@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '@/store/index'
 import $config from "@/config/index"
-import { getLocalStorage } from '@/common/js/mUtils'
 import QS from 'qs';
 
 
@@ -14,8 +13,7 @@ axios.defaults.timeout = 30000; // 超时时间
 
 //请求拦截器
 axios.interceptors.request.use(config => {
-  let token = getLocalStorage('auth') ? (getLocalStorage('auth')).token : ''
-  let auth = token ? token : store.getters.authorization
+  let auth =  store.getters.authorization
 	config.headers.Authorization = auth
   return config
 }, error => {
