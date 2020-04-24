@@ -10,8 +10,8 @@
     "prd": "p2 start server/bin/www",
     "lib:pc": "vue-cli-service build --target lib --name page-engine --dest server/public/engin_libs/pc engine-template/engine-pc/index.js",
     "lint": "vue-cli-service lint",
-    "doc-dev": "vuepress dev docs",
-    "doc-build": "vuepress build docs"
+    "doc-dev": "vuepress dev vuedoc",
+    "doc-build": "vuepress build vuedoc"
   },
   "dependencies": {
     "@antv/data-set": "^0.11.1",
