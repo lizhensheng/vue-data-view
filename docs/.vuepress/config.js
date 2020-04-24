@@ -1,7 +1,7 @@
 const { fs, path } = require('@vuepress/shared-utils')
 
 module.exports = ctx => ({
-  base: '/vuepress/',
+  base: '/vue-data-view/vuepress/',
   dest: './vuepress',
   locales: {
     '/zh/': {
