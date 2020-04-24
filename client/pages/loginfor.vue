@@ -24,7 +24,7 @@
                     登陆
                 </div>
             </div>
-            <div class="footer">武汉XX信息科技有限公司 @2020 版权所有</div>
+            <div class="footer">武汉XX信息科技有限公司 ©2020 版权所有</div>
         </div>
     </div>
 </template>

@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"admin.groupcomponent"}],"uuid":"609d7e59310945d6846feb41eb6b0c6b"}
