@@ -1,6 +1,7 @@
 ## 开发文档
 请访问https://lizhensheng.github.io/vue-data-view/
 
+
 ## 简介
 
 * DataView是一个基于**Vue**的数据可视化设计框架
