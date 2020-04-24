@@ -1,3 +1,5 @@
+## 开发文档
+请访问https://lizhensheng.github.io/vue-data-view/
 
 ## 简介
 
@@ -10,15 +12,15 @@
 
 ## 截图 / Screenshot
 
-![image-1](./docs/pic1.png)
+![image-1](./vuedoc/pic1.png)
 
-![image-2](./docs/pic2.png)
+![image-2](./vuedoc/pic2.png)
 
-![image-3](./docs/pic3.png)
+![image-3](./vuedoc/pic3.png)
 
-![image-4](./docs/pic4.png)
+![image-4](./vuedoc/pic4.png)
 
-![image-5](./docs/pic5.png)
+![image-5](./vuedoc/pic5.png)
 
 ## 开发 / Develop
 
