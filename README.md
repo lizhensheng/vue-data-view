@@ -1,5 +1,5 @@
 ## 开发文档
-请访问https://lizhensheng.github.io/vue-data-view/
+请访问 https://lizhensheng.github.io/vue-data-view/
 
 
 ## 简介
