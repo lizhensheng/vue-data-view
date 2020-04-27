@@ -89,7 +89,9 @@ function getGuideSidebar (groupA, groupB) {
       children: [
         '',
         'getting-started',
-        'login'
+        'login',
+        'code-tree',
+        'database'
       ]
     },
     {
