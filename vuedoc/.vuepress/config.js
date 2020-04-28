@@ -91,7 +91,9 @@ function getGuideSidebar (groupA, groupB) {
         'getting-started',
         'login',
         'code-tree',
-        'database'
+        'database',
+        'shortkey',
+        'search'
       ]
     },
     {

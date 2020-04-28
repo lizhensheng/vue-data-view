@@ -41,7 +41,7 @@ yarn dev-server
 mongorestore -h 127.0.0.1:27017 -d admin E:\db-file\admin
 ```
 
-## 附言
+## 命令
 ``` bash
 # mongodb数据库导入/导出命令
 
