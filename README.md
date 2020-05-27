@@ -1,7 +1,7 @@
 ## 开发文档
 请访问 https://lizhensheng.github.io/vue-data-view/
 
-## 正在开发dataV的封装组件,持续更新,欢迎star,或者贡献代码
+## 持续更新,欢迎star,或者贡献代码
 
 ## 简介
 
