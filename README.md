@@ -13,15 +13,13 @@
 
 ## 截图 / Screenshot
 
-![image-1](./vuedoc/pic1.png)
+![image-1](./vuedoc/cloud-computing.png)
 
-![image-2](./vuedoc/pic2.png)
+![image-2](./vuedoc/statistical-query.png)
 
-![image-3](./vuedoc/pic3.png)
+![image-3](./vuedoc/manager-project.png)
 
-![image-4](./vuedoc/pic4.png)
-
-![image-5](./vuedoc/pic5.png)
+![image-4](./vuedoc/login-form.png)
 
 ## 开发 / Develop
 

@@ -10,7 +10,6 @@ import Input from './input'
 import Textarea from './textarea'
 import bgMusic from './bg-music'
 import BaseForm from './baseform'
-import ScrollForm from './scrollform'
 import ScrollText from './scrolltext'
 import DatePicker from './datepicker'
 import Select from './select'
@@ -32,7 +31,6 @@ const components = [
 	bgMusic,
 	BaseForm,
 	Breadcrumb,
-    ScrollForm,
 	ScrollText,
 	DatePicker,
 	Select,
@@ -56,6 +54,11 @@ components.forEach(item => {
 })
 
 export {
+    _c_register_components_object
+}
+
+export default {
+	install,
 	Text,
 	Image,
 	Carousel,
@@ -67,16 +70,10 @@ export {
 	bgMusic,
 	BaseForm,
 	Breadcrumb,
-    ScrollForm,
 	ScrollText,
 	Chartline,
 	Chartcolumnar,
 	Chartmap,
 	Chartpie,
-    _c_register_components_object
-}
-
-export default {
-	install,
 	// 所有组件，必须具有 install，才能使用 Vue.use()
 }

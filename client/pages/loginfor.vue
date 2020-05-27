@@ -55,7 +55,7 @@ export default {
             this.$axios.post('/auth/login',{username:this.username,password:this.password}).then(res => {
                 this.loading = false
                 this.getUserInfo();
-                this.$store.dispatch('updateUserToken', res.body.token)
+                this.$mUtils.setLocalStorage('token', 'Bearer ' + res.body.token)
                 this.$router.push('/');
             })
             .catch(()=>{
@@ -156,8 +156,6 @@ export default {
                 alin-align-items: center;
                 margin-top: 22px;
                 .login-user-icon{
-                    width: 22px;
-                    height: 18px;
                     margin-left: 35px;
                     margin-right: 10px;
                 }

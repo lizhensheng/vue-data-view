@@ -4,7 +4,6 @@ const router = require('koa-router')()
 const jsonwebtoken = require('jsonwebtoken')
 
 router.post('/login', async ctx=> {
-    debugger
     let data = ctx.request.body
     let result = await Users.findOne({username: data.username}).select('username _id password').exec()
     if(!result){

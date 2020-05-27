@@ -16,7 +16,7 @@
   "dependencies": {
     "@antv/data-set": "^0.11.1",
     "@antv/g2": "^4.0.2",
-    "@jiaminghi/data-view": "^2.4.7",
+    "@jiaminghi/data-view": "^2.8.3",
     "@vuepress/shared-utils": "^1.4.1",
     "animate.css": "3.7.2",
     "axios": "^0.19.0",

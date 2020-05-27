@@ -1,4 +1,5 @@
 <template>
+    <dv-full-screen-container>
     <div class="engine-template-wrapper">
         <div class="relative" :style="{...getProjectStyle()}">
             <!--页面组件列表展示-->
@@ -16,24 +17,28 @@
                                               }"
                                      class="engine-element-item"
                                      >
-                    <component :is="item.elName" 
-                                class="element-on-edit-pane" 
+                    <component :is="item.elName"
+                                class="element-on-edit-pane"
                                 v-bind="{...item}"
-                                :width="(getCommonStyle(item)).chartWidth" 
+                                :width="(getCommonStyle(item)).chartWidth"
                                 :height="(getCommonStyle(item)).chartHeight"/>
             </div>
         </div>
     </div>
+    </dv-full-screen-container>
 </template>
 
 <script>
 import Vue from 'vue'
 import '../../../client/common/styles/element-variable.scss'
-import {_c_register_components_object} from '@client/plugins/index'
+import diyChart from '@client/plugins/index'
+import diyDataV from '@client/dataV/index'
 // 将自动注册所有组件为全局组件
 import dataV from '@jiaminghi/data-view'
 import Element from 'element-ui'
 Vue.use(dataV)
+Vue.use(diyDataV)
+Vue.use(diyChart)
 Vue.use(Element)
 export default {
     name:'ShowData',
@@ -74,9 +79,6 @@ export default {
                 margin: '0 auto'
             }
          }
-    },
-    components:{
-        ..._c_register_components_object
     }
 }
 </script>

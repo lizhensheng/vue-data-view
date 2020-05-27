@@ -1,1 +1,0 @@
-{ "_id" : { "$oid" : "5e7cc9ebd6a7ce27e8722588" }, "dbconnectionname" : "data", "dbtype" : "ORACLE", "dbhost" : "127.0.0.1", "dbservername" : "orcl", "dbusername" : "NMGYDYS", "dbpassword" : "123", "dbcreatetime" : 1.585236459978E12, "author" : { "$oid" : "5e05c392375ca54b4c9e4d51" }, "__v" : 0 }

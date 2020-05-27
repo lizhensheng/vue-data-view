@@ -1,7 +1,8 @@
 import axios from 'axios'
 import store from '@/store/index'
 import $config from "@/config/index"
-import QS from 'qs';
+import * as mUtils  from '@/common/js/mUtils'
+import QS from 'qs'
 
 
 // 线上环境配置axios.defaults.baseURL，生产环境则用proxy代理
@@ -13,8 +14,11 @@ axios.defaults.timeout = 30000; // 超时时间
 
 //请求拦截器
 axios.interceptors.request.use(config => {
-  let auth =  store.getters.authorization
-	config.headers.Authorization = auth
+  let token =  mUtils.getLocalStorage('token')
+  if(token != null && !config.url.includes('login'))
+  {
+    config.headers.Authorization = token
+  }
   return config
 }, error => {
   return Promise.reject(error)
@@ -72,6 +76,7 @@ axios.interceptors.response.use(response => {
     }
   } else {
     err.message = "连接到服务器失败"
+    window.location.href = '/#/login'
   }
   store.dispatch('showMassage', {
     type: 'error',

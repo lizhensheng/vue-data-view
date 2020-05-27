@@ -23,6 +23,7 @@ import '@/base/theme/default/index.styl'// 自定义基础组件css
 import 'animate.css'
 import VueClipboard from 'vue-clipboard2'
 import EventBus from './eventBus/index'
+import EndataV from './dataV/index'
 
 import vdr from 'vue-draggable-resizable-gorkys'
 import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
@@ -31,6 +32,7 @@ Vue.component('vdr', vdr)
 Vue.use(Element)
 Vue.use(YouDu)
 Vue.use(VueClipboard)
+Vue.use(EndataV)//封装dataV组件			
 
 /**
  * 引入公共方法mUtils

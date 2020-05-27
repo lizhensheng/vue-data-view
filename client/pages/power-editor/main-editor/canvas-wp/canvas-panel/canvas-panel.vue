@@ -23,6 +23,8 @@
                                      @activated="onComponentActivated(item.uuid)"
                                      :scale-ratio="ratio"
                                      @keyup.native.13="onDelete"
+                                     @keyup.native.46="onDelete"
+                                     @keyup.native.8="onDelete"
                                      @keyup.native.ctrl.67="onCopy"
                                      @keyup.native.alt.67="onCopyUUID"
                                      tabindex="1"

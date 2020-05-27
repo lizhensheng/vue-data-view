@@ -123,7 +123,6 @@ export default {
             httpServer.post('/connection/excuteSql', {id: data.connectionSourceId, sql: data.sql, limit: data.limit, paging: paging, where: whereModel})
             .then((res) =>{
                 if(res.code === 200){
-                    debugger
                     let result = res.body
                     this.props[1].fields[0].value.dataJson.data.where = whereModel
                     if(paging){

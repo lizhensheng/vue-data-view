@@ -67,8 +67,19 @@ export const setLocalStorage = (name,content) => {
 export const getLocalStorage = name => {
     if(!name) return
     let data = window.localStorage.getItem(name)
-    
-    return data ? JSON.parse(data) : undefined
+    if(typeof data === 'string')
+    {
+        return data
+    }
+    else{
+        try{
+            data = JSON.parse(data)
+        }
+        catch(e){
+            data = undefined
+        }
+    }
+    return data 
 }
 
 export const removeLocalStorage = name => {
