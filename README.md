@@ -15,8 +15,8 @@
 * 集成高级查询语法
 
 ## 截图 / Screenshot
-
-![image-1](./vuedoc/cloud-computing.png)
+http://qdge0f46c.bkt.clouddn.com/cloud-computing.png
+![image-1](http://qdge0f46c.bkt.clouddn.com/cloud-computing.png)
 
 ![image-2](./vuedoc/statistical-query.png)
 
