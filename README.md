@@ -1,5 +1,5 @@
 
-## 持续更新,欢迎star,下一步准备把菜单权限控制，分配角色，按钮权限，嵌套路由等功能完善
+## 暂停更新
 
 ## 开发文档（★★★★★）
 请访问 https://lizhensheng.github.io/vue-data-view/
