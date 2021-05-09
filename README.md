@@ -1,7 +1,7 @@
 
-## 暂停更新
+## 该项目已停止更新和维护
 
-## 开发文档（★★★★★）
+## 开发文档
 请访问 https://lizhensheng.github.io/vue-data-view/
 
 
